@@ -1,0 +1,53 @@
+
+.dropdown{
+  width: 150px;
+  text-align: center;
+  font-family: 'Fira Sans', sans-serif;
+}
+.navbar-brand{
+  padding-top: 5px;
+  padding-right: 30px;
+  padding-left: 10px;
+}
+.dangNhap{
+  margin-left: 50px;
+}
+.search .text{
+  height: 30px;
+  margin-top: 10px;
+  width: 280px;
+  border-color:coral;
+  border-radius: 10px;
+}
+.search .btn{
+  background-color: coral;
+  border-radius: 0px 10px 10px 0px;
+  height: 30px;
+  margin-left: -40px;
+}
+sticknav {
+  height: 30px;
+  width: 100%;
+    right: 15px;
+    left: 0px;
+  margin-left: 0px;
+  position: relative;
+  z-index: 9999;
+  }
+.fixed { position:fixed;
+}
+@media screen and (max-width:760px) {
+  .dangNhap{
+    margin-left: 7px;
+  }
+  sticknav {
+    height: 30px;
+    width: 100%;
+    margin-left: 0px;
+    margin-top: 0px;
+    right: 0px;
+    left: 0px;
+    position: relative;
+    z-index: 9999;
+    }
+}

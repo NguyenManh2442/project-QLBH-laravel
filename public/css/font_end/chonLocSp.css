@@ -1,0 +1,55 @@
+.boloc{
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #B0C4DE;
+    height: 50px;
+    line-height: 50px;
+    font-family: 'Fira Sans', sans-serif;
+    border-radius: 10px;
+}
+.form-boloc{
+    margin-top: 20px;
+    margin-left: 20px;
+}
+.sapxep-gia{
+    width: 155px;
+}
+input[type=checkbox] + label {
+    display: block;
+    margin: 0.2em;
+    margin-top: 20px;
+    cursor: pointer;
+    padding: 0.2em;
+  }
+  
+  input[type=checkbox] {
+    display: none;
+  }
+  
+  input[type=checkbox] + label:before {
+    content: "\2714";
+    border: 0.1em solid #000;
+    border-radius: 0.2em;
+    display: inline-block;
+    width: 1.4em;
+    height: 1.4em;
+    padding-left: 0.2em;
+    padding-bottom: 0.3em;
+    margin-right: 0.2em;
+    vertical-align: bottom;
+    color: transparent;
+    transition: .2s;
+  }
+  
+  input[type=checkbox] + label:active:before {
+    transform: scale(0);
+  }
+  
+  input[type=checkbox]:checked + label:before {
+    background-color: MediumSeaGreen;
+    border-color: MediumSeaGreen;
+    color: #fff;
+  }
+  
+  

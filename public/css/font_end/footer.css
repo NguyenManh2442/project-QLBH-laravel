@@ -1,0 +1,11 @@
+.footer{
+	color: rgb(60, 60, 60);
+	line-height: 40px;
+}
+.footer .thongTin{
+    width: 100%;
+    height: 300px;
+}
+.footer1, .footer2, .footer3{
+   padding-left: 150px;
+}

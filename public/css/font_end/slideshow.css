@@ -1,0 +1,23 @@
+.sua{
+    width: 100%;
+    height: 450px;
+}
+.item img{
+    height: 450px;
+}
+.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
+    display: block;
+    height: 450px;
+    width: 100%;
+}
+@media screen and (max-width:441px) {
+    .sua{
+        width: 100%;
+        height: 150px;
+    }
+    .carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
+        display: block;
+        height: 150px;
+        width: 100%;
+  }
+}

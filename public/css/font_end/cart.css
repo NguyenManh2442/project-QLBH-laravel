@@ -1,0 +1,22 @@
+.cart-logo{
+    height: 10px;
+    width: 10px;
+}
+.cart-header h1{
+    text-align: center;
+    margin-left: 200px;
+}
+.cart-logo img{
+    margin-left: 100px;
+    background-color: black;
+    float:left;
+    width:200px;
+    height:60px;
+}
+.cart-name h1{
+    float: left;
+
+}
+.container{
+    clear: both;
+}

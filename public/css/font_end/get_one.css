@@ -1,0 +1,74 @@
+.price{
+    width: 150px;
+    color: crimson;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.color-prd ul{
+	list-style-type: none;
+
+}
+.color-prd ul li{
+	display: inline-block;
+	text-align: center;
+	height: 30px;
+	line-height: 10px;
+	width: 60px;
+	font-size: 30px;
+	font-weight: bold;
+	position: relative;
+}
+.color-prd ul li a{
+	text-decoration: none;
+    display: block;
+    color: black;
+}
+.color-prd ul li a:hover{
+	background-color: #007acc;
+	color: #FFFF;
+}
+
+.size-prd ul{
+	list-style-type: none;
+	
+}
+.size-prd ul li{
+	display: inline-block;
+	text-align: center;
+	height: 20px;
+	line-height: 10px;
+	width: 60px;
+	font-size: 15px;
+	font-weight: bold;
+	position: relative;
+}
+.size-prd ul li a{
+	text-decoration: none;
+    display: block;
+    color: black;
+}
+.size-prd ul li a:hover{
+	background-color: #007acc;
+	color: #FFFF;
+}
+.hop{
+	width: 30px;
+	height: 34px;
+	border: 1px solid rgba(0,0,0,.09);
+	border-radius: 4px;
+	text-align: center;
+	box-sizing: border-box;
+	font-size: 17px;
+}
+.anh_one img{
+	height: 600px;
+	width: 400px;
+	margin-left: 200px;
+}
+@media screen and (max-width:760px) {
+    .anh_one img{
+        height: 350px;
+        width: 100%;
+    }
+  }

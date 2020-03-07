@@ -1,0 +1,32 @@
+ul .danhmuc{
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #B0C4DE;
+    height: 50px;
+    line-height: 50px;
+    font-family: 'Fira Sans', sans-serif;
+    border-radius: 10px;
+}
+ul li{
+    list-style-type: none;
+    text-decoration: none;
+}
+/* ul .sub-danhmuc{
+    margin-left: 30px;
+    font-size: 20px;
+    margin-top: 10px;
+} */
+ul .sub-danhmuc ul .sp a{
+    font-size: 17px;
+    text-decoration: none;
+    color: #25CCF7;
+}
+ul .sub-danhmuc ul .sp a:hover{
+    color: #ff5e57
+}
+.sub-danhmuc{
+    padding-left: 15px;
+    font-size: 22px;
+    font-family: 'Fira Sans', sans-serif;
+}
