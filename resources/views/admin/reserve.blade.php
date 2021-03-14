@@ -1,6 +1,6 @@
-@extends('layout.template_admin')
+@extends('layout.layout_admin')
 @section('title','Quản lý đơn hàng')
-@section('noidung')
+@section('content')
     @if(Session::has('reserve'))
         <div class="alert alert-success">{{Session::get('reserve')}}</div>
     @endif

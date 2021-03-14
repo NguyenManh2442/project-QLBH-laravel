@@ -15,12 +15,12 @@ class CreateShippersTable extends Migration
     {
         Schema::create('shippers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('shipperID');
-            $table->string('companyName');
+            $table->string('shipper_id');
+            $table->string('company_name');
             $table->string('phone');
             $table->string('description');
-            $table->string('orderID');
-            $table->date('completeOrderDate');
+            $table->string('order_id');
+            $table->date('complete_order_date');
             $table->timestamps();
         });
     }

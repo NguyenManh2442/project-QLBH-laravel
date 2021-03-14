@@ -16,7 +16,7 @@ class CheckLevelShipper
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::guard('employee')->check()&&Auth::guard('employee')->user()->level==3){
+        if(Auth::guard('employee')->check()&&Auth::guard('employee')->user()->role==3){
             return $next($request);
         }else{
             return redirect('/404.html');

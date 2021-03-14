@@ -7,18 +7,27 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Employee;
+use App\Models\User;
+use App\Models\Orders;
+use App\Models\Shipper;
+
 
 class ShipperController extends Controller
 {
-    //
-    public function index(){
-        $order = DB::table('customers')
-            ->join('orders','orders.userid','=','customers.id')
-            ->select('customers.address','customers.phone','customers.fullName','orders.*')
-            ->orderBy('orders.orderDate', 'desc')
-            ->where('orders.status',1)
-            ->limit(3)
-            ->get();
+    protected $employee;
+    protected $customer;
+    protected $order;
+
+    public function __construct(Employee $employee, User $customer, Orders $order)
+    {
+        $this->employee = $employee;
+        $this->customer = $customer;
+        $this->order = $order;
+    }
+    public function index()
+    {
+        $order = $this->customer->getOrderByCustomer();
         return view('admin.index', compact('order'));
     }
     public function getOrderLoadMoreShipper(Request $request){
@@ -57,8 +66,10 @@ class ShipperController extends Controller
     public function reserve(Request $request){
         $time = Carbon::now('Asia/Ho_Chi_Minh');
         $id = Auth::guard('employee')->user()->id;
-        \App\Orders::where('orderID', $request->orderId)->update(['status' => 2],['shipperID'=>$id]);
-        $shipper = new \App\Shipper();
+
+        $this->order->updateStatusOrderAndShiperId($request->orderId, 2, $id);
+        
+        $shipper = new Shipper();
         $shipper->shipperID = $id;
         $shipper->orderID = $request->orderId;
         $shipper->receiveDate = $time;
@@ -81,8 +92,8 @@ class ShipperController extends Controller
     public function completeOrder(Request $request){
         $completeOrderDate = Carbon::now('Asia/Ho_Chi_Minh');
         $id = Auth::guard('employee')->user()->id;
-        \App\Orders::where('orderID', $request->orderId)->update(['status' => 3]);
-        \App\Shipper::where('shipperID', $id)->where('orderID', $request->orderId)->update(['completeOrderDate' => $completeOrderDate]);
+        Orders::where('orderID', $request->orderId)->update(['status' => 3]);
+        Shipper::where('shipperID', $id)->where('orderID', $request->orderId)->update(['completeOrderDate' => $completeOrderDate]);
 
         return redirect()->back()->with('complete','Đơn hàng đã hoàn thành');
     }

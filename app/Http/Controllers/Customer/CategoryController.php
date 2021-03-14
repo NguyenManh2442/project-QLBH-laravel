@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     //
-    public function getCategory(){
-       $data = \App\Category::where('subCategoryID',0)->get();
-        dd($data);
-    }
+    // public function getCategory(){
+    //    $data = \App\Category::where('subCategoryID',0)->get();
+    //     dd($data);
+    // }
 }

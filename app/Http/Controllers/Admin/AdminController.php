@@ -3,92 +3,129 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\repairMenu;
 use Illuminate\Http\Request;
 use App\Http\Requests\signinAdmin;
-use App\Http\Requests\AccAdmin;
+use App\Http\Requests\CreateAccountAdminRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Models\Employee;
+use Throwable;
 
 class AdminController extends Controller
 {
-    public function index(){
+    protected $employee;
+
+    public function __construct(Employee $employee)
+    {
+        $this->employee = $employee;
+    }
+
+    // func index
+    public function index()
+    {
         return view('admin.index');
     }
-    public function form_signin(){
+
+    // func formSignin
+    public function formSignin()
+    {
         return view('admin.signin');
     }
-    public function signinAdmin(signinAdmin $request){
+
+    // func signinAdmin
+    public function signinAdmin(signinAdmin $request)
+    {
         $data = [
-            'email'=> $request->email,
+            'mail_address'=> $request->email,
             'password'=> $request->password
         ];
-        if(Auth::guard('employee')->attempt($data)&&Auth::guard('employee')->user()->level==1){
+        if (Auth::guard('employee')->attempt($data)&&Auth::guard('employee')->user()->role==1) {
             return redirect('admin');
         }
-        else if(Auth::guard('employee')->attempt($data)&&Auth::guard('employee')->user()->level==3){
+        else if (Auth::guard('employee')->attempt($data)&&Auth::guard('employee')->user()->role==3) {
             return redirect('shipper');
         }
-        else{
+        else {
             return redirect('signinAdminForm');
         }
     }
-    public function logoutAdmin(Request $request){
+
+    // func logoutAdmin
+    public function logoutAdmin(Request $request)
+    {
         Auth::guard('employee')->logout();
         return redirect('signinAdminForm');
     }
 
-    public function AdminAccountManagement(){
-        $employee = \App\Employee::all();
+    // func adminAccountManagement
+    public function adminAccountManagement(Request $request)
+    {
+        $keySearch = [];
+        if ($request->input('btn_search')) {
+            $sName = $request->s_name;
+            $sEmail = $request->s_email;
+            $sRole = $request->s_role;
+            $sPhone = $request->s_phone;
+            if (isset($sName)) {
+                $keySearch['name'] = $sName;
+            }
+            if (isset($sEmail)) {
+                $keySearch['mail_address'] = $sEmail;
+            }
+            if (isset($sRole)) {
+                $keySearch['role'] = $sRole;
+            }
+            if (isset($sPhone)) {
+                $keySearch['phone'] = $sPhone;
+            }
+        }
+        $employee = $this->employee->getAllEmployee($keySearch);
         return view('admin.AdminAccountManagement', compact('employee'));
     }
 
-    public function createAccAdmin(){
-        return view('admin.formCreateAcc');
+    // func createAccountAdmin
+    public function createAccountAdmin()
+    {
+        return view('admin.form_create_acccount');
     }
 
-    public function AddAccAdmin(AccAdmin $request){
-        $employee = new \App\Employee();
-        $employee->employeeName = $request->fullName;
-        $employee->email = $request->email;
-        $employee->phone= $request->phone;
-        $employee->password= bcrypt($request->password1);
-        $employee->level= $request->level;
-        $employee->save();
+    // func storeAccountAdmin
+    public function storeAccountAdmin(CreateAccountAdminRequest $request){
+        try {
+            $this->employee->createEmployee($request->all());
+        } catch (Throwable $exception) {
+            flash('Thêm mới thất bại!')->error();
+            return redirect()->route('admin.accountManagement');
+        }
+        flash('Thêm mới thành công!')->success();
+        return redirect()->route('admin.accountManagement');
+
         return redirect()->back()->with('addAcc','Thêm tài khoản thành công!');
     }
-
-    public function deleteAcc(Request $request){
-        \App\Employee::where('id',$request->id)->delete();
-        return redirect()->back()->with('deleteAcc','Xóa tài khoản thành công!');
+    
+    // func editAccountAdmin
+    public function editAccountAdmin($id)
+    {
+        $employee = $this->employee->getOnlyEmployee($id);
+        return view('admin.form_create_acccount', compact('employee'));
     }
 
-    public function getCategoryParent(){
-
-        return \App\Category::where('subCategoryID', '0')->get();
+    // func updateAccountAdmin
+    public function updateAccountAdmin($id, CreateAccountAdminRequest $request){
+        try {
+            $this->employee->updateEmployee($id, $request->all());
+        } catch (Throwable $exception) {
+            flash('Them moi that bai!')->error();
+            return redirect()->route('admin.accountManagement');
+        }
+        flash('Them moi thanh cong!')->success();
+        return redirect()->route('admin.accountManagement');
     }
 
-    public function getCategoryChill(){
-        return \App\Category::where('subCategoryID','!=', '0')->get();
-    }
-
-    public function showMenuManager(){
-        $category = $this->getCategoryParent();
-        $category1 = $this->getCategoryChill();
-        return view('admin.showMenu', compact('category','category1'));
-    }
-
-    public function formRepairMenu(Request $request){
-        $category = \App\Category::where('categoryID', $request->id )->get();
-        $category1 = \App\Category::where('subCategoryID','!=', '0')->get();
-        return view('admin.repairMenu', compact('category','category1'));
-    }
-
-    public function repairMenu(repairMenu $request){
-        \App\Category::where('categoryID', $request->categoryID )->update(['categoryName'=>$request->CategoryParent]);
-        \App\Category::where('categoryID', $request->categoryChillID1)->update(['categoryName'=>$request->CategoryChill1]);
-        \App\Category::where('categoryID', $request->categoryChillID2)->update(['categoryName'=>$request->CategoryChill2]);
-        return redirect()->back()->with('repairMenu','Sửa menu thành công');
+    // func deleteAccountAdmin
+    public function deleteAccountAdmin($id){
+        $this->employee->deleteEmployee($id);
+        flash('Xoa thanh cong!')->success();
+        return redirect()->route('admin.accountManagement');
     }
 
 }

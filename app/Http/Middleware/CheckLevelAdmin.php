@@ -16,7 +16,7 @@ class CheckLevelAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::guard('employee')->check()&&Auth::guard('employee')->user()->level==1){
+        if(Auth::guard('employee')->check()&&Auth::guard('employee')->user()->role == 1){
             return $next($request);
         }else{
             return redirect('/404.html');

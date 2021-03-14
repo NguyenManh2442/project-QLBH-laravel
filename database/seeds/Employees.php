@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use App\Models\Employee;
 
 class Employees extends Seeder
 {
@@ -14,10 +13,11 @@ class Employees extends Seeder
     public function run()
     {
 
-        $emp = new \App\Employees();
-        $emp->email = "manhabc@gmail.com";
-        $emp->password = bcrypt('12345678');
-        $emp->employeeName = "Nguyen tien manh";
+        $emp = new Employee();
+        $emp->mail_address = "admin@gmail.com";
+        $emp->password = bcrypt('123456');
+        $emp->name = "Nguyen tien manh";
+        $emp->role = 1;
         $emp->save();
     }
 }

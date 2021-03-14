@@ -3,146 +3,186 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Requests\AddProduct;
+use App\Http\Requests\CreateProductRequest;
 use Illuminate\Support\Facades\DB;
+use App\Models\Category;
+use App\Models\Orderdetail;
+use App\Models\Product;
+use App\Models\Orders;
+use App\Models\Slideshow;
+use App\Models\User;
+use Throwable;
 
 class ProductManagementController extends Controller
 {
-    //
-    public function getCategoryParent(){
+    protected $category;
+    protected $orderdetail;
+    protected $product;
+    protected $slideshow;
+    protected $order;
+    protected $customer;
 
-        return \App\Category::where('subCategoryID', '0')->get();
+    public function __construct(User $customer, Category $category, Orderdetail $orderdetail, Orders $order, Product $product, Slideshow $slideshow)
+    {
+        $this->category = $category;
+        $this->orderdetail = $orderdetail;
+        $this->product = $product;
+        $this->slideshow =$slideshow;
+        $this->order = $order;
+        $this->customer = $customer;
     }
 
-    public function getCategoryChill(){
-        return \App\Category::where('subCategoryID','!=', '0')->get();
+    public function viewProduct(Request $request)
+    {
+        $keySearch = [];
+        if ($request->input('btn_search')) {
+            $sNameProduct = $request->s_name_product;
+            $sStatus = $request->s_status;
+            $sSupplier = $request->s_supplier;
+            $sCategory = $request->s_category;
+            if (isset($sNameProduct)) {
+                $keySearch['product_name'] = $sNameProduct;
+            }
+            if (isset($sStatus)) {
+                $keySearch['status'] = $sStatus;
+            }
+            if (isset($sSupplier)) {
+                $keySearch['supplier'] = $sSupplier;
+            }
+            if (isset($sCategory)) {
+                $keySearch['category_id'] = $sCategory;
+            }
+        }
+        $product = $this->product->getAllProduct($keySearch);
+        $category = $this->category->getCategoryParent(0);
+        $subCategory = $this->category->getCategory('sub_category_id', $category[0]->id);
+        return view('productManagement.allProduct', compact('product', 'category', 'subCategory'));
+    }
+    public function createProduct()
+    {
+        $category = $this->category->getCategoryParent(0);
+        return view('productManagement.addProduct', compact('category'));
     }
 
-    public function getAllProduct(){
-        return \App\Product::all();
-    }
-
-    public function viewProduct(){
-        $product = $this->getAllProduct();
-        return view('productManagement.allProduct', compact('product'));
-    }
-    public function formAddProduct(){
-        $category1 = $this->getCategoryParent();
-        return view('productManagement.addProduct', compact('category1'));
-    }
-
-    public function getCategoryAjax(Request $request){
+    public function getCategoryAjax(Request $request)
+    {
         $categoryID = $request->depart;
-        $categoryCon = \App\Category::where('subCategoryID','=', $categoryID)->get();
+        $subCategory =  $this->category->getCategoryParent($categoryID);
         $cate_arr = array();
-        foreach ($categoryCon as $key=>$value){
-            $cate_arr[] = array("categoryID" => $value->categoryID, "categoryName" => $value->categoryName);
+        foreach ($subCategory as $key => $value){
+            $cate_arr[] = array("category_id" => $value->id, "category_name" => $value->category_name);
         }
         return $cate_arr;
 
     }
 
-    public function addProduct(AddProduct $request){
-        if($request->hasFile('fileImg')){
-            $time = Carbon::now('Asia/Ho_Chi_Minh');
-            $fileImg = $request->fileImg;
+    public function storeProduct(CreateProductRequest $request)
+    {
+        if($request->hasFile('image')){
+            $fileImg = $request->image;
             $fileName =time() . "_" . rand(0,9999999) . "_" . md5(rand(0,9999999)) . $fileImg->getClientOriginalName();
-
             $fileImg->move('img', $fileName);
-            $pro = new \App\Product();
-            $pro->productName = $request->productName;
-            $pro->categoryID = $request->menucon;
-            $pro->unitPrice = $request->unitPrice;
-            $pro->quantity = $request->quantity;
-            $pro->description = $request->mota;
-            $pro->image = $fileName;
-            $pro->save();
-            return redirect()->back()->with('themsp','Thêm sản phẩm thành công!');
+            
+            $productName = $request->product_name;
+            $supplier = $request->supplier;
+            $categoryId = $request->category_2;
+            $unitPrice = $request->unit_price;
+            $quantity = $request->quantity;
+            $description = $request->description;
+            $discount = $request->discount;
+            $status = $request->status == true ? 1 : 0;
+            $sizeS = isset($request->size_s) ? 1 : 0;
+            $sizeM = isset($request->size_m) ? 1 : 0;
+            $sizeL = isset($request->size_l) ? 1 : 0;
+            $sizeXL = isset($request->size_xl) ? 1 : 0;
+            $sizeXXL = isset($request->size_xxl) ? 1 : 0;
+            $image = $fileName;
+
+            try {
+                $this->product->createProduct($productName, $supplier, $categoryId, $quantity, $unitPrice,  $discount, $status, $description, $image, $sizeS, $sizeM, $sizeL, $sizeXL, $sizeXXL);
+            } catch (Throwable $exception) {
+                flash('Thêm mới sản phẩm thất bại!')->error();
+                return redirect()->route('product.management');
+            }
+            flash('Thêm mới sản phẩm thành công!')->success();
+            return redirect()->route('product.management');
         }
         else{
-            return redirect()->back()->with('themsp','Thêm sản phẩm thất bại!');
+            flash('Thêm mới sản phẩm thất bại!')->error();
+            return redirect()->route('product.management');
         }
     }
-    public function getAllMenu($categoryID){
-        return \App\Category::where('categoryID',$categoryID)->get();
-    }
-    public function form_repair(Request $request){
-        $category1 = $this->getCategoryParent();
-        $product = \App\Product::where('id', $request->id)->get();
 
-        foreach($product as $key =>$value){
-            $categorycon = $this->getAllMenu($value->categoryID);
-        }
-
-        foreach($categorycon as $key =>$value2){
-            $categorycha = $this->getAllMenu($value2->subCategoryID);
-        }
-        return view('productManagement.repairProduct', compact('category1','product','categorycon','categorycha'));
+    public function editProduct(Request $request){
+        $category = $this->category->getCategoryParent(0);
+        $product = $this->product->getProductById($request->id);
+        $subCategoryById = $this->category->getCategory('id', $product->category_id);
+        $subCategory = $this->category->getCategory('sub_category_id', $category[0]->id);
+        return view('productManagement.addProduct', compact('product','subCategoryById', 'subCategory', 'category'));
     }
 
-    public function repairProduct(AddProduct $request){
-        if($request->hasFile('fileImg')){
-            $time = Carbon::now('Asia/Ho_Chi_Minh');
-            $fileImg = $request->fileImg;
+    // func updateProduct
+    public function updateProduct(CreateProductRequest $request, $id) 
+    {
+        if ($request->hasFile('image')) {
+            $fileImg = $request->image;
             $fileName =time() . "_" . rand(0,9999999) . "_" . md5(rand(0,9999999)) . $fileImg->getClientOriginalName();
-            $id = $request->id;
             $fileImg->move('img', $fileName);
-            $pro = \App\Product::find($id);
-            $pro->productName = $request->productName;
-            $pro->categoryID = $request->menucon;
-            $pro->unitPrice = $request->unitPrice;
-            $pro->quantity = $request->quantity;
-            $pro->description = $request->mota;
-            $pro->image = $fileName;
-            $pro->save();
-            return redirect()->back()->with('addsp','Sửa sản phẩm thành công!');
+        } else {
+            $fileName = null;
         }
-        else{
-            return redirect()->back()->with('addsp','Sửa sản phẩm thất bại!');
+
+        $productName = $request->product_name;
+        $supplier = $request->supplier;
+        $categoryId = $request->category_2;
+        $unitPrice = $request->unit_price;
+        $quantity = $request->quantity;
+        $description = $request->description;
+        $discount = $request->discount;
+        $status = $request->status == true ? 1 : 0;
+        $sizeS = isset($request->size_s) ? 1 : 0;
+        $sizeM = isset($request->size_m) ? 1 : 0;
+        $sizeL = isset($request->size_l) ? 1 : 0;
+        $sizeXL = isset($request->size_xl) ? 1 : 0;
+        $sizeXXL = isset($request->size_xxl) ? 1 : 0;
+        $image = $fileName;
+
+        try {
+            $this->product->updateProduct($id, $productName, $supplier, $categoryId, $quantity, $unitPrice,  $discount, $status, $description, $image, $sizeS, $sizeM, $sizeL, $sizeXL, $sizeXXL);
+        } catch (Throwable $exception) {
+            flash('Update sản phẩm thất bại!')->error();
+            return redirect()->route('product.management');
         }
+        flash('Update sản phẩm thành công!')->success();
+        return redirect()->route('product.management');
     }
 
-    public function orderProcessing(){
-
-        $order = DB::table('customers')
-            ->join('orders','orders.userid','=','customers.id')
-            ->select('customers.phone','customers.fullName','orders.*')
-            ->orderBy('orders.orderDate', 'desc')
-            ->limit(3)
-            ->get();
-        return view('productManagement.orderProcessing', compact('order'));
-    }
-
-    public function dataOrder($orderId){
-        return DB::table('customers')
-            ->join('orders','orders.userid','=','customers.id')
-            ->join('orderdetail','orderdetail.orderID','=','orders.orderID')
-            ->join('products','products.id','=','orderdetail.idProduct')
-            ->select('customers.address','customers.phone','customers.fullName','customers.email','orders.*','orderdetail.*','products.image','products.productName')
-            ->where('orderdetail.orderID','=',$orderId)
-            ->get();
-    }
-    public function orderdetail(Request $request){
-        $ord = $this->dataOrder($request->orderId);
-
-        return view('productManagement.orderdetail', compact('ord'));
+    // func deleteProduct
+    public function deleteProduct($id)
+    {
+        try {
+            $this->product->destroyProduct($id);
+        } catch (Throwable $exception) {
+            flash('Xóa sản phẩm thất bại!')->error();
+            return redirect()->route('product.management');
+        }
+        flash('Xóa sản phẩm thành công!')->success();
+        return redirect()->route('product.management'); 
     }
 
     public function orderConfirmation(Request $request){
-        $ord = $this->dataOrder($request->orderID);
-        foreach($ord as $key=> $value){
-            $quant= \App\Product::where('id','=',$value->idProduct)->get();
+        $ord =  $this->customer->dataOrder($request->orderId);
+        foreach($ord as $key => $value){
+            $quant= $this->product->getProductById($value->idProduct);
 
-            foreach ($quant as $key=>$quantitys){
-                $newQuantity = $quantitys->quantity-$value->quantity;
-                $pro = \App\Product::find($quantitys->id);
-                $pro ->quantity = $newQuantity;
-                $pro->save();
+            foreach ($quant as $key => $quantitys){
+                $newQuantity = $quantitys->quantity - $value->quantity;
+
+                $this->product->updateQuantity($quantitys->id, $newQuantity);
             }
 
-            \App\Orders::where('orderID', $value->orderID)->update(['status' => 1]);
+            $this->order->updateStatusOrder($value->orderID, 1);
         }
         return redirect()->back();
     }
@@ -196,9 +236,9 @@ class ProductManagementController extends Controller
 
     }
 
-    public function orderCancel(Request $request){
-//        dd($request);
-        \App\Orders::where('orderID',$request->orderID)->update(['status'=>4]);
+    public function orderCancel(Request $request)
+    {
+        $this->order->updateStatusOrder($request->orderID, 4);
         return redirect()->back();
     }
 }

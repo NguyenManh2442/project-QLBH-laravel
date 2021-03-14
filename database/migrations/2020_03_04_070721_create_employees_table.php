@@ -15,15 +15,15 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('employeeID');
-            $table->string('employeeName');
-            $table->string('address');
-            $table->string('email');
-            $table->string('password');
-            $table->string('phone');
-            $table->date('birthDate');
-            $table->string('avatar');
-            $table->string('level');
+            $table->string('mail_address', 100);
+            $table->string('password', 255);
+            $table->string('name', 255)->nullable();
+            $table->string('address', 255)->nullable();
+            $table->string('phone', 15)->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('role', 2);
+            $table->string('token', 255)->nullable();
             $table->timestamps();
         });
     }
