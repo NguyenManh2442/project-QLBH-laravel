@@ -36,6 +36,8 @@ Route::group(['namespace'=>'Customer'], function(){
 
     Route::post('post-signin','customerController@signin'); // post đăng nhập
 
+    Route::get('ordered&status={status}','OrderController@getOrdered')->name('order.ordered');
+
     Route::get('logout','customerController@logout'); // đăng xuất tải khoản
 
     Route::get('signup','customerController@form_signup')->middleware('checkUser'); // Đăng ký tài khoản form
@@ -104,11 +106,7 @@ Route::group(['namespace'=>'Admin'],function(){
 
     Route::get('orderdetail&id={id}','OrderManagementController@getOrderdetail')->middleware('checkSigninEmployee','CheckLevelEmployee');//xem chi tiet don hang
 
-    Route::post('orderConfirmation','ProductManagementController@orderConfirmation')->middleware('checkSigninEmployee','CheckLevelEmployee');//Xac nhan don hang
-
-    Route::post('getOrderLoadMore', 'ProductManagementController@getOrderLoadMore')->middleware('checkSigninEmployee','CheckLevelEmployee');//get Order LoadMore
-
-    Route::post('getOrderLoadMoreShipper', 'ShipperController@getOrderLoadMoreShipper')->middleware('checkSigninEmployee','CheckLevelShipper');//get Order LoadMore Shipper
+    Route::put('update-status-order&id={id}','OrderManagementController@updateOrderStatus')->name('update.status_order')->middleware('checkSigninEmployee','CheckLevelEmployee');//Xac nhan don hang
 
     Route::get('reserve&orderId={orderId}', 'ShipperController@reserve')->middleware('checkSigninEmployee','CheckLevelShipper');
 
@@ -129,8 +127,6 @@ Route::group(['namespace'=>'Admin'],function(){
     Route::put('updateAccAdmin&id={id}', 'AdminController@updateAccountAdmin')->name('update_acc_admin')->middleware('checkSigninEmployee','CheckLevelEmployee');
 
     Route::delete('deleteAccountAdmin&id={id}', 'AdminController@deleteAccountAdmin')->name('delete_acc_admin')->middleware('checkSigninEmployee','CheckLevelAdmin');//Xoa acc employee
-
-    Route::post('orderCancel', 'ProductManagementController@orderCancel')->middleware('checkSigninEmployee','CheckLevelAdmin');//Xoa acc employee
 
     Route::get('category-management','CategoryController@showMenuManager' )->name('category.categoryManagement')->middleware('checkSigninEmployee','CheckLevelAdmin');
 

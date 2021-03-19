@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\signinAdmin;
 use App\Http\Requests\CreateAccountAdminRequest;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Employee;
+use Illuminate\Support\Facades\Auth;
+// use App\Models\Employee;
 use Throwable;
 
 class AdminController extends Controller

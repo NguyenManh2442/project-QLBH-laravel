@@ -52,6 +52,10 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $countUnitProce = 0;
+                                $countDiscount = 0;
+                            @endphp
                             @foreach ($orderdetail as $value)
                                 <tr>
                                     <td><img src="{{asset('img')}}/{{ $value->image }}" alt="Img placeholder"></td>
@@ -61,6 +65,10 @@
                                     <td>{{ $value->discount }}</td>
                                     <td>{{ $value->size }}</td>
                                 </tr>
+                                @php
+                                    $countUnitProce += $value->unit_price;
+                                    $countDiscount += $value->unit_price - $value->unit_price * ($value->discount / 100)
+                                @endphp
                             @endforeach
                         </tbody>
                     </table>
@@ -74,19 +82,31 @@
                         <table class="table table-borderless">
                             <tbody>
                                 <tr>
-                                    <th>SUBTOTAL</th>
-                                    <td>114000 USD</td>
+                                    <th>Thành tiền</th>
+                                    <td>{{ number_format($countUnitProce) }} .Đ</td>
                                 </tr>
                                 <tr>
-                                    <th>DISCOUNT (5%)</th>
-                                    <td>5700 USD</td>
+                                    <th>Giảm giá</th>
+                                    <td>- {{ number_format($countUnitProce - $countDiscount) }} .Đ</td>
                                 </tr>
                                 <tr>
-                                    <th>TOTAL</th>
-                                    <td>108300 USD</td>
+                                    <th>Tổng tiền:</th>
+                                    <td>{{ number_format($countDiscount) }} .Đ</td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-7 d-flex">
+                            <form action="{{ route('update.status_order', $order[0]->id)}}" method="post">
+                                @method('PUT')
+                                <input type="submit" name="btn_confirm" class="btn btn-primary mb-1 mb-md-0" value="Xác nhận đơn" />
+                            </form>
+                            <form action="{{ route('update.status_order', $order[0]->id)}}" method="post">
+                                @method('PUT')
+                                <input type="submit" name="btn_cancel" class="btn btn-danger  ml-0 ml-md-1" value="Hủy đơn" />
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,11 +114,7 @@
 
         <!-- Invoice Footer -->
         <div id="invoice-footer" class="text-right pt-3">
-            <p>Transfer the amounts to the business amount below. Please include invoice number on your check.
-                <p class="bank-details mb-0">
-                    <span class="mr-4">BANK: <strong>FTSBUS33</strong></span>
-                    <span>IBAN: <strong>G882-1111-2222-3333</strong></span>
-                </p>
+            
         </div>
         <!--/ Invoice Footer -->
 

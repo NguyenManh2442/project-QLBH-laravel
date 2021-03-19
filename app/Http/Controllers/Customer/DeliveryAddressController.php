@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Models\DeliveryAddress;
+use App\Models\DeliveryAddress;
 use Illuminate\Http\Request;
 use Throwable;
 

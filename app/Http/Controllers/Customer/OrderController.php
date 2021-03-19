@@ -3,22 +3,26 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Orderdetail;
 use App\Models\Orders;
-use Carbon\Carbon;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Throwable;
 
 class OrderController extends Controller
 {
     protected $orderdetail;
     protected $order;
+    protected $category;
+    protected $product;
 
-    public function __construct(Orderdetail $orderdetail, Orders $order)
+    public function __construct(Orderdetail $orderdetail, Orders $order, Category $category, Product $product)
     {
         $this->order = $order;
+        $this->orderdetail = $orderdetail;
+        $this->category = $category;
+        $this->product = $product;
     }
 
     public function postOrderProduct(Request $request)
@@ -29,7 +33,7 @@ class OrderController extends Controller
         ];
         if ($orderdetail == true) { 
             $this->order->storeOrderProduct();
-            $orderByUser = $this->order->getOrderByUserID(); 
+            $orderByUser = $this->order->findOrderByUserID(); 
             $order = false;
                 foreach ($orderdetail as $value) {
                     $orderId = $orderByUser[0]->id;
@@ -39,8 +43,9 @@ class OrderController extends Controller
                     $discount = $value['discount'];
                     $size = $value['size'];
                     $order = $this->order->storeOrderdetail($orderId, $idProduct, $unitPrice, $quantity, $discount, $size);
+                    $updateDiscountProduct = $this->product->updateQuantityProductByID($idProduct, $quantity);
                 }
-                if ($order == true) {
+                if ($order == true && $updateDiscountProduct == true) {
                     $data['status'] = 'true';
                     session()->forget('cart');
                     session()->forget('idAddress');
@@ -50,6 +55,14 @@ class OrderController extends Controller
                 }
              }
         return response()->json($data);
+    }
+
+    public function getOrdered($status)
+    {
+        $category = $this->category->getCategoryParent(0);
+        $category1 = $this->category->getCategoryChill();
+        $products = $this->order->getOrderByUserIDAndStatus($status);
+        return view('customer.ordered_of_customer', compact('products', 'category', 'category1', 'status'));
     }
 
 }

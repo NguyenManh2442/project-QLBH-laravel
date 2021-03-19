@@ -64,4 +64,15 @@ class OrderManagementController extends Controller
         $order = $this->order->getOrderByID($id);
         return view('order.orderdetail', compact('orderdetail', 'order'));
     }
+
+    public function updateOrderStatus($id, Request $request)
+    {
+        if (isset($request->btn_confirm)) {
+            $this->order->updateStatusOrder($id, 1);
+        } else {
+            $this->order->updateStatusOrder($id, 2);
+        }
+        
+        return redirect()->route('order.management');
+    }
 }

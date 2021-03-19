@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Models\DeliveryAddress;
+use App\Models\Category;
+use App\Models\DeliveryAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Category;
 use App\Models\Orderdetail;
 use App\Models\Product;
 use App\Models\Orders;

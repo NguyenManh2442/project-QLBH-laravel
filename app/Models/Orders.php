@@ -13,6 +13,11 @@ class Orders extends Model
     //
     protected $table = 'orders';
 
+    const CONFIRM = 1;
+    const CANCEL_FOR_ADMIN = 2;
+    const CANCEL_FOR_CUSROMER = 3;
+
+
     // func get Orders
     public function getOrders(array $keySearch, $status)
     {
@@ -58,7 +63,7 @@ class Orders extends Model
     }
 
     public function updateStatusOrder($orderID, $status) {
-        Orders::where('order_id', $orderID)->update(['status' => $status]);
+        Orders::where('id', $orderID)->update(['status' => $status]);
     }
 
     public function updateStatusOrderAndShiperId($orderID, $status, $shiperId) {
@@ -76,7 +81,7 @@ class Orders extends Model
         $order->save();
     }
 
-    public function getOrderByUserID()
+    public function findOrderByUserID()
     {   
         $id = Auth::user()->id;
         return Orders::where('orders.user_id', '=', $id)
@@ -103,5 +108,25 @@ class Orders extends Model
             DB::rollBack();
             return false;
         }
+    }
+
+    public function getOrderByUserIDAndStatus($status)
+    {   
+        $id = Auth::user()->id;
+        return Orders::join('orderdetails','orderdetails.order_id','=','orders.id')
+        ->join('products','products.id','=','orderdetails.id_product')
+        ->where('orders.user_id', '=', $id)
+        ->where('orders.status','=',$status)
+        ->orderBy('order_date', 'desc')
+        ->select(
+            'orders.order_date',
+            'orderdetails.unit_price',
+            'orderdetails.quantity', 
+            'orderdetails.discount',
+            'orderdetails.size', 
+            'products.image', 
+            'products.product_name'
+            )
+        ->paginate(5);
     }
 }

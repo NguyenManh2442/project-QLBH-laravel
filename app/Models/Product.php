@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -65,6 +66,22 @@ class Product extends Model
     }
     public function getDetail($id) {
         return Product::where('id', $id)->get();
+    }
+
+    public function updateQuantityProductByID($id, $quantity)
+    {
+        $product = $this->getProductById($id);
+        $quantity = $product->quantity - $quantity;
+        DB::beginTransaction();
+        try{
+            Product::where('id', $id)->update(['quantity' => $quantity]);
+        DB::commit();
+        return true;
+        }
+        catch(Exception $exeption) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function getProductLatest($menuid, $check) {
