@@ -61,7 +61,7 @@
         <div class="navbar-header d-xl-block d-none">
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item"><a class="navbar-brand" href="/">
-                        <div class="brand-logo"></div> ABC
+                        <div class="brand-logo"></div> THÚY HẰNG
                     </a>
                 </li>
             </ul>
@@ -140,7 +140,7 @@
             <div class="navbar-container main-menu-content" data-menu="menu-container">
                 <!-- include ../../../includes/mixins-->
                 <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
-                    <li class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="/"><i
+                    <li class="dropdown nav-item active" data-menu="dropdown"><a class="nav-link" href="/"><i
                                 class="feather icon-home"></i><span data-i18n="Dashboard">Home</span></a></li>
                     @foreach($category as $key=>$value)
                     <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link"

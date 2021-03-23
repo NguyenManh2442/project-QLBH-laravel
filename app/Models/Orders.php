@@ -14,8 +14,10 @@ class Orders extends Model
     protected $table = 'orders';
 
     const CONFIRM = 1;
-    const CANCEL_FOR_ADMIN = 2;
-    const CANCEL_FOR_CUSROMER = 3;
+    const SHIPPING = 2;
+    const SHIPPED = 3;
+    const CANCEL_FOR_ADMIN = 4;
+    const CANCEL_FOR_CUSROMER = 5;
 
 
     // func get Orders
@@ -24,17 +26,22 @@ class Orders extends Model
         $query = DB::table('orders')
         ->join('delivery_address','delivery_address.id','=','orders.delivery_address_id');
 
+        if ($status == 4) {
+            $query->whereIn('orders.status', [4, 5]);
+        } else {
+            $query->where('orders.status','=',$status);
+        }
+        
         if (!empty($keySearch)) {
             foreach ($keySearch as $key => $value) {
-                if (isset($keySearch['phone_number'])) {
+                if ($key == 'phone_number') {
                     $query->where($key, '=', $value);
-                } else{
+                } else {
                     $query->where($key, 'like', '%' . $value . '%');
                 }
             }
         }
-        return $query->where('orders.status','=',$status)
-                    ->select(
+        return $query->select(
                         'orders.*', 
                         'delivery_address.name',
                         'delivery_address.phone_number', 
@@ -64,6 +71,11 @@ class Orders extends Model
 
     public function updateStatusOrder($orderID, $status) {
         Orders::where('id', $orderID)->update(['status' => $status]);
+    }
+
+    public function updateStatusOrderByUserID($orderID, $status) {
+        $userID = Auth::user()->id;
+        Orders::where('id', $orderID)->where('user_id', $userID)->update(['status' => $status]);
     }
 
     public function updateStatusOrderAndShiperId($orderID, $status, $shiperId) {
@@ -110,23 +122,47 @@ class Orders extends Model
         }
     }
 
+    public function getOrdersByStatus( $status)
+    {
+        $query = DB::table('orders');
+        $query->join('delivery_address','delivery_address.id','=','orders.delivery_address_id')
+                ->where('orders.status','=',$status);
+                if ($status == 4) {
+                    $query->orWhere('orders.status','=', 5);
+                }
+        return $query->select(
+                    'orders.*', 
+                    'delivery_address.name',
+                    'delivery_address.phone_number', 
+                    'delivery_address.wards',
+                    'delivery_address.district', 
+                    'delivery_address.province', 
+                    'delivery_address.detailed_address'
+                    )
+                ->paginate(12);
+    }
+
     public function getOrderByUserIDAndStatus($status)
     {   
         $id = Auth::user()->id;
-        return Orders::join('orderdetails','orderdetails.order_id','=','orders.id')
+        $query = DB::table('orders');
+        $query->join('orderdetails','orderdetails.order_id','=','orders.id')
         ->join('products','products.id','=','orderdetails.id_product')
         ->where('orders.user_id', '=', $id)
-        ->where('orders.status','=',$status)
-        ->orderBy('order_date', 'desc')
-        ->select(
-            'orders.order_date',
-            'orderdetails.unit_price',
-            'orderdetails.quantity', 
-            'orderdetails.discount',
-            'orderdetails.size', 
-            'products.image', 
-            'products.product_name'
-            )
-        ->paginate(5);
+        ->where('orders.status','=',$status);
+
+        if ($status == 4) {
+            $query->orWhere('orders.status','=', 5);
+        }
+        return $query->orderBy('order_date', 'desc')
+                    ->select(
+                        'orderdetails.order_id',
+                        'orderdetails.unit_price',
+                        'orderdetails.quantity', 
+                        'orderdetails.discount',
+                        'orderdetails.size', 
+                        'products.image', 
+                        'products.product_name'
+                    )->get(5);
     }
 }

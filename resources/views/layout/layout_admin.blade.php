@@ -141,7 +141,7 @@
                 </li>
                 <li class=" navigation-header"><span>Apps</span>
                 </li>
-                <li class=" nav-item"><a href="/orderManagement"><i class="feather icon-shopping-cart"></i><span
+                <li class=" nav-item"><a href="{{ route('order.management', 0)}}"><i class="feather icon-shopping-cart"></i><span
                             class="menu-title" data-i18n="Email">Quản lý đơn hàng</span></a>
                 </li>
                 <li class=" nav-item"><a href="/product-management"><i class="fa fa-product-hunt"></i><span
@@ -268,10 +268,10 @@
     <!-- BEGIN: Footer-->
     <footer class="footer footer-static footer-light">
         <p class="clearfix blue-grey lighten-2 mb-0"><span
-                class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2020<a
-                    class="text-bold-800 grey darken-2" href="https://1.envato.market/pixinvent_portfolio"
-                    target="_blank">Pixinvent,</a>All rights Reserved</span><span
-                class="float-md-right d-none d-md-block">Hand-crafted & Made with<i
+                class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2021<a
+                    class="text-bold-800 grey darken-2" href="https://www.facebook.com/nguyenmanh2442.nt/"
+                    target="_blank">ManhNguyen,</a>Đã đăng ký Bản quyền</span><span
+                class="float-md-right d-none d-md-block">Nguyen Tien Manh<i
                     class="feather icon-heart pink"></i></span>
             <button class="btn btn-primary btn-icon scroll-top" type="button"><i
                     class="feather icon-arrow-up"></i></button>

@@ -6,22 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Orderdetail;
 use Illuminate\Http\Request;
 use App\Models\Orders;
+use App\Models\Product;
 
 class OrderManagementController extends Controller
 {
 
     protected $order;
     protected $orderdetail;
+    protected $product;
 
-    public function __construct(Orders $order, Orderdetail $orderdetail)
+    public function __construct(Orders $order, Orderdetail $orderdetail, Product $product)
     {
         $this->order = $order;
         $this->orderdetail = $orderdetail;
+        $this->product = $product;
     }
     // func orderManagement
-    public function orderManagement(Request $request)
+    public function orderManagement($status, Request $request)
     {
-        $status = 0;
         $keySearch = [];
         if ($request->input('btn_search')) {
             $sName = $request->s_name;
@@ -55,7 +57,7 @@ class OrderManagementController extends Controller
             }
         }
         $orders = $this->order->getOrders($keySearch, $status);
-        return view('order.show_all_orders', compact('orders'));
+        return view('order.show_all_orders', compact('orders', 'status'));
     }
 
     public function getOrderdetail($id)
@@ -67,10 +69,14 @@ class OrderManagementController extends Controller
 
     public function updateOrderStatus($id, Request $request)
     {
-        if (isset($request->btn_confirm)) {
-            $this->order->updateStatusOrder($id, 1);
+        if (isset($request->btn_cancel)) {
+            $this->order->updateStatusOrder($id, 4);
+            $orderdetails = $this->orderdetail->getOrderdetail($id);
+            foreach ($orderdetails as $orderdetail) {
+                $this->product->plusQuantityProduct($orderdetail->id_product, $orderdetail->quantity);
+            }
         } else {
-            $this->order->updateStatusOrder($id, 2);
+            $this->order->updateStatusOrder($id, 1);
         }
         
         return redirect()->route('order.management');

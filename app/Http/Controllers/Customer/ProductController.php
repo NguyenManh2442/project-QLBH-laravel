@@ -32,7 +32,7 @@ class ProductController extends Controller
     }
 
     public function index(){
-        $popularSellingProducts = $this->orderdetail->popularSellingProducts(6);
+        $popularSellingProducts = $this->orderdetail->popularSellingProducts();
         $productRandom = $this->product->getProductrandom();
         $newProduct = $this->product->getNewProduct();
         $category = $this->category->getCategoryParent(0);
@@ -63,11 +63,14 @@ class ProductController extends Controller
         return view('product.show_details', compact('product','category', 'category1'));
     }
     public function getCart(){
-        $userID = Auth::user()->id;
-        $address = $this->deliveryAddress->getAddressByUserId($userID);
+        if (Auth::check()) {
+            $userID = Auth::user()->id;
+            $address = $this->deliveryAddress->getAddressByUserId($userID);
+            session(['idAddress' => $address[0]->id]);
+        }
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
-        session(['idAddress' => $address[0]->id]);
+        
         return view('product.checkout_cart', compact('category', 'category1', 'address'));
     }
 

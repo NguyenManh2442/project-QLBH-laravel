@@ -32,7 +32,7 @@
                         <div class="col-xl-5 col-md-6 col-12 mb-1">
                             <fieldset class="form-group">
                                 <label for="basicInput">Phone</label>
-                                <input type="text" class="form-control" name="s_phone" value="{{ request()->s_supplier }}">
+                                <input type="text" class="form-control" name="s_phone" value="{{ request()->s_phone }}">
                             </fieldset>
                         </div>
                         <div class="col-xl-2 col-md-6 col-12">

@@ -18,12 +18,13 @@ class Orderdetail extends Model
                         ->get();
     }
 
-
-    public function popularSellingProducts($num){
-        return Orderdetail::select('id_product','products.*',DB::raw('SUM(orderdetails.quantity) as banchay'))
+    //
+    public function popularSellingProducts(){
+        return Orderdetail::join('products','products.id','=','orderdetails.id_product')
         ->groupBy('id_product')
-        ->join('products','products.id','=','orderdetails.id_product')
-        ->orderBy('banchay','DESC')
-        ->paginate($num);
+        ->select('id_product','products.*',DB::raw('SUM(orderdetails.quantity) as selling'))
+        ->orderBy('selling','DESC')
+        ->limit(8)
+        ->get();
     }
 }

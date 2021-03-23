@@ -43,7 +43,7 @@ class OrderController extends Controller
                     $discount = $value['discount'];
                     $size = $value['size'];
                     $order = $this->order->storeOrderdetail($orderId, $idProduct, $unitPrice, $quantity, $discount, $size);
-                    $updateDiscountProduct = $this->product->updateQuantityProductByID($idProduct, $quantity);
+                    $updateDiscountProduct = $this->product->minusQuantityProduct($idProduct, $quantity);
                 }
                 if ($order == true && $updateDiscountProduct == true) {
                     $data['status'] = 'true';
@@ -61,8 +61,28 @@ class OrderController extends Controller
     {
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
+        $orders = $this->order->getOrdersByStatus($status);
         $products = $this->order->getOrderByUserIDAndStatus($status);
-        return view('customer.ordered_of_customer', compact('products', 'category', 'category1', 'status'));
+        return view('customer.ordered_of_customer', compact('orders','products', 'category', 'category1', 'status'));
+    }
+
+    public function updateOrderStatus($id, Request $request)
+    {
+        $orderdetails = $this->orderdetail->getOrderdetail($id);
+        if (isset($request->btn_cancel)) {
+            $this->order->updateStatusOrderByUserID($id, 5);
+            foreach ($orderdetails as $orderdetail) {
+                $this->product->plusQuantityProduct($orderdetail->id_product, $orderdetail->quantity);
+            }
+        } 
+        if (isset($request->btn_reorder)) {
+            $this->order->updateStatusOrderByUserID($id, 0);
+            foreach ($orderdetails as $orderdetail) {
+                $this->product->minusQuantityProduct($orderdetail->id_product, $orderdetail->quantity);
+            }
+        }
+        
+        return redirect()->route('order.ordered', 0);
     }
 
 }

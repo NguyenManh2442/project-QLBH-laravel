@@ -47,7 +47,7 @@
                         <div class="col-12 col-md-5 d-flex align-items-center justify-content-center mb-2 mb-md-0">
                             <div class="d-flex align-items-center justify-content-center">
                                 <img src="{{ asset('img') }}/{{ $product[0]->image }}" class="img-fluid"
-                                    alt="product image">
+                                    alt="product image" style="height:500px; width:500px; !important">
                             </div>
                         </div>
                         <div class="col-12 col-md-6">

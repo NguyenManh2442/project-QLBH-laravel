@@ -96,14 +96,16 @@
                             <div class="item-img text-center">
                                 <a href="/detail&id={{ $value->id }}">
                                     <img class="img-fluid" src="{{ asset('img') }}/{{ $value->image }}"
-                                        alt="img-placeholder"></a>
+                                        alt="img-placeholder" style="height:350px !important" ></a>
                             </div>
                             <div class="card-body">
                                 <div class="item-wrapper">
                                     <div class="item-rating">
-                                        <div class="badge badge-primary badge-md">
-                                            <span>4</span> <i class="feather icon-star"></i>
-                                        </div>
+                                        @if ($value->discount != 0)
+                                            <div class="badge badge-primary badge-md">
+                                                - {{ $value->discount }}%
+                                            </div>
+                                        @endif
                                     </div>
                                     <div>
                                         <h6 class="item-price">

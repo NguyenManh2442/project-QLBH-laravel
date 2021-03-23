@@ -14,7 +14,6 @@ Route::group(['namespace'=>'Customer'], function(){
     Route::get('/','ProductController@index'); //TRang chủ
 
     Route::get('getproductbycatid/{idProduct}', 'ProductController@getproductbycatid'); //hiển thị các sản phẩm theo menu
-    Route::get('getproductOffer','ProductController@getproductOffer');
 
     Route::get('getPopularSellingProducts','ProductController@getPopularSellingProducts');
 
@@ -29,6 +28,8 @@ Route::group(['namespace'=>'Customer'], function(){
     Route::post('editAddress','DeliveryAddressController@editAddress');
 
     Route::put('updateAddress&id={id}','DeliveryAddressController@updateAddress')->name('address.update_address');
+
+    Route::put('cancel-status-order&id={id}','OrderController@updateOrderStatus')->name('order.status_cancel');
 
     Route::post('storeAddressSession','DeliveryAddressController@storeAddressSession');
 
@@ -47,8 +48,6 @@ Route::group(['namespace'=>'Customer'], function(){
     Route::get('updateInfor-form','customerController@formUpdateInfor'); // cập nhật thông tin user form
 
     Route::post('update_infor', 'customerController@updateInfor'); // post cập nhật thông tin user
-
-    Route::get('search', 'ProductController@searchProduct'); // tìm kiếm sản phẩm
 
     Route::post('postOrderProduct', 'OrderController@postOrderProduct'); //đặt hàng
 
@@ -102,7 +101,7 @@ Route::group(['namespace'=>'Admin'],function(){
 
     Route::delete('delete&id={id}', 'ProductManagementController@deleteProduct')->name('delete_product')->middleware('checkSigninEmployee','CheckLevelEmployee');// delete sản phẩm
 
-    Route::get('orderManagement','OrderManagementController@orderManagement')->name('order.management')->middleware('checkSigninEmployee','CheckLevelEmployee');//quan ly don hang
+    Route::get('orderManagement&status={status}','OrderManagementController@orderManagement')->name('order.management')->middleware('checkSigninEmployee','CheckLevelEmployee');//quan ly don hang
 
     Route::get('orderdetail&id={id}','OrderManagementController@getOrderdetail')->middleware('checkSigninEmployee','CheckLevelEmployee');//xem chi tiet don hang
 

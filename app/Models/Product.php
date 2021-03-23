@@ -34,9 +34,9 @@ class Product extends Model
         $query = DB::table('products');
         if (!empty($request)) {
             foreach ($request as $key => $value) {
-                if (isset($request['product_name'])) {
+                if ($key == 'product_name') {
                     $query->where($key, 'like', '%' . $value . '%');
-                } else{
+                } else {
                     $query->where($key, '=', $value);
                 }
             }
@@ -53,7 +53,7 @@ class Product extends Model
     }
 
     public function getNewProduct(){
-        return Product::limit(8)->get();
+        return Product::orderBy('products.created_at', 'desc')->limit(8)->get();
     }
 
     public function getproductbycatid($categoryID){
@@ -68,10 +68,9 @@ class Product extends Model
         return Product::where('id', $id)->get();
     }
 
+    //
     public function updateQuantityProductByID($id, $quantity)
     {
-        $product = $this->getProductById($id);
-        $quantity = $product->quantity - $quantity;
         DB::beginTransaction();
         try{
             Product::where('id', $id)->update(['quantity' => $quantity]);
@@ -84,6 +83,23 @@ class Product extends Model
         }
     }
 
+    //
+    public function minusQuantityProduct($id, $quantity)
+    {
+        $product = $this->getProductById($id);
+        $quantity = $product->quantity - $quantity;
+        return $this->updateQuantityProductByID($id, $quantity);
+    }
+
+    //
+    public function plusQuantityProduct($id, $quantity)
+    {
+        $product = $this->getProductById($id);
+        $quantity = $product->quantity + $quantity;
+        return $this->updateQuantityProductByID($id, $quantity);
+    }
+
+    //
     public function getProductLatest($menuid, $check) {
         $query = $this->_model->newQuery()
         ->where('category_id', $menuid)

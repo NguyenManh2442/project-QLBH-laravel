@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="col-xl-4 col-md-6 col-12 mb-1">
                         <fieldset class="form-group">
-                            <label for="basicInput">Name category</label>
+                            <label for="basicInput">Name</label>
                             <input type="text" class="form-control" name="s_name_product" value="{{ request()->s_name_product }}">
                         </fieldset>
                     </div>
@@ -87,7 +87,7 @@
                 @foreach($product as $key=>$value)
                 <tr>
                     <td></td>
-                    <td class="product-img"><img src="{{asset('img')}}/{{ $value->image }}" alt="Img placeholder">
+                    <td class="product-img"><img src="{{asset('img')}}/{{ $value->image }}" alt="Img placeholder" width="250px" height="250px">
                     </td>
                     <td class="product-name">{{ $value->product_name }}</td>
                     <td class="product-category">{{ $value->supplier }}</td>

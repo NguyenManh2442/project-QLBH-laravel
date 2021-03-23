@@ -23,7 +23,7 @@ class Employee extends Authenticatable
         $query = DB::table('employees');
         if (!empty($request)) {
             foreach ($request as $key => $value) {
-                if (isset($request['name']) || isset($request['mail_address'])) {
+                if ($key == 'name' || $key == 'mail_address') {
                     $query->where($key, 'like', '%' . $value . '%');
                 } else{
                     $query->where($key, '=', $value);

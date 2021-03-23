@@ -87,38 +87,40 @@
     <div class="content-header row">
         <div class="container-fluid" style="width: 1600px">
             <div style="margin: 40px">
-                <h2>Đề xuất</h2>
+                <h2>Sản phẩm bán chạy</h2>
             </div>
             <section id="wishlist" class="grid-view wishlist-items">
-                @foreach ($newProduct as $valueNewProduct)
+                @foreach ($popularSellingProducts as $valueProduct)
                     <div class="card ecommerce-card">
                         <div class="card-content">
                             <div class="item-img text-center">
-                                <a href="/detail&id={{ $valueNewProduct->id }}">
-                                    <img src="{{ asset('img') }}/{{ $valueNewProduct->image }}" class="img-fluid"
-                                        alt="img-placeholder">
+                                <a href="/detail&id={{ $valueProduct->id }}">
+                                    <img src="{{ asset('img') }}/{{ $valueProduct->image }}" class="img-fluid"
+                                        alt="img-placeholder" style="height:350px !important" >
                                 </a>
                             </div>
                             <div class="card-body">
                                 <div class="item-wrapper">
                                     <div class="item-rating">
+                                        @if ($valueProduct->discount != 0)
                                         <div class="badge badge-primary badge-md">
-                                            4 <i class="feather icon-star ml-25"></i>
+                                            - {{ $valueProduct->discount }}%
                                         </div>
+                                    @endif
                                     </div>
                                     <div>
                                         <h6 class="item-price">
-                                            @if ($valueNewProduct->discount == 0)
+                                            @if ($valueProduct->discount == 0)
                                                 <p class="text-primary font-medium-3 mr-1 mb-0">
-                                                    {{ number_format($valueNewProduct->unit_price) }}
+                                                    {{ number_format($valueProduct->unit_price) }}
                                                     .Đ</p>
                                                 </br></br>
                                             @else
                                                 <p class="text-primary font-medium-3 mr-1 mb-0">
-                                                    {{ number_format($valueNewProduct->unit_price - $valueNewProduct->unit_price * ($valueNewProduct->discount / 100)) }}
+                                                    {{ number_format($valueProduct->unit_price - $valueProduct->unit_price * ($valueProduct->discount / 100)) }}
                                                     .Đ</p>
                                                 <p style="font-size: 15px !important; color: #626262;">
-                                                    <del>{{ number_format($valueNewProduct->unit_price) }}<del>
+                                                    <del>{{ number_format($valueProduct->unit_price) }}<del>
                                                             .Đ
                                                 </p>
                                             @endif
@@ -126,17 +128,17 @@
                                     </div>
                                 </div>
                                 <div class="item-name">
-                                    <a href="/detail&id={{ $valueNewProduct->id }}">
-                                        {{ $valueNewProduct->product_name }}
+                                    <a href="/detail&id={{ $valueProduct->id }}">
+                                        {{ $valueProduct->product_name }}
                                     </a>
                                 </div>
                                 <div>
                                     <p class="item-description">
-                                        {{ $valueNewProduct->description }}
+                                        {{ $valueProduct->description }}
                                     </p>
                                 </div>
                             </div>
-                            <a href="/detail&id={{ $valueNewProduct->id }}" style="color: wheat">
+                            <a href="/detail&id={{ $valueProduct->id }}" style="color: wheat">
                                 <div class="item-options text-center">
                                     <div class="cart">
                                         <i class="feather icon-shopping-cart"></i> <span>Chi tiết</span>
@@ -160,15 +162,17 @@
                             <div class="item-img text-center">
                                 <a href="/detail&id={{ $valueNewProduct->id }}">
                                     <img src="{{ asset('img') }}/{{ $valueNewProduct->image }}" class="img-fluid"
-                                        alt="img-placeholder">
+                                        alt="img-placeholder" style="height:350px !important" >
                                 </a>
                             </div>
                             <div class="card-body">
                                 <div class="item-wrapper">
                                     <div class="item-rating">
-                                        <div class="badge badge-primary badge-md">
-                                            4 <i class="feather icon-star ml-25"></i>
-                                        </div>
+                                        @if ($valueNewProduct->discount != 0)
+                                            <div class="badge badge-primary badge-md">
+                                                - {{ $valueNewProduct->discount }}%
+                                            </div>
+                                        @endif
                                     </div>
                                     <div>
                                         <h6 class="item-price">
@@ -218,8 +222,8 @@
     </div>
     <div class="card-body">
         <div class="mt-4 mb-2 text-center">
-            <h2>RELATED PRODUCTS</h2>
-            <p>People also search for this items</p>
+            <h2>Ngẫu nhiên</h2>
+            <p>Có thể bạn thích</p>
         </div>
         <div class="swiper-responsive-breakpoints swiper-container px-4 py-2">
             <div class="swiper-wrapper">
@@ -235,7 +239,7 @@
                             </p>
                         </div>
                         <div class="img-container w-50 mx-auto my-2 py-75">
-                            <img src="{{ asset('img') }}/{{ $valueNewProduct->image }}" class="img-fluid" alt="image">
+                            <img src="{{ asset('img') }}/{{ $valueRandomProduct->image }}" style="height:159px; width: 121px !important" class="img-fluid" alt="image">
                         </div>
                         <div class="item-meta">
                             <div class="product-rating">

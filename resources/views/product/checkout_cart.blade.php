@@ -53,7 +53,7 @@
                                     <div class="item-img text-center">
                                         <a href="/detail&id={{ $value['id'] }}">
                                             <img src="{{ asset('img') }}/{{ $value['image'] }}"
-                                                alt="img-placeholder">
+                                                alt="img-placeholder" width="250px" height="250px">
                                         </a>
                                     </div>
                                     <div class="card-body">
@@ -281,7 +281,7 @@
                                                                         </button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        Bạn có chắc muốn xóa slideshow này?
+                                                                        Bạn có chắc muốn address này?
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <form
@@ -361,7 +361,7 @@
                                                     <td></td>
                                                     <td class="product-img"><img
                                                             src="{{ asset('img') }}/{{ $value['image'] }}"
-                                                            alt="Img placeholder" width="500px" height="300px">
+                                                            alt="Img placeholder" width="250px" height="250px">
                                                     </td>
                                                     <td class="product-name">{{ $value['name'] }}</td>
                                                     <td class="product-category">{{ $value['num'] }}</td>
