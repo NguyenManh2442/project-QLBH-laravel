@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\CustomerOrder;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Orderdetail;
@@ -25,7 +26,7 @@ class OrderController extends Controller
         $this->product = $product;
     }
 
-    public function postOrderProduct(Request $request)
+    public function postOrderProduct()
     {
         $orderdetail = session()->get('cart');
         $data = [
@@ -47,6 +48,14 @@ class OrderController extends Controller
                 }
                 if ($order == true && $updateDiscountProduct == true) {
                     $data['status'] = 'true';
+                    $mail = Auth::user()->email;
+
+                    $order = $this->order->getOrderByID($orderByUser[0]->id);
+                    $orderdetail = $this->orderdetail->getOrderdetail($order[0]->id);
+                    $order = json_decode(json_encode($order), true);
+                    $orderdetails = json_decode(json_encode($orderdetail), true);
+                    event(new CustomerOrder($order, $orderdetails, $mail));
+
                     session()->forget('cart');
                     session()->forget('idAddress');
                     return response()->json($data);

@@ -61,7 +61,7 @@ class Employee extends Authenticatable
         $employee->phone = $request['phone'];
         $employee->address = $request['address'];
         $employee->birth_date = $request['birth_date'];
-        if (empty($request['password'])) {
+        if (!empty($request['password'])) {
             $employee->password = bcrypt($request['password']);
         }
         $employee->role = $request['role'];
