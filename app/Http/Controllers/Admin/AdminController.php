@@ -3,27 +3,39 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePassword;
 use Illuminate\Http\Request;
 use App\Http\Requests\signinAdmin;
 use App\Http\Requests\CreateAccountAdminRequest;
+use App\Http\Requests\UpdateInforAdminRequest;
 use App\Models\Employee;
+use App\Models\Orders;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 // use App\Models\Employee;
 use Throwable;
 
 class AdminController extends Controller
 {
     protected $employee;
+    protected $order;
 
-    public function __construct(Employee $employee)
+    public function __construct(Employee $employee, Orders $order)
     {
         $this->employee = $employee;
+        $this->order = $order;
     }
 
     // func index
     public function index()
     {
-        return view('admin.index');
+        $array = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        $data = $this->order->countProductOfMonth();
+        foreach ($data as $value) {
+            $array[$value->month - 1] = $value->quantity;
+        }
+        $count = array_map('intval', $array);
+        return view('admin.chart', compact('count'));
     }
 
     // func formSignin
@@ -55,6 +67,44 @@ class AdminController extends Controller
     {
         Auth::guard('employee')->logout();
         return redirect('signinAdminForm');
+    }
+
+    public function editProfile()
+    {
+        return view('admin.update_infor');
+    }
+
+    public function updateProfile(UpdateInforAdminRequest $request)
+    {
+        $fileName = null;
+        if($request->hasFile('avatar')){
+            $fileImg = $request->avatar;
+            $fileName =time() . "_" . rand(0,9999999) . "_" . md5(rand(0,9999999)) . $fileImg->getClientOriginalName();
+            $fileImg->move('img', $fileName);
+        } else {
+            $fileName = Auth::guard('employee')->user()->avatar;
+        }
+
+        $name = $request->full_name;
+        $address = $request->address;
+        $avatar = $fileName;
+        $birthdate = $request->birth_date;
+        $phone = $request->phone;
+        $statusUpdate = $this->employee->postUpdateInfor($name, $address, $avatar, $birthdate, $phone);
+        return redirect()->back()->with('update-infor','Cập nhật thông tin thành công!');
+        
+    }
+
+    public function updatePassword(ChangePassword $request)
+    {
+        $password =Auth::guard('employee')->user()->password;
+        if(Hash::check($request->old_password, $password)){
+            $this->employee->changePassword($request->new_password);
+            return redirect()->back()->with('thaymatkhau2','Thay đổi mật khẩu thành công!');
+        }
+        else{
+            return redirect()->back()->with('thaymatkhau','Mật khẩu cũng không đúng!');
+        }
     }
 
     // func adminAccountManagement

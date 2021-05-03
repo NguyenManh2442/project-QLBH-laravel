@@ -97,6 +97,7 @@
                                                     <select class="form-control" name="role">
                                                         <option value="1">Admin</option>
                                                         <option value="2">Employee</option>
+                                                        <option value="3">Shipper</option>
                                                     </select>
                                                     @error('role')
                                                         <lable style="color: red">{{ $errors->first('role') }}</lable><br><br>

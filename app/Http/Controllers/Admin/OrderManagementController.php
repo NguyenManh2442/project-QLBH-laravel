@@ -79,6 +79,6 @@ class OrderManagementController extends Controller
             $this->order->updateStatusOrder($id, 1);
         }
         
-        return redirect()->route('order.management');
+        return redirect()->route('order.management', 1);
     }
 }

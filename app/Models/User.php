@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -47,20 +49,34 @@ class User extends Authenticatable
         $user->save();
     }
 
-    public function postUpdateInfor($id, $username, $fullname, $phone, $address, $birthdate) {
-        $user = User::find($id);
-        $user->username = $username;
-        $user->full_name = $fullname;
-        $user->phone = $phone;
-        $user->address = $address;
-        $user->birth_date = $birthdate;
-        $user->save();
+    public function postUpdateInfor($username, $fullname, $avatar, $birthdate) {
+        try {
+            $id = Auth::user()->id;
+            $user = User::find($id);
+            $user->username = $username;
+            $user->full_name = $fullname;
+            $user->avatar = $avatar;
+            $user->birth_date = $birthdate;
+            $user->save();
+            return true;
+        }
+        catch(Exception $exeption) {
+            return false;
+        }
+        
     }
 
-    public function changePassword($id, $newPassword) {
-        $user = User::find($id);
-        $user->password = bcrypt($newPassword);
-        $user->save();
+    public function changePassword($new_password) {
+        try {
+            $id = Auth::user()->id;
+            $user = User::find($id);
+            $user->password = bcrypt($new_password);
+            $user->save();
+            return true;
+        }
+        catch(Exception $exeption) {
+            return false;
+        }
     }
 
     public function checkEmail($email) {
@@ -74,30 +90,30 @@ class User extends Authenticatable
         ])->first();
     }
 
-    public function orderProcessing() {
-        return User::join('orders','orders.user_id','=','customers.id')
-            ->select('customers.phone','customers.full_name','orders.*')
-            ->orderBy('orders.order_date', 'desc')
-            ->limit(3)
-            ->get();
-    }
+    // public function orderProcessing() {
+    //     return User::join('orders','orders.user_id','=','customers.id')
+    //         ->select('customers.phone','customers.full_name','orders.*')
+    //         ->orderBy('orders.order_date', 'desc')
+    //         ->limit(3)
+    //         ->get();
+    // }
 
-    public function dataOrder($orderId) {
-        return User::join('orders','orders.user_id','=','customers.id')
-            ->join('orderdetails','orderdetails.order_id','=','orders.order_id')
-            ->join('products','products.id','=','orderdetails.id_product')
-            ->select('customers.address','customers.phone','customers.full_name','customers.email','orders.*','orderdetails.*','products.image','products.product_name')
-            ->where('orderdetails.order_id','=',$orderId)
-            ->get();
+    // public function dataOrder($orderId) {
+    //     return User::join('orders','orders.user_id','=','customers.id')
+    //         ->join('orderdetails','orderdetails.order_id','=','orders.order_id')
+    //         ->join('products','products.id','=','orderdetails.id_product')
+    //         ->select('customers.address','customers.phone','customers.full_name','customers.email','orders.*','orderdetails.*','products.image','products.product_name')
+    //         ->where('orderdetails.order_id','=',$orderId)
+    //         ->get();
             
-    }
+    // }
 
-    public function getOrderByCustomer()
-    {
-        return User::join('orders','orders.user_id','=','customers.id')
-            ->select('customers.address','customers.phone','customers.full_name','orders.*')
-            ->orderBy('orders.order_date', 'desc')
-            ->where('orders.status',1)
-            ->get();
-    }
+    // public function getOrderByCustomer()
+    // {
+    //     return User::join('orders','orders.user_id','=','customers.id')
+    //         ->select('customers.address','customers.phone','customers.full_name','orders.*')
+    //         ->orderBy('orders.order_date', 'desc')
+    //         ->where('orders.status',1)
+    //         ->get();
+    // }
 }

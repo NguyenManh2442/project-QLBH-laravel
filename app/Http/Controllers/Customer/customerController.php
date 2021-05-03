@@ -74,37 +74,32 @@ class customerController extends Controller
         return view('customer.forget_password', compact('category','category1'));
     }
 
-    public function formUpdateInfor(){
+    public function editInfor(){
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
         return view('customer.update_infor', compact('category','category1'));
     }
 
-    public function updateInfor(UpdateInfor $request){
-        $id = Auth::user()->id;
-        $username = $request->username;
-        $fullname = $request->fullName;
-        $phone = $request->phone;
-        $address = $request->address;
-        $birthdate = $request->birthDate;
+    public function updateInfor(Request $request){
+        if($request->hasFile('avatar')){
+            $fileImg = $request->avatar;
+            $fileName =time() . "_" . rand(0,9999999) . "_" . md5(rand(0,9999999)) . $fileImg->getClientOriginalName();
+            $fileImg->move('img', $fileName);
 
-        $this->user->postUpdateInfor($id, $username, $fullname, $phone, $address, $birthdate);
-
-        return redirect()->back()->with('update-infor','Cập nhật thông tin thành công!');
+            $username = $request->username;
+            $fullname = $request->full_name;
+            $avatar = $fileName;
+            $birthdate = $request->birth_date;
+            $statusUpdate = $this->user->postUpdateInfor($username, $fullname, $avatar, $birthdate);
+            return redirect()->back()->with('update-infor','Cập nhật thông tin thành công!');
+        }
     }
 
-    public function form_changePass(){
-        $category = $this->category->getCategoryParent(0);
-        $category1 = $this->category->getCategoryChill();
-        return view('customer.change_password', compact('category','category1'));
-    }
-
-    public function changePassword(ChangePassword $request){
-
-        $id = Auth::user()->id;
+    public function changePassword(Request $request)
+    {
         $password = Auth::user()->password;
-        if(Hash::check($request->password, $password)){
-            $this->user->changePassword($id, $request->newPassword1);
+        if(Hash::check($request->old_password, $password)){
+            $this->user->changePassword($request->new_password);
             return redirect()->back()->with('thaymatkhau2','Thay đổi mật khẩu thành công!');
         }
         else{

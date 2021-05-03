@@ -52,10 +52,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $countUnitProce = 0;
-                                    $countDiscount = 0;
-                                @endphp
                                 @foreach ($orderdetail as $value)
                                     <tr>
                                         <td><img src="{{ asset('img') }}/{{ $value->image }}" alt="Img placeholder"
@@ -66,10 +62,6 @@
                                         <td>{{ $value->discount }}</td>
                                         <td>{{ $value->size }}</td>
                                     </tr>
-                                    @php
-                                        $countUnitProce += $value->unit_price;
-                                        $countDiscount += $value->unit_price - $value->unit_price * ($value->discount / 100);
-                                    @endphp
                                 @endforeach
                             </tbody>
                         </table>
@@ -84,22 +76,22 @@
                                 <tbody>
                                     <tr>
                                         <th>Thành tiền</th>
-                                        <td>{{ number_format($countUnitProce) }} .Đ</td>
+                                        <td>{{ number_format($order[0]->unit_price) }} .Đ</td>
                                     </tr>
                                     <tr>
-                                        <th>Giảm giá</th>
-                                        <td>- {{ number_format($countUnitProce - $countDiscount) }} .Đ</td>
+                                        <th>Giảm giá voucher </th>
+                                        <td>- {{ number_format($order[0]->name) }} .Đ</td>
                                     </tr>
                                     <tr>
                                         <th>Tổng tiền:</th>
-                                        <td>{{ number_format($countDiscount) }} .Đ</td>
+                                        <td>{{ number_format($order[0]->unit_price) }} .Đ</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-7 d-flex">
-                                @if ($order[0]->status == 0))
+                                @if ($order[0]->status == 0)
                                     <form action="{{ route('update.status_order', $order[0]->id) }}" method="post">
                                         @method('PUT')
                                         <input type="submit" name="btn_confirm" class="btn btn-primary mb-1 mb-md-0"

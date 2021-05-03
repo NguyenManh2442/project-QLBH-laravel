@@ -187,55 +187,6 @@ class ProductManagementController extends Controller
         return redirect()->back();
     }
 
-    public function getOrderLoadMore(Request $request)
-    {
-        $order = DB::table('customers')
-            ->join('orders', 'orders.userid', '=', 'customers.id')
-            ->select('customers.phone', 'customers.fullName', 'orders.*')
-            ->orderBy('orders.orderDate', 'desc')
-            ->where('orders.orderDate', '<', $request->lastid)
-            ->limit(3)
-            ->get();
-        $output = "";
-
-
-            foreach ($order as $key => $value) {
-                if (isset($value)){
-                    $output .= " <tr>
-            <th scope=\"row\">$value->orderID</th>
-            <td>$value->orderDate</td>
-            <td>$value->fullName</td>
-            <td>$value->phone </td>";
-                if ($value->status == '') {
-                    $output .= " <td style='color: red'>Chưa xác nhận</td>";
-                }
-                elseif($value->status == 4){
-                    $output .= " <td style='color: red'>Đã hủy</td>";
-                }
-                elseif($value->status == 2){
-                    $output .= " <td style='color: #000080'>Shipper đã nhận</td>";
-                }
-                elseif($value->status == 3){
-                    $output .= " <td style='color: green'>Đã giao thành công</td>";
-                }
-                else {
-                    $output .= " <td style='color: #FFA500'>Đã xác nhận</td>";
-                }
-                $output .= "<td><a href=\"orderdetail&orderId=$value->orderID \"class=\"btn btn-info\">Xem chi tiết</a></td>
-                </tr>";
-            }
-        }
-            if (isset($value))
-                $output .= "
-                 <tr id='btnLoadMore'>
-                     <td scope=\"row\">
-                            <button class=\"btn btn-info load-more\" id=\"btnLoad2\" data-id=\"$value->orderDate\">Xem thêm...</button>
-                     </td>
-                 </tr>";
-            echo $output;
-
-    }
-
     public function orderCancel(Request $request)
     {
         $this->order->updateStatusOrder($request->orderID, 4);

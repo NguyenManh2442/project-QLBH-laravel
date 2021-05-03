@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShippersTable extends Migration
+class CreateVouchersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateShippersTable extends Migration
      */
     public function up()
     {
-        Schema::create('shippers', function (Blueprint $table) {
+        Schema::create('vouchers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('shipper_id');
-            $table->string('company_name');
-            $table->string('phone');
-            $table->string('description');
-            $table->string('order_id');
-            $table->date('complete_order_date');
+            $table->string('name');
+            $table->integer('quantity');
+            $table->date('effective_date');
+            $table->date('expiration_date');
+            $table->string('status', 2);
+            $table->integer('discount');
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateShippersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shippers');
+        Schema::dropIfExists('vouchers');
     }
 }

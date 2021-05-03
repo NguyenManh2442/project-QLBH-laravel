@@ -17,7 +17,7 @@ class checkUser
     public function handle($request, Closure $next)
     {
         if(Auth::check()){
-            return redirect()->intended('trangchu');
+            return redirect()->intended('/');
         }
         return $next($request);
     }

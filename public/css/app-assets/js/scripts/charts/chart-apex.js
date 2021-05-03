@@ -43,7 +43,7 @@ $(document).ready(function () {
     },
     series: [{
       name: "Desktops",
-      data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+      data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 12],
     }],
     title: {
       text: 'Product Trends by Month',
@@ -56,7 +56,7 @@ $(document).ready(function () {
       },
     },
     xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'abc'],
     },
     yaxis: {
       tickAmount: 5,

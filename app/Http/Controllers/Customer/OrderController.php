@@ -29,11 +29,12 @@ class OrderController extends Controller
     public function postOrderProduct()
     {
         $orderdetail = session()->get('cart');
+        $countDiscount = session()->get('count');
         $data = [
             'status' => 'false',
         ];
-        if ($orderdetail == true) { 
-            $this->order->storeOrderProduct();
+        if ($orderdetail == true) {
+            $this->order->storeOrderProduct($countDiscount);
             $orderByUser = $this->order->findOrderByUserID(); 
             $order = false;
                 foreach ($orderdetail as $value) {
@@ -49,7 +50,6 @@ class OrderController extends Controller
                 if ($order == true && $updateDiscountProduct == true) {
                     $data['status'] = 'true';
                     $mail = Auth::user()->email;
-
                     $order = $this->order->getOrderByID($orderByUser[0]->id);
                     $orderdetail = $this->orderdetail->getOrderdetail($order[0]->id);
                     $order = json_decode(json_encode($order), true);

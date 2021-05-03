@@ -10,6 +10,8 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::group(['namespace'=>'Customer'], function(){
     Route::get('/','ProductController@index'); //TRang chủ
 
@@ -20,6 +22,10 @@ Route::group(['namespace'=>'Customer'], function(){
     Route::get('cart','ProductController@getCart'); // giỏ hàng
 
     Route::post('addCart','CartController@addCart'); // post thêm giỏ hàng
+
+    Route::post('checkVoucher','CartController@checkVoucher');
+
+    Route::post('confirmVoucher','CartController@confirmVoucher');
 
     Route::post('updateCart','CartController@updateCart'); //post Cập nhât giỏ hàng
 
@@ -32,6 +38,8 @@ Route::group(['namespace'=>'Customer'], function(){
     Route::put('cancel-status-order&id={id}','OrderController@updateOrderStatus')->name('order.status_cancel');
 
     Route::post('storeAddressSession','DeliveryAddressController@storeAddressSession');
+    
+    Route::post('postOrderProduct', 'OrderController@postOrderProduct');
 
     Route::get('signin','customerController@form_signin')->middleware('checkUser'); // đăng Nhập form
 
@@ -45,15 +53,11 @@ Route::group(['namespace'=>'Customer'], function(){
 
     Route::post('post-signup','customerController@signup'); // post đăng ký
 
-    Route::get('updateInfor-form','customerController@formUpdateInfor'); // cập nhật thông tin user form
+    Route::get('infor','customerController@editInfor')->name('infor'); // cập nhật thông tin user form
 
-    Route::post('update_infor', 'customerController@updateInfor'); // post cập nhật thông tin user
+    Route::post('update-infor', 'customerController@updateInfor')->name('updateInfor'); // post cập nhật thông tin user
 
-    Route::post('postOrderProduct', 'OrderController@postOrderProduct'); //đặt hàng
-
-    Route::get('change-password','customerController@form_changePass'); // form thay đổi mật khẩu
-
-    Route::post('post-change-password', 'customerController@changePassword');
+    Route::post('change-password', 'customerController@changePassword')->name('changePassword');
 
     Route::get('forget-password','customerController@form_forget_password');// form quên m khẩu
 
@@ -75,7 +79,7 @@ Route::group(['namespace'=>'Customer'], function(){
 });
 
 Route::group(['namespace'=>'Admin'],function(){
-    Route::get('admin','AdminController@index')->middleware('checkSigninEmployee','CheckLevelEmployee');// Trang quản trị admin
+    Route::get('admin','AdminController@index')->name('index')->middleware('checkSigninEmployee','CheckLevelEmployee');// Trang quản trị admin
 
     Route::get('employee','AdminController@index')->middleware('checkSigninEmployee','CheckLevelEmployee');
 
@@ -86,6 +90,12 @@ Route::group(['namespace'=>'Admin'],function(){
     Route::post('signinAdmin','AdminController@signinAdmin');// post trang đăng nhập
 
     Route::get('logoutAdmin','AdminController@logoutAdmin');//Đăng xuất admin
+
+    Route::get('profile','AdminController@editProfile')->name('profile');
+
+    Route::post('profile','AdminController@updateProfile')->name('updateProfile');
+
+    Route::post('change-password','AdminController@updatePassword')->name('updatePassword');
 
     Route::get('product-management','ProductManagementController@viewProduct')->name('product.management')->middleware('checkSigninEmployee','CheckLevelEmployee');//Hiển thị các sản phẩm qản lý
 
@@ -107,13 +117,22 @@ Route::group(['namespace'=>'Admin'],function(){
 
     Route::put('update-status-order&id={id}','OrderManagementController@updateOrderStatus')->name('update.status_order')->middleware('checkSigninEmployee','CheckLevelEmployee');//Xac nhan don hang
 
-    Route::get('reserve&orderId={orderId}', 'ShipperController@reserve')->middleware('checkSigninEmployee','CheckLevelShipper');
+    // shipper
+    Route::prefix('shipper')->group(function () {
+        Route::get('receive-purchase-order', 'ShipperController@receivePurchaseOrder')->name('shipper.receive_purchase_order')->middleware('checkSigninEmployee','CheckLevelShipper');
+        
+        Route::put('receive-purchase-order&id={id}', 'ShipperController@updateStatusOrder')->name('shipper.update_status_order')->middleware('checkSigninEmployee','CheckLevelShipper');
 
-    Route::get('received-delivery', 'ShipperController@receivedDelivery')->middleware('checkSigninEmployee','CheckLevelShipper');
+        Route::get('order-shipping', 'ShipperController@orderShipping')->name('shipper.order_shipping')->middleware('checkSigninEmployee','CheckLevelShipper');
 
-    Route::get('complete&orderId={orderId}', 'ShipperController@completeOrder')->middleware('checkSigninEmployee','CheckLevelShipper');
+        Route::get('order-shipped', 'ShipperController@orderShipped')->name('shipper.order_shipped')->middleware('checkSigninEmployee','CheckLevelShipper');
 
-    Route::get('completeReserve','ShipperController@completeReserve')->middleware('checkSigninEmployee','CheckLevelShipper');
+    });
+    // end shipper
+    
+    // vouchers
+    Route::resource('/vouchers', 'VoucherController', ['only' => ['index', 'create', 'store','edit','update', 'destroy']])->name('*','vouchers')->middleware('checkSigninEmployee','CheckLevelAdmin');;
+    // end vouchers
 
     Route::get('admin-account-management','AdminController@adminAccountManagement')->name('admin.accountManagement')->middleware('checkSigninEmployee','CheckLevelAdmin');// hien thi acc employee
 

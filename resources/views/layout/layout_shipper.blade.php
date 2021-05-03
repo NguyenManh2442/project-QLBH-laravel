@@ -87,19 +87,12 @@
                                 class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none"><span
                                         class="user-name text-bold-600">{{ Auth::guard('employee')->user()->name }}</span><span
-                                        class="user-status">Active</span></div>
-                                        <span>
-                                            @if (!empty(Auth::guard('employee')->user()->avatar))
-                                                <img class="round"
-                                                src="{{ asset('img') }}/{{ isset( Auth::guard('employee')->user()->avatar) ?  Auth::guard('employee')->user()->avatar : '' }}"
-                                                alt="avatar" height="40" width="40">
-                                            @else
-                                                <i class="ficon feather icon-user"></i>
-                                            @endif
-                                        </span>
+                                        class="user-status">Available</span></div><span><img class="round"
+                                        src="{{ asset('css/app-assets/images/portrait/small/avatar-s-11.jpg') }}"
+                                        alt="avatar" height="40" width="40"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
-                                    href="{{ route('profile') }}"><i class="feather icon-user"></i> Edit Profile</a><a
+                                    href="page-user-profile.html"><i class="feather icon-user"></i> Edit Profile</a><a
                                     class="dropdown-item" href="app-email.html"><i class="feather icon-mail"></i> My
                                     Inbox</a><a class="dropdown-item" href="app-todo.html"><i
                                         class="feather icon-check-square"></i> Task</a><a class="dropdown-item"
@@ -137,32 +130,23 @@
                 <li class=" nav-item {{ Request::segment(1) === 'admin' ? 'active' : '' }}"><a href="{{ route('index') }}"><i class="feather icon-home"></i>
                     <span class="menu-title" data-i18n="Email">Thống kê</span></a>
                 </li>
-                <li class=" nav-item {{ Request::segment(1) === 'orderManagement&status=0' ? 'active' : '' }}"><a href="{{ route('order.management', 0)}}"><i class="feather icon-shopping-cart"></i><span
-                            class="menu-title" data-i18n="Email">Quản lý đơn hàng</span></a>
+                <li class=" nav-item {{ Request::segment(1) === 'orderManagement&status=0' ? 'active' : '' }}"><a href="{{ route('shipper.receive_purchase_order')}}"><i class="feather icon-shopping-cart"></i><span
+                            class="menu-title" data-i18n="Email">Nhận đơn hàng</span></a>
                 </li>
-                <li class=" nav-item {{ Request::segment(1) === 'product-management' ? 'active' : '' }}"><a href="/product-management"><i class="fa fa-product-hunt"></i><span
-                            class="menu-title" data-i18n="Chat">Quản lý sản phẩm</span></a>
+                <li class=" nav-item {{ Request::segment(1) === 'product-management' ? 'active' : '' }}"><a href="{{ route('shipper.order_shipping') }}"><i class="fa fa-product-hunt"></i><span
+                            class="menu-title" data-i18n="Chat">Đơn hàng đang giao</span></a>
                 </li>
-                <li class=" nav-item {{ Request::segment(1) === 'admin-account-management' ? 'active' : '' }}"><a href="/admin-account-management"><i class="feather icon-users"></i><span
-                            class="menu-title" data-i18n="Todo">Quản Lý tài khoản</span></a>
+                <li class=" nav-item {{ Request::segment(1) === 'admin-account-management' ? 'active' : '' }}"><a href="{{ route('shipper.order_shipped') }}"><i class="feather icon-users"></i><span
+                            class="menu-title" data-i18n="Todo">Đơn hàng đã giao</span></a>
                 </li>
                 <li class="nav-item {{ Request::segment(1) === 'slideshow-management' ? 'active' : '' }}"><a href="{{ route('slideshow.slideshowManagement') }}"><i class="feather icon-image"></i><span class="menu-title">Quản lý
                             slideshow</span></a>
                 </li>
-                <li class="nav-item {{ Request::segment(1) === 'category-management' ? 'active' : '' }}"><a href="{{ route('category.categoryManagement') }}"><i
-                            class="feather icon-menu"></i><span class="menu-title">Quản lý danh mục</span></a>
-                </li>
-                <li class="nav-item"><a href="app-calender.html"><i class="fa fa-star-o"></i><span
-                            class="menu-title">Quản lý khách hàng</span></a>
-                </li>
-                <li class="nav-item"><a href="app-calender.html"><i class="fa fa-cube"></i><span class="menu-title">Quản
-                            lý shipper</span></a>
-                </li>
                 <li class=" nav-item"><a href="#"><i class="feather icon-shopping-cart"></i><span class="menu-title"
-                            data-i18n="Ecommerce">Khác ...</span></a>
+                            data-i18n="Ecommerce">Quản lý ...</span></a>
                     <ul class="menu-content">
-                        <li class="nav-item"><a href="{{ route('vouchers.index') }}"><i class="fa fa-star-o"></i><span
-                            class="menu-title">Quản lý voucher</span></a>
+                        <li><a href="app-ecommerce-shop.html"><i class="feather icon-circle"></i><span class="menu-item"
+                                    data-i18n="Shop">Quản lý</span></a>
                         </li>
                         <li><a href="app-ecommerce-details.html"><i class="feather icon-circle"></i><span
                                     class="menu-item" data-i18n="Details">Details</span></a>

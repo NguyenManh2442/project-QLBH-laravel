@@ -23,6 +23,7 @@ class CreateCustomersTable extends Migration
             $table->string('full_name', 255)->nullable();
             $table->date('birth_date')->nullable();
             $table->string('avatar', 255)->nullable();
+            $table->integer('coin')->nullable();
             $table->timestamps();
         });
     }

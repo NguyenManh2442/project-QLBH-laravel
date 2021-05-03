@@ -56,6 +56,7 @@ class Orders extends Model
     public function getOrderByID($id)
     {
         return Orders::join('delivery_address','delivery_address.id','=','orders.delivery_address_id')
+                    ->join('vouchers','vouchers.id','=','orders.voucher_id')
                     ->where('orders.id','=',$id)
                     ->select(
                         'orders.*', 
@@ -64,7 +65,9 @@ class Orders extends Model
                         'delivery_address.wards',
                         'delivery_address.district', 
                         'delivery_address.province', 
-                        'delivery_address.detailed_address'
+                        'delivery_address.detailed_address',
+                        'vouchers.name',
+                        'vouchers.quantity'
                         )
                     ->get();
     }
@@ -78,18 +81,32 @@ class Orders extends Model
         Orders::where('id', $orderID)->where('user_id', $userID)->update(['status' => $status]);
     }
 
-    public function updateStatusOrderAndShiperId($orderID, $status, $shiperId) {
-        Orders::where('order_id', $orderID)->update(['status' => $status], ['shipper_id'=>$shiperId]);
+    public function updateStatusOrderAndShiperId($orderID, $status, $shiperID) {
+        try{
+            $order = Orders::find($orderID);
+            $order->shipper_id = $shiperID;
+            $order->status = $status;
+            $order->save();
+        return true;
+        }
+        catch(Exception $exeption) {
+            return false;
+        }
     }
 
-    public function storeOrderProduct()
+    public function storeOrderProduct($unit_price)
     {
+        $sessionVoucher = session()->get('voucher');
         $id = Auth::user()->id;
         $order = new Orders();
         $order->user_id = $id;
         $order->order_date = Carbon::now('Asia/Ho_Chi_Minh');
         $order->status = 0;
+        $order->unit_price = $unit_price;
         $order->delivery_address_id = session()->get('idAddress');
+        if (isset($sessionVoucher)) {
+            $order->voucher_id = $sessionVoucher["id"];
+        }
         $order->save();
     }
 
@@ -164,5 +181,17 @@ class Orders extends Model
                         'products.image', 
                         'products.product_name'
                     )->get(5);
+    }
+
+    public function countProductOfMonth()
+    {
+        $year = Carbon::now()->format('Y');
+        $data = Orders::join('orderdetails','orderdetails.order_id','=','orders.id')
+        ->selectRaw('SUM(orderdetails.quantity) as quantity, MONTH(order_date) month')
+        ->whereNotIn('status', [4, 5])
+        ->whereYear('order_date', '=', $year)
+        ->groupBy('month')
+        ->get();
+        return $data;
     }
 }

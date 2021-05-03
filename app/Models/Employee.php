@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Employee extends Authenticatable
@@ -73,5 +75,37 @@ class Employee extends Authenticatable
     {
         Employee::destroy($id);
         return true;
+    }
+
+    public function postUpdateInfor($name, $address, $avatar, $birthdate, $phone)
+    {
+        try {
+            $id = Auth::guard('employee')->user()->id;
+            $employee = Employee::find($id);
+            $employee->name = $name;
+            $employee->address = $address;
+            $employee->avatar = $avatar;
+            $employee->birth_date = $birthdate;
+            $employee->phone = $phone;
+            $employee->save();
+            return true;
+        }
+        catch(Exception $exeption) {
+            return false;
+        }
+    }
+
+    public function changePassword($new_password)
+    {
+        try {
+            $id = Auth::guard('employee')->user()->id;
+            $employee = Employee::find($id);
+            $employee->password = bcrypt($new_password);
+            $employee->save();
+            return true;
+        }
+        catch(Exception $exeption) {
+            return false;
+        }
     }
 }

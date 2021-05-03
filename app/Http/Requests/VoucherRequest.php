@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ChangePassword extends FormRequest
+class VoucherRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,11 @@ class ChangePassword extends FormRequest
     public function rules()
     {
         return [
-            'old_password'=>'required',
-            'new_password'=>'required',
-            'confirm_password'=>'required|same:new_password'
+            'name_voucher' => 'required|max:20',
+            'quantity' => 'required|numeric',
+            'discount' => 'required|numeric',
+            'start_date' => 'required|date|before:end_date',
+            'end_date' => 'required|date|after:start_date',
         ];
     }
 }

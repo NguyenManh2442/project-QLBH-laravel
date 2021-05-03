@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->dateTime('shipped_date')->nullable();
             $table->dateTime('order_date');
             $table->string('status');
+            $table->string('unit_price');
             $table->timestamps();
             $table->foreign('user_id')
                 ->references('id')

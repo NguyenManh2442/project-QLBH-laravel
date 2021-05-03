@@ -91,7 +91,7 @@
                                             <div class="item-cost">
                                                 <div id="listCart{{ $key }}">
                                                     <h6 class="item-price" id="cartx{{ $key }}">
-                                                        {{ number_format($tien = $value['gia'] * $value['num']) }}
+                                                        {{ number_format($tien = ($value['gia'] - $value['gia'] * ($value['discount'] / 100)) * $value['num']) }}
                                                         Đ
                                                     </h6>
                                                 </div>
@@ -126,33 +126,36 @@
                                                 <p>Price Details</p>
                                             </div>
                                             <div class="detail">
-                                                <div class="detail-title">
+                                                <div>
                                                     Giá tất cả sản phẩm:
                                                 </div>
                                                 <div class="detail-amt">
-                                                    ${{ number_format($tong) }} Đ
+                                                    {{ number_format($tong) }} Đ
                                                 </div>
                                             </div>
                                             <div class="detail">
-                                                <div class="detail-title">
-                                                    Ship
+                                                <div>
+                                                    Voucher
                                                 </div>
-                                                <div class="detail-amt discount-amt">
-                                                    Free
+                                                <div>
+                                                    <input type="text" class="form-control" id="voucher" name="voucher">
+                                                    <div class="valid-feedback">
+                                                        Voucher hợp lệ
+                                                    </div>
                                                 </div>
                                             </div>
                                             <hr>
                                             <div class="detail">
                                                 <div class="detail-title detail-total">Total</div>
-                                                <div class="detail-amt total-amt">
-                                                    <div class="total">
-                                                        ${{ number_format($tong) }} Đ
+                                                <div class="detail-amt total-amt" id="ts">
+                                                    <div class="total" target="total">
+                                                        {{ number_format($tong) }} Đ
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="btn btn-primary btn-block place-order">ĐỊA CHỈ ĐẶT HÀNG</div>
+                                    <div class="btn btn-primary btn-block place-order" id="confirm">ĐỊA CHỈ ĐẶT HÀNG</div>
                                 </div>
                             </div>
                         </div>
@@ -342,8 +345,8 @@
                             <p class="text-muted mt-25">Be sure to click on correct payment option</p>
                         </div>
                         <div class="card-content">
-                            <div class="card-body">
-                                <div class="table-responsive">
+                            <div class="card-body" id="list-product">
+                                <div class="table-responsive" id="list">
                                     <table class="table data-thumb-view">
                                         <thead>
                                             <tr>
@@ -367,7 +370,7 @@
                                                     <td class="product-category">{{ $value['num'] }}</td>
                                                     <td class="product-category">{{ $value['size'] }}</td>
                                                     <td class="product-category">
-                                                        {{ number_format($tien = $value['gia'] * $value['num']) }} Đ
+                                                        {{ number_format(($value['gia'] - $value['gia'] * ($value['discount'] / 100)) * $value['num']) }} Đ
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -386,11 +389,23 @@
                         <div class="card-content">
                             <div class="card-body">
                                 <div class="detail">
+                                    <div>
+                                        Dùng 1200 xu
+                                    </div>
+                                    <div class="custom-control custom-switch custom-switch-success mr-2 mb-1">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch11">
+                                        <label class="custom-control-label" for="customSwitch11">
+                                            <span class="switch-icon-left"><i class="feather icon-check"></i></span>
+                                            <span class="switch-icon-right"><i class="feather icon-check"></i></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="detail">
                                     <div class="details-title">
                                         Tổng tiền:
                                     </div>
-                                    <div class="detail-amt">
-                                        <strong>{{ number_format($tong) }} Đ</strong>
+                                    <div class="detail-amt" id="count">
+                                        <strong id="count-unit-price">{{ number_format(session()->get('count')) }} Đ</strong>
                                     </div>
                                 </div>
                                 <div class="detail">

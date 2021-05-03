@@ -5,14 +5,8 @@
         <div class="card">
         <div class="card-content">
             <div class="card-body">
-                <form action="{{route('admin.accountManagement')}}" method="get" class="form form-horizontal">
+                <form action="{{route('vouchers.index')}}" method="get" class="form form-horizontal">
                     <div class="row">
-                        <div class="col-xl-5 col-md-6 col-12 mb-1">
-                            <fieldset class="form-group">
-                                <label for="basicInput">Email</label>
-                                <input type="text" class="form-control" name="s_email" value="{{ request()->s_email }}">
-                            </fieldset>
-                        </div>
                         <div class="col-xl-5 col-md-6 col-12 mb-1">
                             <fieldset class="form-group">
                                 <label for="basicInput">Name</label>
@@ -21,18 +15,12 @@
                         </div>
                         <div class="col-xl-5 col-md-6 col-12 mb-1">
                             <fieldset class="form-group">
-                                <label for="basicInput">Role</label>
-                                <select class="select2 form-control" name="s_role">
+                                <label for="basicInput">Status</label>
+                                <select class="select2 form-control" name="s_status">
                                     <option></option>
-                                    <option value="1" {{ request()->s_role == 1 ? "selected" : "" }} >Admin</option>
-                                    <option value="2" {{ request()->s_role == 2 ? "selected" : "" }} >Employee</option>
+                                    <option value="0" {{ request()->s_status == 1 ? "selected" : "" }} >Block</option>
+                                    <option value="1" {{ request()->s_status == 2 ? "selected" : "" }} >Active</option>
                                 </select>
-                            </fieldset>
-                        </div>
-                        <div class="col-xl-5 col-md-6 col-12 mb-1">
-                            <fieldset class="form-group">
-                                <label for="basicInput">Phone</label>
-                                <input type="text" class="form-control" name="s_phone" value="{{ request()->s_phone }}">
                             </fieldset>
                         </div>
                         <div class="col-xl-2 col-md-6 col-12">
@@ -47,7 +35,7 @@
         </div>
         </div>
          <div style="text-align: right; margin-top: 20px">
-            <a href="/createAccAdmin" class="btn bg-gradient-success mr-1 mb-1"><i class="feather icon-plus-square"></i> Add Account</a>
+            <a href="{{ route('vouchers.create') }}" class="btn bg-gradient-success mr-1 mb-1"><i class="feather icon-plus-square"></i> Add Voucher</a>
          </div>
         <!-- dataTable starts -->
         @include('flash::message')
@@ -56,47 +44,41 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Email</th>
                         <th>Name</th>
-                        <th>Role</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                        <th>Date of birth</th>
+                        <th>Quantity</th>
+                        <th>Discount</th>
+                        <th>Effective date</th>
+                        <th>Expiration_date</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($employee as $key => $value)
+                    @foreach($vouchers as $key => $value)
                     <tr>
                         <td></td>
-                        <td class="product-name">{{ $value->mail_address }}</td>
                         <td class="product-name">{{ $value->name }}</td>
-                        <td>
-                            @if ($value->role == 1)
+                        <td class="product-name">{{ $value->quantity }}</td>
+                        <td class="product-name">{{ $value->discount }}</td>
+                        <td class="product-category">{{ $value->effective_date }}</td>
+                        <td class="product-price">{{ $value->expiration_date }}</td>
+                        <td class="product-price">
+                            @if ($value->status == 1)
                                 <div class="chip chip-success mr-1">
                                     <div class="chip-body">
-                                        <span class="chip-text"> Admin</span>
-                                    </div>
-                                </div>
-                            @elseif ($value->role == 2)
-                                <div class="chip chip-danger mr-1">
-                                    <div class="chip-body">
-                                        <span class="chip-text"> Employee</span>
+                                        <span class="chip-text"> Active</span>
                                     </div>
                                 </div>
                             @else
-                                <div class="chip chip-primary mr-1">
+                                <div class="chip chip-danger mr-1">
                                     <div class="chip-body">
-                                        <span class="chip-text"> Shipper</span>
+                                        <span class="chip-text"> Block</span>
                                     </div>
                                 </div>
                             @endif
                         </td>
-                        <td class="product-category">{{ $value->address }}</td>
-                        <td>{{ $value->phone }}</td>
-                        <td class="product-price">{{ $value->birth_date }}</td>
                         <td class="product-action">
-                            <a href="/editAccountAdmin&id={{ $value->id }}"><i class="feather icon-edit"></i></a>
+                            <a href="{{ route('vouchers.edit', $value->id) }}"><i class="feather icon-edit"></i></a>
                             <span class="action-delete" data-toggle="modal" data-target="#danger{{ $value->id }}"><i class="feather icon-trash"></i></span>
                             <!-- Modal -->
                             <div class="modal fade text-left" id="danger{{ $value->id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120" aria-hidden="true">
@@ -109,10 +91,10 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            Bạn có chắc muốn xóa account này?
+                                            Bạn có chắc muốn block voucher này?
                                         </div>
                                         <div class="modal-footer">
-                                            <form action="{{ route('delete_acc_admin', $value->id) }}" method="post">
+                                            <form action="{{ route('vouchers.destroy', $value->id) }}" method="post">
                                                 @method('delete')
                                                 <input class="btn btn-danger" type="submit" value="Delete" />
                                             </form>
@@ -125,7 +107,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <div >{!! $employee->render(); !!}</div>
+            <div >{!! $vouchers->render(); !!}</div>
         </div>
         <!-- dataTable ends -->
     </section>

@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ChangePassword extends FormRequest
+class UpdateInforAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +24,12 @@ class ChangePassword extends FormRequest
      */
     public function rules()
     {
+        $now = Carbon::now();
         return [
-            'old_password'=>'required',
-            'new_password'=>'required',
-            'confirm_password'=>'required|same:new_password'
+            'full_name' => 'required',
+            'address' => 'required',
+            'phone' => 'numeric',
+            'birth_date' => 'required|date|before:' . $now . '',
         ];
     }
 }

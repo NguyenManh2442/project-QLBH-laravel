@@ -21,6 +21,8 @@ function updateCart(id) {
   $.post('http://127.0.0.1:8000/updateCart', { 'id': id, 'num': num, 'size': size }, function (data) {
     $("#listCart" + id).load("http://127.0.0.1:8000/cart #cartx" + id);
     $("#detail-amt").load("http://127.0.0.1:8000/cart #total");
+    $("#count").load("http://127.0.0.1:8000/cart #count-unit-price");
+    $("#list-product").load("http://127.0.0.1:8000/cart #list");
   });
 }
 
@@ -167,6 +169,47 @@ $(document).ready(function () {
           toastr.console.error("Order khong công");
         }
         window.location.href = '/'
+      }
+    });
+  });
+
+  $("#voucher").keyup(function(){
+    voucher = $("#voucher").val();
+    $.ajax({
+      url: "/checkVoucher",
+      method: "POST",
+      data: {
+        voucher: voucher,
+      },
+      dataType: "text",
+      success: function (data) {
+        var obj = JSON.parse(data);
+        if (obj.status == "true")
+        {
+          $("#voucher").removeClass("is-invalid");
+          $("#voucher").addClass("is-valid");
+          $('#ts').find('[target="total"]').text(obj.count_discount + ' Đ');
+        } else {
+          $("#voucher").removeClass("is-valid");
+          $("#voucher").addClass("is-invalid");
+          $('#ts').find('[target="total"]').text(obj.count_discount + ' Đ');
+        }
+      }
+    });
+  });
+
+  $("#confirm").click(function(){
+    voucher = $("#voucher").val();
+    $.ajax({
+      url: "/confirmVoucher",
+      method: "POST",
+      data: {
+        voucher: voucher,
+      },
+      dataType: "text",
+      success: function (data) {
+        $("#count").load("http://127.0.0.1:8000/cart #count-unit-price");
+        $("#list-product").load("http://127.0.0.1:8000/cart #list");
       }
     });
   });
