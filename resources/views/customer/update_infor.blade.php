@@ -35,21 +35,21 @@
                                 <a class="nav-link d-flex py-75 active" id="account-pill-general" data-toggle="pill"
                                     href="#account-vertical-general" aria-expanded="true">
                                     <i class="feather icon-globe mr-50 font-medium-3"></i>
-                                    General
+                                    Thông tin cá nhân
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link d-flex py-75" id="account-pill-password" data-toggle="pill"
                                     href="#account-vertical-password" aria-expanded="false">
                                     <i class="feather icon-lock mr-50 font-medium-3"></i>
-                                    Change Password
+                                    Thay đổi mật khẩu
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link d-flex py-75" id="account-pill-info" data-toggle="pill"
                                     href="#account-vertical-info" aria-expanded="false">
                                     <i class="feather icon-info mr-50 font-medium-3"></i>
-                                    Info
+                                    Địa chỉ
                                 </a>
                             </li>
                         </ul>
@@ -162,6 +162,126 @@
                                                 </div>
                                             </form>
                                         </div>
+                                        <div class="tab-pane fade " id="account-vertical-info" role="tabpanel"
+                                            aria-labelledby="account-pill-password" aria-expanded="false">
+                                            <div style="text-align: right; margin-top: 20px">
+                                                <a href="/createAddress" class="btn bg-gradient-success mr-1 mb-1"><i class="feather icon-plus-square"></i> Add address</a>
+                                             </div>
+                                            <table class="table data-thumb-view" id="table_data_address">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tên</th>
+                                                        <th>Số điện thoại</th>
+                                                        <th>Địa chỉ</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tbody>
+                                                        @if ($address != null)
+                                                        @foreach ($address as $key => $value)
+                                                            <tr id="data-{{ $value->id }}">
+                                                                <td class="address-name" target="name">{{ $value->name }}</td>
+                                                                <td class="address-phone" target="phone">
+                                                                    {{ $value->phone_number }}</td>
+                                                                <td class="address-detailed-address" target="detailed-address">
+                                                                    {{ $value->detailed_address }} -
+                                                                    {{ $value->wards }} - {{ $value->district }} -
+                                                                    {{ $value->province }}</td>
+                                                                <td class="product-action">
+                                                                    <span class="action-edit"
+                                                                        onclick="updateAddress({{ $value->id }})"
+                                                                        data-toggle="modal"
+                                                                        data-target="#editForm{{ $value->id }}"><i
+                                                                            class="feather icon-edit"></i></span>
+                                                                    <span class="action-delete" data-toggle="modal"
+                                                                        data-target="#danger{{ $value->id }}"><i
+                                                                            class="feather icon-trash"></i></span>
+                                                                    {{-- Model fake --}}
+                                                                    <div class="modal fade text-left"
+                                                                        id="editFake{{ $value->id }}" tabindex="-1"
+                                                                        role="dialog" aria-labelledby="myModalLabel120"
+                                                                        aria-hidden="true">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-body">
+                                                                                <form action=""></form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    {{-- Model edit --}}
+                                                                    <div class="modal fade text-left"
+                                                                        id="editForm{{ $value->id }}" tabindex="-1"
+                                                                        role="dialog" aria-labelledby="myModalLabel130"
+                                                                        aria-hidden="true">
+                                                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                                                            role="document">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header bg-info white">
+                                                                                    <h5 class="modal-title" id="myModalLabel130">
+                                                                                        Info Modal
+                                                                                    </h5>
+                                                                                    <button type="button" class="close"
+                                                                                        data-dismiss="modal" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <form
+                                                                                    action="{{ route('address.update_address', $value->id) }}"
+                                                                                    method="post">
+                                                                                    @method('put')
+                                                                                    <div class="modal-body"
+                                                                                        id="info_address_{{ $value->id }}">
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <input class="btn btn-info" type="submit"
+                                                                                            value="Update" />
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Modal delete-->
+                                                                    <div class="modal fade text-left"
+                                                                        id="danger{{ $value->id }}" tabindex="-1" role="dialog"
+                                                                        aria-labelledby="myModalLabel120" aria-hidden="true">
+                                                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                                                            role="document">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header bg-danger white">
+                                                                                    <h5 class="modal-title" id="myModalLabel120">
+                                                                                        Cảnh báo
+                                                                                    </h5>
+                                                                                    <button type="button" class="close"
+                                                                                        data-dismiss="modal" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    Bạn có chắc muốn xóa address này?
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <form
+                                                                                        action="{{ route('address.detete', $value->id) }}"
+                                                                                        method="post">
+                                                                                        @method('delete')
+                                                                                        <input class="btn btn-danger" type="submit"
+                                                                                            value="Delete" />
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @else
+                                                        <h2>Bạn chưa có địa chỉ nào<h2
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -190,4 +310,5 @@
         }
     }
 </script>
+<script src="{{ asset('js/font_end/get_one.js') }}"></script>
 @stop

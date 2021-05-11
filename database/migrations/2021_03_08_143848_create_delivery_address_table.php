@@ -22,6 +22,7 @@ class CreateDeliveryAddressTable extends Migration
             $table->string('district');
             $table->string('province');
             $table->string('detailed_address');
+            $table->integer('status');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('customers');

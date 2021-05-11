@@ -52,6 +52,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php $count = 0; @endphp
                                 @foreach ($orderdetail as $value)
                                     <tr>
                                         <td><img src="{{ asset('img') }}/{{ $value->image }}" alt="Img placeholder"
@@ -62,6 +63,7 @@
                                         <td>{{ $value->discount }}</td>
                                         <td>{{ $value->size }}</td>
                                     </tr>
+                                    @php $count += $value->quantity * ($value->unit_price - $value->unit_price * ($value->discount / 100)); @endphp
                                 @endforeach
                             </tbody>
                         </table>
@@ -76,15 +78,17 @@
                                 <tbody>
                                     <tr>
                                         <th>Thành tiền</th>
-                                        <td>{{ number_format($order[0]->unit_price) }} .Đ</td>
+                                        <td>{{ number_format($count) }} .Đ</td>
                                     </tr>
-                                    <tr>
-                                        <th>Giảm giá voucher </th>
-                                        <td>- {{ number_format($order[0]->name) }} .Đ</td>
-                                    </tr>
+                                    @if (!empty($voucher))
+                                        <tr>
+                                            <th>Giảm giá voucher </th>
+                                            <td> {{ $voucher->discount }} %</td>
+                                        </tr>
+                                    @endif
                                     <tr>
                                         <th>Tổng tiền:</th>
-                                        <td>{{ number_format($order[0]->unit_price) }} .Đ</td>
+                                        <td>{{ number_format($order[0]->total_money) }} .Đ</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -107,8 +107,7 @@ class CartController extends Controller
         if ($orderdetail == true) {
             $countDiscount = 0;
             foreach ($orderdetail as $value) {
-                $countDiscount += $value['gia'] - $value['gia'] * ($value['discount'] / 100);
-                $countDiscount = $countDiscount * $value['num'];
+                $countDiscount += ($value['gia'] - $value['gia'] * ($value['discount'] / 100)) * $value['num'];
             }
             $voucher = $this->voucher->checkVoucher($request->voucher);
             if ($voucher->count() == 1 && $voucher[0]->quantity > 0) {
@@ -131,8 +130,7 @@ class CartController extends Controller
         if ($orderdetail == true) {
             $countDiscount = 0;
             foreach ($orderdetail as $value) {
-                $countDiscount += $value['gia'] - $value['gia'] * ($value['discount'] / 100);
-                $countDiscount = $countDiscount * $value['num'];
+                $countDiscount += ($value['gia'] - $value['gia'] * ($value['discount'] / 100)) * $value['num'];
             }
             $voucher = $this->voucher->checkVoucher($request->voucher);
             

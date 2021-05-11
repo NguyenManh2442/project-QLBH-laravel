@@ -56,18 +56,15 @@ class Orders extends Model
     public function getOrderByID($id)
     {
         return Orders::join('delivery_address','delivery_address.id','=','orders.delivery_address_id')
-                    ->join('vouchers','vouchers.id','=','orders.voucher_id')
                     ->where('orders.id','=',$id)
                     ->select(
                         'orders.*', 
                         'delivery_address.name',
                         'delivery_address.phone_number', 
                         'delivery_address.wards',
-                        'delivery_address.district', 
-                        'delivery_address.province', 
-                        'delivery_address.detailed_address',
-                        'vouchers.name',
-                        'vouchers.quantity'
+                        'delivery_address.district',
+                        'delivery_address.province',
+                        'delivery_address.detailed_address'
                         )
                     ->get();
     }
@@ -94,7 +91,7 @@ class Orders extends Model
         }
     }
 
-    public function storeOrderProduct($unit_price)
+    public function storeOrderProduct($total_money)
     {
         $sessionVoucher = session()->get('voucher');
         $id = Auth::user()->id;
@@ -102,7 +99,7 @@ class Orders extends Model
         $order->user_id = $id;
         $order->order_date = Carbon::now('Asia/Ho_Chi_Minh');
         $order->status = 0;
-        $order->unit_price = $unit_price;
+        $order->total_money = $total_money;
         $order->delivery_address_id = session()->get('idAddress');
         if (isset($sessionVoucher)) {
             $order->voucher_id = $sessionVoucher["id"];

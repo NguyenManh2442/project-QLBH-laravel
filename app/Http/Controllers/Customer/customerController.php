@@ -14,16 +14,19 @@ use App\Http\Requests\Signin;
 use App\Http\Requests\ChangePassword;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Category;
+use App\Models\DeliveryAddress;
 use App\Models\User;
 class customerController extends Controller
 {
     //
     protected $category;
     protected $user;
-    public function __construct(Category $category, User $user)
+    protected $deliveryAddress;
+    public function __construct(Category $category, User $user, DeliveryAddress $deliveryAddress)
     {
         $this->category = $category;
         $this->user = $user;
+        $this->deliveryAddress = $deliveryAddress;
     }
 
     public function form_signin(){
@@ -41,7 +44,7 @@ class customerController extends Controller
             return redirect('/');
         }
         else{
-            return redirect('signin');
+            return redirect('signin')->with('loginFalse','Tài khoản mật khẩu không chính xác!');
         }
     }
 
@@ -58,7 +61,6 @@ class customerController extends Controller
     }
 
     public function signup(Request $request){
-
             $email = $request->email;
             $username = $request->userName;
             $password = $request->password1;
@@ -75,9 +77,11 @@ class customerController extends Controller
     }
 
     public function editInfor(){
+        $userID = Auth::user()->id;
+        $address = $this->deliveryAddress->getAddressByUserId($userID);
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
-        return view('customer.update_infor', compact('category','category1'));
+        return view('customer.update_infor', compact('category','category1', 'address'));
     }
 
     public function updateInfor(Request $request){

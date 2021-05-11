@@ -7,6 +7,7 @@ use App\Models\Orderdetail;
 use Illuminate\Http\Request;
 use App\Models\Orders;
 use App\Models\Product;
+use App\Models\Vouchers;
 
 class OrderManagementController extends Controller
 {
@@ -14,12 +15,14 @@ class OrderManagementController extends Controller
     protected $order;
     protected $orderdetail;
     protected $product;
+    protected $voucher;
 
-    public function __construct(Orders $order, Orderdetail $orderdetail, Product $product)
+    public function __construct(Orders $order, Orderdetail $orderdetail, Product $product, Vouchers $voucher)
     {
         $this->order = $order;
         $this->orderdetail = $orderdetail;
         $this->product = $product;
+        $this->voucher = $voucher;
     }
     // func orderManagement
     public function orderManagement($status, Request $request)
@@ -64,7 +67,11 @@ class OrderManagementController extends Controller
     {
         $orderdetail = $this->orderdetail->getOrderdetail($id);
         $order = $this->order->getOrderByID($id);
-        return view('order.orderdetail', compact('orderdetail', 'order'));
+        $voucher = null;
+        if ($order[0]->voucher_id != null) {
+            $voucher = $this->voucher->getVoucherByID($order[0]->voucher_id);
+        }
+        return view('order.orderdetail', compact('orderdetail', 'order', 'voucher'));
     }
 
     public function updateOrderStatus($id, Request $request)

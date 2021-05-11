@@ -19,6 +19,8 @@ Route::group(['namespace'=>'Customer'], function(){
 
     Route::get('getPopularSellingProducts','ProductController@getPopularSellingProducts');
 
+    Route::get('getNewProducts','ProductController@getNewProducts');
+
     Route::get('cart','ProductController@getCart'); // giỏ hàng
 
     Route::post('addCart','CartController@addCart'); // post thêm giỏ hàng
@@ -31,9 +33,15 @@ Route::group(['namespace'=>'Customer'], function(){
 
     Route::get('detail&id={id}', 'ProductController@getOne'); // chi tiết của 1 sản phẩm
 
+    Route::get('createAddress', 'DeliveryAddressController@createAddress');
+
+    Route::post('storeAddress','DeliveryAddressController@storeAddress')->name("address.store");
+
     Route::post('editAddress','DeliveryAddressController@editAddress');
 
     Route::put('updateAddress&id={id}','DeliveryAddressController@updateAddress')->name('address.update_address');
+
+    Route::delete('deleteAddress&id={id}','DeliveryAddressController@deleteAddress')->name('address.detete');
 
     Route::put('cancel-status-order&id={id}','OrderController@updateOrderStatus')->name('order.status_cancel');
 

@@ -19,12 +19,11 @@ class Orderdetail extends Model
     }
 
     //
-    public function popularSellingProducts(){
+    public function popularSellingProducts($limit){
         return Orderdetail::join('products','products.id','=','orderdetails.id_product')
         ->groupBy('id_product')
         ->select('id_product','products.*',DB::raw('SUM(orderdetails.quantity) as selling'))
         ->orderBy('selling','DESC')
-        ->limit(8)
-        ->get();
+        ->paginate($limit);
     }
 }

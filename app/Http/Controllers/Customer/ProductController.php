@@ -31,10 +31,16 @@ class ProductController extends Controller
         $this->deliveryAddress = $deliveryAddress;
     }
 
-    public function index(){
-        $popularSellingProducts = $this->orderdetail->popularSellingProducts();
+    public function index(Request $request){
+        if ($request->input('product_name') && isset($request->product_name)) {
+            $product = $this->product->getSearchProduct($request);
+            $category = $this->category->getCategoryParent(0);
+            $category1 = $this->category->getCategoryChill();
+        return view('product.show_products', compact('product','category', 'category1', 'categoryID'));
+        }
+        $popularSellingProducts = $this->orderdetail->popularSellingProducts(8);
         $productRandom = $this->product->getProductrandom();
-        $newProduct = $this->product->getNewProduct();
+        $newProduct = $this->product->getNewProduct(8);
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
         $slideshow = $this->slideshow->getSlide();
@@ -42,18 +48,24 @@ class ProductController extends Controller
     }
 
     public function getproductbycatid(Request $request){
-        $categoryID = $request->idProduct;
-        $product = $this->product->getproductbycatid($categoryID);
+        $product = $this->product->getproductbycatid($request);
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
         return view('product.show_products', compact('product','category', 'category1', 'categoryID'));
     }
 
     public function getPopularSellingProducts(){
-        $product = $this->orderdetail->popularSellingProducts(24);
+        $product = $this->orderdetail->popularSellingProducts(12);
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
-        return view('product.getProduct', compact('product','category', 'category1'));
+        return view('product.show_products', compact('product','category', 'category1'));
+    }
+
+    public function getNewProducts(){
+        $product = $this->product->getNewProduct(12);
+        $category = $this->category->getCategoryParent(0);
+        $category1 = $this->category->getCategoryChill();
+        return view('product.show_products', compact('product','category', 'category1'));
     }
 
     public function getOne(Request $request){
@@ -66,7 +78,9 @@ class ProductController extends Controller
         if (Auth::check()) {
             $userID = Auth::user()->id;
             $address = $this->deliveryAddress->getAddressByUserId($userID);
-            session(['idAddress' => $address[0]->id]);
+            if ($address[0] != null) {
+                session(['idAddress' => $address[0]->id]);
+            }
         }
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();

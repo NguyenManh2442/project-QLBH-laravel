@@ -28,15 +28,6 @@
             </div>
         </div>
         <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
-            <div class="form-group breadcrum-right">
-                <div class="dropdown">
-                    <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                            class="feather icon-settings"></i></button>
-                    <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Chat</a><a
-                            class="dropdown-item" href="#">Email</a><a class="dropdown-item" href="#">Calendar</a></div>
-                </div>
-            </div>
         </div>
 </div>
 <div class="content-body">
@@ -175,6 +166,9 @@
                         <h4 class="card-title">Thông tin giao hàng</h4>
                         <p class="text-muted mt-25">Hãy nhớ chọn "Gửi đến địa chỉ này" khi bạn đã hoàn tất
                         </p>
+                        <div style="text-align: right; margin-top: 20px">
+                            <a href="/createAddress" class="btn bg-gradient-success mr-1 mb-1"><i class="feather icon-plus-square"></i> Add address</a>
+                         </div>
                     </div>
                     <div class="card-content">
                         <div class="card-body">
@@ -219,9 +213,6 @@
                                                             data-toggle="modal"
                                                             data-target="#editForm{{ $value->id }}"><i
                                                                 class="feather icon-edit"></i></span>
-                                                        <span class="action-delete" data-toggle="modal"
-                                                            data-target="#danger{{ $value->id }}"><i
-                                                                class="feather icon-trash"></i></span>
                                                         {{-- Model fake --}}
                                                         <div class="modal fade text-left"
                                                             id="editFake{{ $value->id }}" tabindex="-1"
@@ -267,37 +258,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!-- Modal delete-->
-                                                        <div class="modal fade text-left"
-                                                            id="danger{{ $value->id }}" tabindex="-1" role="dialog"
-                                                            aria-labelledby="myModalLabel120" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
-                                                                role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header bg-danger white">
-                                                                        <h5 class="modal-title" id="myModalLabel120">
-                                                                            Cảnh báo
-                                                                        </h5>
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        Bạn có chắc muốn address này?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <form
-                                                                            action="{{ route('slideshow.deleteSlideshow', $value->id) }}"
-                                                                            method="post">
-                                                                            @method('delete')
-                                                                            <input class="btn btn-danger" type="submit"
-                                                                                value="Delete" />
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -311,7 +271,7 @@
                 </div>
                 <div class="customer-card">
                     <div class="card">
-                        @if (isset($address))
+                        @if ($address[0] != null)
                         <div class="card-header" id="confirm-name">
                             <h4 class="card-title" target="name">Tên: {{ $address[0]->name }}</h4>
                         </div>
@@ -326,7 +286,7 @@
                                 <div class="btn btn-primary btn-block delivery-address">GỬI ĐẾN ĐỊA CHỈ NÀY</div>
                             </div>
                         </div>
-                        @endif
+                        
                     </div>
                 </div>
             </section>
@@ -437,6 +397,7 @@
                                 <div class="detail">
                                     <button class="btn btn-primary mr-1 mb-1" id="order" onclick="orderItem()"> Đặt hàng</button>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>

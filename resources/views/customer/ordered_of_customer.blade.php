@@ -57,6 +57,10 @@
                                                         </div><br>
                                                         <div class="detail">
                                                             Ngày đặt: {{ $order->order_date }}
+                                                        </div><br>
+                                                        <div class="detail">
+                                                            Tổng tiền: {{ number_format($order->total_money) }}
+                                                                Đ
                                                         </div>
                                                     </div>
                                                 </div>

@@ -150,7 +150,7 @@ $(document).ready(function () {
       
       toastr.success("Update thành công");
 
-      $('#editForm' + response.id).modal('toggle');;
+      $('#editForm' + response.id).modal('toggle');
     });
     event.preventDefault(); // <- avoid reloading
   });

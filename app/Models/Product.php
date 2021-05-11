@@ -52,17 +52,26 @@ class Product extends Model
         return Product::inRandomOrder()->limit(8)->get();
     }
 
-    public function getNewProduct(){
-        return Product::orderBy('products.created_at', 'desc')->limit(8)->get();
+    public function getNewProduct($limit){
+        return Product::orderBy('products.created_at', 'desc')->paginate($limit);
     }
 
-    public function getproductbycatid($categoryID){
-        return Product::where('category_id', $categoryID)->paginate(24);
+    public function getproductbycatid($request){
+        $query = Product::where('category_id', $request->idProduct);
+        if(isset($request->order_by)) {
+            $query->orderBy($request->order_by, $request->sort_order);
+        }
+        
+        return $query->paginate(12);
     }
 
-    public function getSearchProduct($search)
+    public function getSearchProduct($request)
     {
-        return Product::where('product_name','like', $search)->paginate(24);
+        $query = Product::where('product_name','like', '%' . $request->product_name . '%');
+        if(isset($request->order_by)) {
+            $query->orderBy($request->order_by, $request->sort_order);
+        }
+        return $query->paginate(12);
     }
     public function getDetail($id) {
         return Product::where('id', $id)->get();

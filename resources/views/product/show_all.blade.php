@@ -6,12 +6,14 @@
     <section id="ecommerce-searchbar">
         <div class="row mt-1">
             <div class="col-sm-12">
-                <fieldset class="form-group position-relative">
-                    <input type="text" class="form-control search-product" id="iconLeft5" placeholder="Search here">
-                    <div class="form-control-position">
-                        <i class="feather icon-search"></i>
-                    </div>
-                </fieldset>
+                <form action="/" method="GET">
+                    <fieldset class="form-group position-relative">
+                        <input type="text" class="form-control search-product" id="iconLeft5" placeholder="Search here" name="product_name">
+                        <div class="form-control-position">
+                            <button type="submit" class="btn btn-icon" style="padding-top: 2px !important;"><i class="feather icon-search"></i></button>
+                        </div>
+                    </fieldset>
+                <form>
             </div>
         </div>
     </section>
@@ -149,9 +151,9 @@
                     </div>
                 @endforeach
             </section>
-            <div style="text-align: center"><button type="button"
+            <div style="text-align: center"><a type="button" href="/getPopularSellingProducts"
                     class="btn btn-outline-primary round mr-1 mb-1 waves-effect waves-light" style="width: 200px">Xem
-                    thêm</button></div>
+                    thêm</a></div>
             <div style="margin: 40px">
                 <h2>Sản phẩm mới</h2>
             </div>
@@ -215,9 +217,9 @@
                     </div>
                 @endforeach
             </section>
-            <div style="text-align: center"><button type="button"
+            <div style="text-align: center"><a type="button" href="/getNewProducts"
                     class="btn btn-outline-primary round mr-1 mb-1 waves-effect waves-light" style="width: 200px">Xem
-                    thêm</button></div>
+                    thêm</a></div>
         </div>
     </div>
     <div class="card-body">
