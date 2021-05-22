@@ -36,7 +36,7 @@ class DeliveryAddress extends Model
         $address = new DeliveryAddress;
         $address->user_id = $user_id;
         $address->name = $request['name'];
-        $address->phone_number = $request['phone_number'];
+        $address->phone_number = $request['phone'];
         $address->wards = $request['wards'];
         $address->district = $request['district'];
         $address->province = $request['province'];

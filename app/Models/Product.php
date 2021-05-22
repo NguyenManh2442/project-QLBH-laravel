@@ -52,8 +52,12 @@ class Product extends Model
         return Product::inRandomOrder()->limit(8)->get();
     }
 
-    public function getNewProduct($limit){
-        return Product::orderBy('products.created_at', 'desc')->paginate($limit);
+    public function getNewProduct($limit, $request){
+        $query = Product::orderBy('products.created_at', 'desc');
+        if(isset($request['order_by'])) {
+            $query->orderBy('products.'.$request['order_by'], $request['sort_order']);
+        }
+        return $query->paginate($limit);
     }
 
     public function getproductbycatid($request){
@@ -204,6 +208,10 @@ class Product extends Model
     // func delete product 
     public function destroyProduct($id) {
         Product::destroy($id);
+    }
+
+    public function setDiscountProduct($request) {
+        Product::where('category_id', $request->category_2)->update(['discount'=>$request->discount]);
     }
 }
 

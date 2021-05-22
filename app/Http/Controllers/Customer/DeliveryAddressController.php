@@ -29,14 +29,40 @@ class DeliveryAddressController extends Controller
 
     public function storeAddress(AddressRequest $request)
     {
-        $this->deliveryAddress->storeAddress($request->all());
-        return redirect('/infor');
+        try {
+            $this->deliveryAddress->storeAddress($request->all());
+            session()->flash('success', 'Thêm địa chỉ thành công!');
+            return redirect('/infor');
+        } catch (Throwable $exception) {
+            session()->flash('error', 'Thêm địa chỉ thất bại!');
+            return redirect('/infor');
+        }
     }
 
     public function editAddress(Request $request)
     {
         $address = $this->deliveryAddress->getAddressById($request->id);
         return response()->json($address);
+    }
+
+    public function editAddressByID($id)
+    {
+        $category = $this->category->getCategoryParent(0);
+        $category1 = $this->category->getCategoryChill();
+        $address = $this->deliveryAddress->getAddressById($id);
+        return view('customer.form_address', compact('category', 'category1', 'address'));
+    }
+
+    public function updateAddressById($id, Request $request)
+    {
+        try {
+            $this->deliveryAddress->updateAddress($id, $request->all());
+            session()->flash('success', 'Update địa chỉ thành công!');
+            return redirect('/infor');
+        } catch (Throwable $exception) {
+            session()->flash('error', 'Update địa chỉ thất bại!');
+            return redirect('/infor');
+        }
     }
 
     public function updateAddress($id, Request $request)
@@ -62,7 +88,13 @@ class DeliveryAddressController extends Controller
 
     public function deleteAddress($id)
     {
-        $this->deliveryAddress->deleteAddress($id);
-        return redirect('/infor');
+        try {
+            $this->deliveryAddress->deleteAddress($id);
+            session()->flash('success', 'Xóa địa chỉ thành công!');
+            return redirect('/infor');
+        } catch (Throwable $exception) {
+            session()->flash('error', 'Xóa địa chỉ thất bại!');
+            return redirect('/infor');
+        }
     }
 }

@@ -41,7 +41,8 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('css/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app-assets/css/core/colors/palette-gradient.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/app-assets/css/plugins/calendars/fullcalendar.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('css/app-assets/css/plugins/calendars/fullcalendar.css') }}">
 
     <!-- END: Page CSS-->
     @yield('css')
@@ -59,6 +60,26 @@
 
     <!-- BEGIN: Header-->
     <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu floating-nav navbar-light navbar-shadow">
+        @if (Session::has('success'))
+            <div id="alert-message" style="position: relative;">
+                <div class="alert alert-success" role="alert" style="position: absolute; width: 400px; top: -32px;">
+                    <h4 class="alert-heading">Success</h4>
+                    <p class="mb-0">
+                        {{ Session::get('success') }}
+                    </p>
+                </div>
+            </div>
+        @endif
+        @if (Session::has('error'))
+            <div id="alert-message" style="position: relative;">
+                <div class="alert alert-danger" role="alert" style="position: absolute; width: 400px; top: -32px;">
+                    <h4 class="alert-heading">Error</h4>
+                    <p class="mb-0">
+                        {{ Session::get('error') }}
+                    </p>
+                </div>
+            </div>
+        @endif
         <div class="navbar-wrapper">
             <div class="navbar-container content">
                 <div class="navbar-collapse" id="navbar-mobile">
@@ -87,13 +108,21 @@
                                 class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none"><span
                                         class="user-name text-bold-600">{{ Auth::guard('employee')->user()->name }}</span><span
-                                        class="user-status">Available</span></div><span><img class="round"
-                                        src="{{ asset('css/app-assets/images/portrait/small/avatar-s-11.jpg') }}"
-                                        alt="avatar" height="40" width="40"></span>
+                                        class="user-status">Active</span></div>
+                                <span>
+                                    @if (!empty(Auth::guard('employee')->user()->avatar))
+                                        <img class="round"
+                                            src="{{ asset('img') }}/{{ isset(Auth::guard('employee')->user()->avatar) ? Auth::guard('employee')->user()->avatar : '' }}"
+                                            alt="avatar" height="40" width="40">
+                                    @else
+                                        <i class="ficon feather icon-user"></i>
+                                    @endif
+                                </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
-                                    href="page-user-profile.html"><i class="feather icon-user"></i> Edit Profile</a><a
-                                    class="dropdown-item" href="app-email.html"><i class="feather icon-mail"></i> My
+                                    href="{{ route('shipper.edit_profile') }}"><i class="feather icon-user"></i> Edit
+                                    Profile</a><a class="dropdown-item" href="app-email.html"><i
+                                        class="feather icon-mail"></i> My
                                     Inbox</a><a class="dropdown-item" href="app-todo.html"><i
                                         class="feather icon-check-square"></i> Task</a><a class="dropdown-item"
                                     href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a>
@@ -127,19 +156,26 @@
         <div class="shadow-bottom"></div>
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class=" nav-item {{ Request::segment(1) === 'admin' ? 'active' : '' }}"><a href="{{ route('index') }}"><i class="feather icon-home"></i>
-                    <span class="menu-title" data-i18n="Email">Thống kê</span></a>
+                <li class=" nav-item {{ Request::segment(1) === 'shipper' ? 'active' : '' }}"><a href="/shipper"><i
+                            class="feather icon-home"></i>
+                        <span class="menu-title" data-i18n="Email">Thống kê</span></a>
                 </li>
-                <li class=" nav-item {{ Request::segment(1) === 'orderManagement&status=0' ? 'active' : '' }}"><a href="{{ route('shipper.receive_purchase_order')}}"><i class="feather icon-shopping-cart"></i><span
-                            class="menu-title" data-i18n="Email">Nhận đơn hàng</span></a>
+                <li class=" nav-item {{ Request::segment(1) === 'orderManagement&status=0' ? 'active' : '' }}"><a
+                        href="{{ route('shipper.receive_purchase_order') }}"><i
+                            class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Email">Nhận đơn
+                            hàng</span></a>
                 </li>
-                <li class=" nav-item {{ Request::segment(1) === 'product-management' ? 'active' : '' }}"><a href="{{ route('shipper.order_shipping') }}"><i class="fa fa-product-hunt"></i><span
+                <li class=" nav-item {{ Request::segment(1) === 'product-management' ? 'active' : '' }}"><a
+                        href="{{ route('shipper.order_shipping') }}"><i class="fa fa-product-hunt"></i><span
                             class="menu-title" data-i18n="Chat">Đơn hàng đang giao</span></a>
                 </li>
-                <li class=" nav-item {{ Request::segment(1) === 'admin-account-management' ? 'active' : '' }}"><a href="{{ route('shipper.order_shipped') }}"><i class="feather icon-users"></i><span
+                <li class=" nav-item {{ Request::segment(1) === 'admin-account-management' ? 'active' : '' }}"><a
+                        href="{{ route('shipper.order_shipped') }}"><i class="feather icon-users"></i><span
                             class="menu-title" data-i18n="Todo">Đơn hàng đã giao</span></a>
                 </li>
-                <li class="nav-item {{ Request::segment(1) === 'slideshow-management' ? 'active' : '' }}"><a href="{{ route('slideshow.slideshowManagement') }}"><i class="feather icon-image"></i><span class="menu-title">Quản lý
+                <li class="nav-item {{ Request::segment(1) === 'slideshow-management' ? 'active' : '' }}"><a
+                        href="{{ route('slideshow.slideshowManagement') }}"><i class="feather icon-image"></i><span
+                            class="menu-title">Quản lý
                             slideshow</span></a>
                 </li>
                 <li class=" nav-item"><a href="#"><i class="feather icon-shopping-cart"></i><span class="menu-title"
@@ -251,8 +287,7 @@
                 class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2021<a
                     class="text-bold-800 grey darken-2" href="https://www.facebook.com/nguyenmanh2442.nt/"
                     target="_blank">ManhNguyen,</a>Đã đăng ký Bản quyền</span><span
-                class="float-md-right d-none d-md-block">Nguyen Tien Manh<i
-                    class="feather icon-heart pink"></i></span>
+                class="float-md-right d-none d-md-block">Nguyen Tien Manh<i class="feather icon-heart pink"></i></span>
             <button class="btn btn-primary btn-icon scroll-top" type="button"><i
                     class="feather icon-arrow-up"></i></button>
         </p>
@@ -284,6 +319,14 @@
     <script src="{{ asset('css/app-assets/js/scripts/extensions/fullcalendar.js') }}"></script>
     <!-- END: Page JS-->
     @yield('scripts')
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('#alert-message').hide()
+            }, 4000)
+        })
+
+    </script>
 
 </body>
 <!-- END: Body-->

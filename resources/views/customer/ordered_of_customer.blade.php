@@ -49,10 +49,12 @@
                                                             <i class="fa fa-user"></i> {{ $order->name }}
                                                         </div><br>
                                                         <div class="detail">
-                                                            <i class="fa fa-phone-square"></i> {{ $order->phone_number }}
+                                                            <i class="fa fa-phone-square"></i>
+                                                            {{ $order->phone_number }}
                                                         </div><br>
                                                         <div class="detail">
-                                                            <i class="fa fa-address-card-o"></i> {{ $order->detailed_address }} - {{ $order->wards }} -
+                                                            <i class="fa fa-address-card-o"></i>
+                                                            {{ $order->detailed_address }} - {{ $order->wards }} -
                                                             {{ $order->district }} - {{ $order->province }}
                                                         </div><br>
                                                         <div class="detail">
@@ -60,7 +62,7 @@
                                                         </div><br>
                                                         <div class="detail">
                                                             Tổng tiền: {{ number_format($order->total_money) }}
-                                                                Đ
+                                                            Đ
                                                         </div>
                                                     </div>
                                                 </div>
@@ -100,19 +102,23 @@
                                                 <div class="col-sm-1">
                                                     <div style="margin: 10px">
                                                         @if ($status == 4 || $status == 3)
-                                                        <form action="{{ route('order.status_cancel', $order->id) }}"
-                                                            method="post">
-                                                            @method('PUT')
-                                                            <input type="submit" name="btn_reorder"
-                                                            class="btn btn-outline-primary round mr-1 mb-1 waves-effect waves-light" value="Đặt lại" />
-                                                        </form>
+                                                            <form
+                                                                action="{{ route('order.status_cancel', $order->id) }}"
+                                                                method="post">
+                                                                @method('PUT')
+                                                                <input type="submit" name="btn_reorder"
+                                                                    class="btn btn-outline-primary round mr-1 mb-1 waves-effect waves-light"
+                                                                    value="Đặt lại" />
+                                                            </form>
                                                         @else
-                                                        <form action="{{ route('order.status_cancel', $order->id) }}"
-                                                            method="post">
-                                                            @method('PUT')
-                                                            <input type="submit" name="btn_cancel"
-                                                            class="btn btn-outline-danger round mr-1 mb-1 waves-effect waves-light" value="Hủy" />
-                                                        </form>
+                                                            <form
+                                                                action="{{ route('order.status_cancel', $order->id) }}"
+                                                                method="post">
+                                                                @method('PUT')
+                                                                <input type="submit" name="btn_cancel"
+                                                                    class="btn btn-outline-danger round mr-1 mb-1 waves-effect waves-light"
+                                                                    value="Hủy" />
+                                                            </form>
                                                         @endif
                                                     </div>
                                                 </div>

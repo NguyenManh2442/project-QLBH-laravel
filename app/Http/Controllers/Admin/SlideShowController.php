@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SlideshowRequest;
 use App\Models\Slideshow;
 use Illuminate\Http\Request;
 use Throwable;
@@ -29,7 +30,7 @@ class SlideShowController extends Controller
     }
 
     // func storeSlideshow
-    public function storeSlideshow(Request $request) {
+    public function storeSlideshow(SlideshowRequest $request) {
         $fileImg = $request->image;
         $fileName =time() . "_" . rand(0,9999999) . "_" . md5(rand(0,9999999)) . $fileImg->getClientOriginalName();
         $fileImg->move('img', $fileName);
@@ -39,12 +40,11 @@ class SlideShowController extends Controller
         $imgSlideshow = $fileName;
 
         try {
-                $this->slideshow->storeSlideshow($title, $content, $imgSlideshow);
+            $this->slideshow->storeSlideshow($title, $content, $imgSlideshow);
+            session()->flash('success', 'Thêm mới slideshow thành công!');
         } catch (Throwable $exception) {
-            flash('Thêm mới slideshow thất bại!')->error();
-            return redirect()->route('slideshow.slideshowManagement');
+            session()->flash('error', 'Thêm mới slideshow thất bại!');
         }
-        flash('Thêm mới slideshow thành công!')->success();
         return redirect()->route('slideshow.slideshowManagement');
     }
 
@@ -56,7 +56,7 @@ class SlideShowController extends Controller
     }
 
     // func updateSlideshow
-    public function updateSlideshow($id, Request $request){
+    public function updateSlideshow($id, SlideshowRequest $request){
         if ($request->hasFile('image')) {
             $fileImg = $request->image;
             $fileName =time() . "_" . rand(0,9999999) . "_" . md5(rand(0,9999999)) . $fileImg->getClientOriginalName();
@@ -70,11 +70,10 @@ class SlideShowController extends Controller
 
         try {
             $this->slideshow->updateSlideshow($id, $title, $content, $imgSlideshow);
+            session()->flash('success', 'Update slideshow thành công!');
         } catch (Throwable $exception) {
-            flash('Update slideshow thất bại!')->error();
-            return redirect()->route('slideshow.slideshowManagement');
+            session()->flash('error', 'Update slideshow thất bại!');
         }
-        flash('Update slideshow thành công!')->success();
         return redirect()->route('slideshow.slideshowManagement');
     }
 
@@ -82,11 +81,10 @@ class SlideShowController extends Controller
     public function deleteSlideshow($id) {
         try {
             $this->slideshow->deleteSlidehow($id);
+            session()->flash('success', 'Xóa thành công!');
         } catch (Throwable $exception) {
-            flash('Xóa thất bại!')->error();
-            return redirect()->route('slideshow.slideshowManagement');
+            session()->flash('error', 'Xóa thất bại!');
         }
-        flash('Xóa thành công!')->success();
         return redirect()->route('slideshow.slideshowManagement');
     }
 }

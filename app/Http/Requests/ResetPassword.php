@@ -24,16 +24,8 @@ class ResetPassword extends FormRequest
     public function rules()
     {
         return [
-            'newPassword1'=>'required',
-            'newPassword2'=>'required|same:newPassword1'
-        ];
-    }
-    public function messages()
-    {
-        return [
-            'newPassword1.required'=>'Vui lòng nhập mật mới!',
-            'newPassword2.required'=>'Vui lòng nhập lại mật khẩu mới!',
-            'newPassword2.same'=>'Mật khẩu mới không trùng nhau!'
+            'password'=>'required',
+            'confirm_password'=>'required|same:password'
         ];
     }
 }

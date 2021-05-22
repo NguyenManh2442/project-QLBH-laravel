@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\CustomerOrder' => [
             'App\Listeners\SendMailConfirmOrder',
         ],
+        'App\Events\ResetPassword' => [
+            'App\Listeners\SendMailResetPassword',
+        ],
     ];
 
     /**

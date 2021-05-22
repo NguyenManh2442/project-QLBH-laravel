@@ -17,8 +17,8 @@
                                         <div class="card">
                                             <div class="card-content">
                                                 <div class="card-body">
-                                                    <form action="{{ route('shipper.receive_purchase_order') }}" method="get"
-                                                        class="form form-horizontal">
+                                                    <form action="{{ route('shipper.receive_purchase_order') }}"
+                                                        method="get" class="form form-horizontal">
                                                         <div class="row">
                                                             <div class="col-xl-3 col-md-6 col-12 mb-1">
                                                                 <fieldset class="form-group">
@@ -116,16 +116,22 @@
                                                             <td>{{ $value->order_date }}</td>
                                                             <td class="product-action">
                                                                 @if ($status == 1)
-                                                                    <form action="{{ route('shipper.update_status_order', $value->id) }}" method="post">
+                                                                    <form
+                                                                        action="{{ route('shipper.update_status_order', $value->id) }}"
+                                                                        method="post">
                                                                         @method('PUT')
-                                                                        <input type="submit" name="btn_confirm" class="btn btn-primary mb-1 mb-md-0"
+                                                                        <input type="submit" name="btn_confirm"
+                                                                            class="btn btn-primary mb-1 mb-md-0"
                                                                             value="Nhận đơn" />
                                                                     </form>
                                                                 @endif
                                                                 @if ($status == 2)
-                                                                    <form action="{{ route('shipper.update_status_order', $value->id) }}" method="post">
+                                                                    <form
+                                                                        action="{{ route('shipper.update_status_order', $value->id) }}"
+                                                                        method="post">
                                                                         @method('PUT')
-                                                                        <input type="submit" name="btn_finish" class="btn btn-success mb-1 mb-md-0"
+                                                                        <input type="submit" name="btn_finish"
+                                                                            class="btn btn-success mb-1 mb-md-0"
                                                                             value="Hoàn thành" />
                                                                     </form>
                                                                 @endif

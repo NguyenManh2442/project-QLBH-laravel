@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Orderdetail;
 use App\Models\Orders;
 use App\Models\Product;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +59,7 @@ class OrderController extends Controller
 
                     session()->forget('cart');
                     session()->forget('idAddress');
+                    session()->flash('success', 'Đặt hàng thành công!');
                     return response()->json($data);
                 } else {
                     return response()->json($data);

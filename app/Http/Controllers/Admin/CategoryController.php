@@ -35,12 +35,12 @@ class CategoryController extends Controller
     public function storeCategory(CategoryRequest $request) {
         try {
             $this->category->storeCategory($request->all());
+            session()->flash('success', 'Thêm mới thành công!');
+            return redirect()->route('category.categoryManagement');
         } catch (Throwable $exception) {
-            flash('Thêm mới thất bại!')->error();
+            session()->flash('error', 'Thêm mới thất bại!');
             return redirect()->route('category.categoryManagement');
         }
-        flash('Thêm mới thành công!')->success();
-        return redirect()->route('category.categoryManagement');
     }
 
     // func editCategory
@@ -55,11 +55,10 @@ class CategoryController extends Controller
     public function updateCategory($id, CategoryRequest $request){
         try {
             $this->category->updateCategory($id, $request->all());
+            session()->flash('success', 'Update thành công!');
         } catch (Throwable $exception) {
-            flash('Update thất bại!')->error();
-            return redirect()->route('category.categoryManagement');
+            session()->flash('error', 'Update thất bại!');
         }
-        flash('Update thành công!')->success();
         return redirect()->route('category.categoryManagement');
     }
 
@@ -67,11 +66,10 @@ class CategoryController extends Controller
     public function deleteCategory($id) {
         try {
             $this->category->deleteCategory($id);
+            session()->flash('success', 'Delete thành công!');
         } catch (Throwable $exception) {
-            flash('Xóa thất bại!')->error();
-            return redirect()->route('category.categoryManagement');
+            session()->flash('error', 'Delete thất bại!');
         }
-        flash('Xóa thành công!')->success();
         return redirect()->route('category.categoryManagement');
     }
 }

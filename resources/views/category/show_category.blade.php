@@ -1,10 +1,11 @@
 @extends('layout.layout_admin')
 @section('title', 'Menu')
 @section('content')
-@include('flash::message')
-<div style="text-align: right; margin-top: 20px">
-    <a href="/createCategory" class="btn bg-gradient-success mr-1 mb-1"><i class="feather icon-plus-square"></i> Add category</a>
- </div>
+    @include('flash::message')
+    <div style="text-align: right; margin-top: 20px">
+        <a href="/createCategory" class="btn bg-gradient-success mr-1 mb-1"><i class="feather icon-plus-square"></i> Add
+            category</a>
+    </div>
     <section id="collapsible">
         <div class="row">
             <div class="col-sm-12">
@@ -134,7 +135,7 @@
                                                     <td class="product-action">
                                                         <a href="/editCategory&id={{ $value->id }}"><i
                                                                 class="feather icon-edit"></i></a>
-                                                                <span>   |   </span>
+                                                        <span> | </span>
                                                         <span class="action-delete" data-toggle="modal"
                                                             data-target="#danger{{ $value->id }}"><i
                                                                 class="feather icon-trash"></i></span>

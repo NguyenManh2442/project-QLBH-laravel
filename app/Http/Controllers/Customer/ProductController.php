@@ -38,9 +38,9 @@ class ProductController extends Controller
             $category1 = $this->category->getCategoryChill();
         return view('product.show_products', compact('product','category', 'category1', 'categoryID'));
         }
-        $popularSellingProducts = $this->orderdetail->popularSellingProducts(8);
+        $popularSellingProducts = $this->orderdetail->popularSellingProducts(8, $request);
         $productRandom = $this->product->getProductrandom();
-        $newProduct = $this->product->getNewProduct(8);
+        $newProduct = $this->product->getNewProduct(8, $request);
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
         $slideshow = $this->slideshow->getSlide();
@@ -54,15 +54,15 @@ class ProductController extends Controller
         return view('product.show_products', compact('product','category', 'category1', 'categoryID'));
     }
 
-    public function getPopularSellingProducts(){
-        $product = $this->orderdetail->popularSellingProducts(12);
+    public function getPopularSellingProducts(Request $request){
+        $product = $this->orderdetail->popularSellingProducts(12, $request);
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
         return view('product.show_products', compact('product','category', 'category1'));
     }
 
-    public function getNewProducts(){
-        $product = $this->product->getNewProduct(12);
+    public function getNewProducts(Request $request){
+        $product = $this->product->getNewProduct(12, $request);
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
         return view('product.show_products', compact('product','category', 'category1'));

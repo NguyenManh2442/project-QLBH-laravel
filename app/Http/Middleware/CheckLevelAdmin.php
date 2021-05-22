@@ -16,8 +16,12 @@ class CheckLevelAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::guard('employee')->check()&&Auth::guard('employee')->user()->role == 1){
-            return $next($request);
+        if(Auth::guard('employee')->check()){
+            if ( Auth::guard('employee')->user()->role == 1 && Auth::guard('employee')->user()->status == 1) {
+                return $next($request);
+            }
+            Auth::guard('employee')->logout();
+            return redirect('/404.html');
         }else{
             return redirect('/404.html');
         }

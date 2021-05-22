@@ -69,6 +69,27 @@
                 </li>
             </ul>
         </div>
+        @if (Session::has('success'))
+            <div id="alert-message" style="position: relative;">
+                <div class="alert alert-success" role="alert" style="position: absolute; width: 400px; top: -32px;">
+                    <h4 class="alert-heading">Success</h4>
+                    <p class="mb-0">
+                        {{ Session::get('success') }}
+                    </p>
+                </div>
+            </div>
+        @endif
+        @if (Session::has('error'))
+            <div id="alert-message" style="position: relative;">
+                <div class="alert alert-danger" role="alert" style="position: absolute; width: 400px; top: -32px;">
+                    <h4 class="alert-heading">Error</h4>
+                    <p class="mb-0">
+                        {{ Session::get('error') }}
+                    </p>
+                </div>
+            </div>
+        @endif
+
         <div class="navbar-wrapper">
             <div class="navbar-container content">
                 <div class="navbar-collapse" id="navbar-mobile">
@@ -94,12 +115,14 @@
                         @if (Auth::check())
                             <li class="dropdown dropdown-user nav-item">
                                 <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                    <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{ Auth::user()->username }}</span><span class="user-status">Active</span></div>
+                                    <div class="user-nav d-sm-flex d-none"><span
+                                            class="user-name text-bold-600">{{ Auth::user()->username }}</span><span
+                                            class="user-status">Active</span></div>
                                     <span>
                                         @if (!empty(Auth::user()->avatar))
                                             <img class="round"
-                                            src="{{ asset('img') }}/{{ isset(Auth::user()->avatar) ? Auth::user()->avatar : '' }}"
-                                            alt="avatar" height="40" width="40">
+                                                src="{{ asset('img') }}/{{ isset(Auth::user()->avatar) ? Auth::user()->avatar : '' }}"
+                                                alt="avatar" height="40" width="40">
                                         @else
                                             <i class="ficon feather icon-user"></i>
                                         @endif
@@ -235,6 +258,15 @@
     <script src="{{ asset('css/app-assets/js/scripts/forms/number-input.js') }}"></script>
     <!-- END: Page JS-->
     @yield('scripts')
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('#alert-message').hide()
+            }, 5000)
+        })
+
+    </script>
+
 
 </body>
 <!-- END: Body-->

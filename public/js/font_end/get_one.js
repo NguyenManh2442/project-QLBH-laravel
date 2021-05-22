@@ -11,7 +11,7 @@ function addCart(id) {
   $.post('http://127.0.0.1:8000/addCart', { 'id': id, 'num': num, 'size': size }, function (data) {
     $("#numberCart").text(data);
     $('#showCart').modal();
-    toastr.success("Đã thêm vào giỏ hàng");
+    toastr.success('Đặt hàng thành công', 'Success', { positionClass: 'toast-top-center', containerId: 'toast-top-center' });
   });
 
 }
@@ -148,7 +148,7 @@ $(document).ready(function () {
       $('#data-'+response.id).find('[target="phone"]').text(response.phone_number);
       $('#data-'+response.id).find('[target="detailed-address"]').text(response.detailed_address + " - " + response.wards + " - " + response.district + " - " + response.province);
       
-      toastr.success("Update thành công");
+      toastr.success('Update thành công', 'Success', { positionClass: 'toast-top-center', containerId: 'toast-top-center' });
 
       $('#editForm' + response.id).modal('toggle');
     });

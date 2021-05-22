@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateProductRequest;
+use App\Http\Requests\DiscountProductRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 use App\Models\Orderdetail;
@@ -103,13 +104,14 @@ class ProductManagementController extends Controller
                 $this->product->createProduct($productName, $supplier, $categoryId, $quantity, $unitPrice,  $discount, $status, $description, $image, $sizeS, $sizeM, $sizeL, $sizeXL, $sizeXXL);
             } catch (Throwable $exception) {
                 flash('Thêm mới sản phẩm thất bại!')->error();
+                session()->flash('error', 'Thêm mới sản phẩm thất bại!');
                 return redirect()->route('product.management');
             }
-            flash('Thêm mới sản phẩm thành công!')->success();
+            session()->flash('success', 'Thêm mới sản phẩm thành công!');
             return redirect()->route('product.management');
         }
         else{
-            flash('Thêm mới sản phẩm thất bại!')->error();
+            session()->flash('error', 'Thêm mới sản phẩm thất bại!');
             return redirect()->route('product.management');
         }
     }
@@ -151,10 +153,10 @@ class ProductManagementController extends Controller
         try {
             $this->product->updateProduct($id, $productName, $supplier, $categoryId, $quantity, $unitPrice,  $discount, $status, $description, $image, $sizeS, $sizeM, $sizeL, $sizeXL, $sizeXXL);
         } catch (Throwable $exception) {
-            flash('Update sản phẩm thất bại!')->error();
+            session()->flash('error', 'Update sản phẩm thất bại!');
             return redirect()->route('product.management');
         }
-        flash('Update sản phẩm thành công!')->success();
+        session()->flash('success', 'Update sản phẩm thành công!');
         return redirect()->route('product.management');
     }
 
@@ -164,32 +166,23 @@ class ProductManagementController extends Controller
         try {
             $this->product->destroyProduct($id);
         } catch (Throwable $exception) {
-            flash('Xóa sản phẩm thất bại!')->error();
+            session()->flash('error', 'Xóa sản phẩm thất bại!');
             return redirect()->route('product.management');
         }
-        flash('Xóa sản phẩm thành công!')->success();
+        session()->flash('success', 'Xóa sản phẩm thành công!');
         return redirect()->route('product.management'); 
     }
 
-    public function orderConfirmation(Request $request){
-        $ord =  $this->customer->dataOrder($request->orderId);
-        foreach($ord as $key => $value){
-            $quant= $this->product->getProductById($value->idProduct);
-
-            foreach ($quant as $key => $quantitys){
-                $newQuantity = $quantitys->quantity - $value->quantity;
-
-                $this->product->updateQuantity($quantitys->id, $newQuantity);
-            }
-
-            $this->order->updateStatusOrder($value->orderID, 1);
-        }
-        return redirect()->back();
+    public function discountProducts()
+    {
+        $category = $this->category->getCategoryParent(0);
+        return view('productManagement.discount_products', compact("category"));
     }
 
-    public function orderCancel(Request $request)
+    public function setDiscountProducts(DiscountProductRequest $request)
     {
-        $this->order->updateStatusOrder($request->orderID, 4);
-        return redirect()->back();
+        $this->product->setDiscountProduct($request);
+        session()->flash('success', 'Giảm giá sản phẩm thành công!');
+        return redirect()->route('product.management');
     }
 }

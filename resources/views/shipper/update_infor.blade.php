@@ -1,12 +1,11 @@
-@extends('layout.layout_customer')
+@extends('layout.layout_shipper')
 @section('content')
-
 @section('title')
-    Infor
+    Profile
 @endsection
 <div class="content-overlay"></div>
 <div class="header-navbar-shadow"></div>
-<div class="content-wrapper">
+<div class="content-wrapper" style="margin-top: 0px;">
     <div class="content-header row">
         <div class="content-header-left col-md-9 col-12 mb-2">
             <div class="row breadcrumbs-top">
@@ -35,21 +34,14 @@
                             <a class="nav-link d-flex py-75 active" id="account-pill-general" data-toggle="pill"
                                 href="#account-vertical-general" aria-expanded="true">
                                 <i class="feather icon-globe mr-50 font-medium-3"></i>
-                                Thông tin cá nhân
+                                General
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link d-flex py-75" id="account-pill-password" data-toggle="pill"
                                 href="#account-vertical-password" aria-expanded="false">
                                 <i class="feather icon-lock mr-50 font-medium-3"></i>
-                                Thay đổi mật khẩu
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex py-75" id="account-pill-info" data-toggle="pill"
-                                href="#account-vertical-info" aria-expanded="false">
-                                <i class="feather icon-info mr-50 font-medium-3"></i>
-                                Địa chỉ
+                                Change Password
                             </a>
                         </li>
                     </ul>
@@ -62,13 +54,13 @@
                                 <div class="tab-content">
                                     <div role="tabpanel" class="tab-pane active" id="account-vertical-general"
                                         aria-labelledby="account-pill-general" aria-expanded="true">
-                                        <form novalidate action="{{ route('updateInfor') }}" method="post"
+                                        <form novalidate action="{{ route('updateProfile') }}" method="post"
                                             enctype="multipart/form-data">
                                             <div class="row">
                                                 <div class="media">
                                                     <a href="javascript: void(0);">
-                                                        <img id="image" class="rounded mr-75 @if (empty(Auth::user()->avatar)) hidden @endif"
-                                                        src="{{ asset('img') }}/{{ isset(Auth::user()->avatar) ? Auth::user()->avatar : '' }}"
+                                                        <img id="image" class="rounded mr-75 @if (empty(Auth::guard('employee')->user()->avatar)) hidden @endif"
+                                                        src="{{ asset('img') }}/{{ isset(Auth::guard('employee')->user()->avatar) ? Auth::guard('employee')->user()->avatar : '' }}"
                                                         height="64" width="64">
                                                     </a>
                                                     <div class="media-body mt-75">
@@ -86,20 +78,45 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <div class="controls">
-                                                            <label for="account-username">Username</label>
-                                                            <input type="text" class="form-control"
-                                                                id="account-username" placeholder="Username"
-                                                                name="username" value="{{ Auth::user()->username }}">
+                                                            <label for="account-name">Name</label>
+                                                            <input type="text"
+                                                                class="form-control  @error('full_name') border border-danger @enderror"
+                                                                id="account-name" placeholder="Name" name="full_name"
+                                                                value="{{ Auth::guard('employee')->user()->name }}">
+                                                            @error('full_name')
+                                                                <lable style="color: red">
+                                                                    {{ $errors->first('full_name') }}</lable><br><br>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <div class="controls">
-                                                            <label for="account-name">Name</label>
-                                                            <input type="text" class="form-control" id="account-name"
-                                                                placeholder="Name" name="full_name"
-                                                                value="{{ Auth::user()->full_name }}">
+                                                            <label for="account-name">Address</label>
+                                                            <input type="text"
+                                                                class="form-control @error('address') border border-danger @enderror"
+                                                                id="account-name" placeholder="Address" name="address"
+                                                                value="{{ Auth::guard('employee')->user()->address }}">
+                                                            @error('address')
+                                                                <lable style="color: red">{{ $errors->first('address') }}
+                                                                </lable><br><br>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label for="account-name">Phone</label>
+                                                            <input type="number"
+                                                                class="form-control @error('phone') border border-danger @enderror"
+                                                                id="account-name" placeholder="Phone" name="phone"
+                                                                value="{{ Auth::guard('employee')->user()->phone }}">
+                                                            @error('phone')
+                                                                <lable style="color: red">{{ $errors->first('phone') }}
+                                                                </lable><br><br>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -107,8 +124,14 @@
                                                     <div class="form-group">
                                                         <div class="controls">
                                                             <label for="account-e-mail">Birth day</label>
-                                                            <input type="date" class="form-control" name="birth_date"
-                                                                value="{{ Auth::user()->birth_date }}">
+                                                            <input type="date"
+                                                                class="form-control @error('birth_date') border border-danger @enderror"
+                                                                name="birth_date"
+                                                                value="{{ Auth::guard('employee')->user()->birth_date }}">
+                                                            @error('birth_date')
+                                                                <lable style="color: red">
+                                                                    {{ $errors->first('birth_date') }}</lable><br><br>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -123,7 +146,7 @@
                                     </div>
                                     <div class="tab-pane fade " id="account-vertical-password" role="tabpanel"
                                         aria-labelledby="account-pill-password" aria-expanded="false">
-                                        <form novalidate action="{{ route('changePassword') }}" method="POST">
+                                        <form novalidate action="{{ route('updatePassword') }}" method="POST">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
@@ -164,94 +187,6 @@
                                                 </div>
                                             </div>
                                         </form>
-                                    </div>
-                                    <div class="tab-pane fade " id="account-vertical-info" role="tabpanel"
-                                        aria-labelledby="account-pill-password" aria-expanded="false">
-                                        <div style="text-align: right; margin-top: 20px">
-                                            <a href="/createAddress" class="btn bg-gradient-success mr-1 mb-1"><i
-                                                    class="feather icon-plus-square"></i> Add address</a>
-                                        </div>
-                                        <table class="table data-thumb-view" id="table_data_address">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tên</th>
-                                                    <th>Số điện thoại</th>
-                                                    <th>Địa chỉ</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tbody>
-                                                @if ($address != null)
-                                                    @foreach ($address as $key => $value)
-                                                        <tr id="data-{{ $value->id }}">
-                                                            <td class="address-name" target="name">{{ $value->name }}
-                                                            </td>
-                                                            <td class="address-phone" target="phone">
-                                                                {{ $value->phone_number }}</td>
-                                                            <td class="address-detailed-address"
-                                                                target="detailed-address">
-                                                                {{ $value->detailed_address }} -
-                                                                {{ $value->wards }} - {{ $value->district }} -
-                                                                {{ $value->province }}</td>
-                                                            <td class="product-action">
-                                                                <a href="/editAddress&id={{ $value->id }}"><i
-                                                                        class="feather icon-edit"></i></a>
-                                                                <span class="action-delete" data-toggle="modal"
-                                                                    data-target="#danger{{ $value->id }}"><i
-                                                                        class="feather icon-trash"></i></span>
-                                                                {{-- Model fake --}}
-                                                                <div class="modal fade text-left"
-                                                                    id="editFake{{ $value->id }}" tabindex="-1"
-                                                                    role="dialog" aria-labelledby="myModalLabel120"
-                                                                    aria-hidden="true">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-body">
-                                                                            <form action=""></form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> <!-- Modal delete-->
-                                                                <div class="modal fade text-left"
-                                                                    id="danger{{ $value->id }}" tabindex="-1"
-                                                                    role="dialog" aria-labelledby="myModalLabel120"
-                                                                    aria-hidden="true">
-                                                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
-                                                                        role="document">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header bg-danger white">
-                                                                                <h5 class="modal-title"
-                                                                                    id="myModalLabel120">
-                                                                                    Cảnh báo
-                                                                                </h5>
-                                                                                <button type="button" class="close"
-                                                                                    data-dismiss="modal"
-                                                                                    aria-label="Close">
-                                                                                    <span
-                                                                                        aria-hidden="true">&times;</span>
-                                                                                </button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                Bạn có chắc muốn xóa address này?
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <form
-                                                                                    action="{{ route('address.detete', $value->id) }}"
-                                                                                    method="post">
-                                                                                    @method('delete')
-                                                                                    <input class="btn btn-danger"
-                                                                                        type="submit" value="Delete" />
-                                                                                </form>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                @else
-                                                    <h2>Bạn chưa có địa chỉ nào<h2 @endif
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>

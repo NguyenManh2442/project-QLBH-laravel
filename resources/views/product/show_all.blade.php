@@ -8,12 +8,14 @@
             <div class="col-sm-12">
                 <form action="/" method="GET">
                     <fieldset class="form-group position-relative">
-                        <input type="text" class="form-control search-product" id="iconLeft5" placeholder="Search here" name="product_name">
+                        <input type="text" class="form-control search-product" id="iconLeft5" placeholder="Search here"
+                            name="product_name">
                         <div class="form-control-position">
-                            <button type="submit" class="btn btn-icon" style="padding-top: 2px !important;"><i class="feather icon-search"></i></button>
+                            <button type="submit" class="btn btn-icon" style="padding-top: 2px !important;"><i
+                                    class="feather icon-search"></i></button>
                         </div>
                     </fieldset>
-                <form>
+                    <form>
             </div>
         </div>
     </section>
@@ -98,17 +100,17 @@
                             <div class="item-img text-center">
                                 <a href="/detail&id={{ $valueProduct->id }}">
                                     <img src="{{ asset('img') }}/{{ $valueProduct->image }}" class="img-fluid"
-                                        alt="img-placeholder" style="height:350px !important" >
+                                        alt="img-placeholder" style="height:350px !important">
                                 </a>
                             </div>
                             <div class="card-body">
                                 <div class="item-wrapper">
                                     <div class="item-rating">
                                         @if ($valueProduct->discount != 0)
-                                        <div class="badge badge-primary badge-md">
-                                            - {{ $valueProduct->discount }}%
-                                        </div>
-                                    @endif
+                                            <div class="badge badge-primary badge-md">
+                                                - {{ $valueProduct->discount }}%
+                                            </div>
+                                        @endif
                                     </div>
                                     <div>
                                         <h6 class="item-price">
@@ -164,7 +166,7 @@
                             <div class="item-img text-center">
                                 <a href="/detail&id={{ $valueNewProduct->id }}">
                                     <img src="{{ asset('img') }}/{{ $valueNewProduct->image }}" class="img-fluid"
-                                        alt="img-placeholder" style="height:350px !important" >
+                                        alt="img-placeholder" style="height:350px !important">
                                 </a>
                             </div>
                             <div class="card-body">
@@ -241,7 +243,8 @@
                             </p>
                         </div>
                         <div class="img-container w-50 mx-auto my-2 py-75">
-                            <img src="{{ asset('img') }}/{{ $valueRandomProduct->image }}" style="height:159px; width: 121px !important" class="img-fluid" alt="image">
+                            <img src="{{ asset('img') }}/{{ $valueRandomProduct->image }}"
+                                style="height:159px; width: 121px !important" class="img-fluid" alt="image">
                         </div>
                         <div class="item-meta">
                             <div class="product-rating">

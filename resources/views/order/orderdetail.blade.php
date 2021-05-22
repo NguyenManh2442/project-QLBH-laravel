@@ -15,7 +15,7 @@
         <div id="invoice-template" class="card-body">
             <!-- Invoice Recipient Details -->
             <div id="invoice-customer-details" class="row pt-2">
-                <div class="col-sm-6 col-12 text-left">
+                <div class="col-sm-6 col-6 text-left">
                     <h5>Recipient</h5>
                     <div class="recipient-info my-2">
                         <p>{{ $order[0]->name }}</p>
@@ -32,6 +32,21 @@
                             {{ $order[0]->phone_number }}
                         </p>
                     </div>
+                </div>
+                <div class="col-sm-6 col-6 text-left">
+                    @if (!empty($employee))
+                        <h5>Shiper</h5>
+                        <div class="recipient-info my-2">
+                            <p>Họ và tên: {{ $employee->name }}</p>
+                            <p>Email: {{ $employee->mail_address }}</p>
+                        </div>
+                        <div class="recipient-contact pb-2">
+                            <p>
+                                <i class="feather icon-phone"></i>
+                                {{ $employee->phone }}
+                            </p>
+                        </div>
+                    @endif
                 </div>
             </div>
             <!--/ Invoice Recipient Details -->
@@ -122,15 +137,16 @@
 @endsection
 @section('css')
     <style>
-        @media print 
-        {
-            .invoice-print{
-                display:none;
+        @media print {
+            .invoice-print {
+                display: none;
             }
-            .footer{
-                display:none;
+
+            .footer {
+                display: none;
             }
         }
+
     </style>
 @endsection
 @section('scripts')

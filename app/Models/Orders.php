@@ -136,7 +136,7 @@ class Orders extends Model
         }
     }
 
-    public function getOrdersByStatus( $status)
+    public function getOrdersByStatus($status)
     {
         $query = DB::table('orders');
         $query->join('delivery_address','delivery_address.id','=','orders.delivery_address_id')

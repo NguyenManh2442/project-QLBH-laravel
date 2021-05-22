@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\Orderdetail;
 use Illuminate\Http\Request;
 use App\Models\Orders;
@@ -16,13 +17,15 @@ class OrderManagementController extends Controller
     protected $orderdetail;
     protected $product;
     protected $voucher;
+    protected $employee;
 
-    public function __construct(Orders $order, Orderdetail $orderdetail, Product $product, Vouchers $voucher)
+    public function __construct(Orders $order, Orderdetail $orderdetail, Product $product, Vouchers $voucher, Employee $employee)
     {
         $this->order = $order;
         $this->orderdetail = $orderdetail;
         $this->product = $product;
         $this->voucher = $voucher;
+        $this->employee = $employee;
     }
     // func orderManagement
     public function orderManagement($status, Request $request)
@@ -68,10 +71,14 @@ class OrderManagementController extends Controller
         $orderdetail = $this->orderdetail->getOrderdetail($id);
         $order = $this->order->getOrderByID($id);
         $voucher = null;
+        $employee = null;
         if ($order[0]->voucher_id != null) {
             $voucher = $this->voucher->getVoucherByID($order[0]->voucher_id);
         }
-        return view('order.orderdetail', compact('orderdetail', 'order', 'voucher'));
+        if ($order[0]->user_id != null) {
+            $employee = $this->employee->getOnlyEmployee($order[0]->shipper_id);
+        }
+        return view('order.orderdetail', compact('orderdetail', 'order', 'voucher', 'employee'));
     }
 
     public function updateOrderStatus($id, Request $request)
@@ -82,10 +89,12 @@ class OrderManagementController extends Controller
             foreach ($orderdetails as $orderdetail) {
                 $this->product->plusQuantityProduct($orderdetail->id_product, $orderdetail->quantity);
             }
+            session()->flash('success', 'Hủy đơn hàng thành công!');
+            return redirect()->route('order.management', 4);
         } else {
             $this->order->updateStatusOrder($id, 1);
+            session()->flash('success', 'Xác nhận đơn hàng thành công!');
+            return redirect()->route('order.management', 1);
         }
-        
-        return redirect()->route('order.management', 1);
     }
 }

@@ -41,7 +41,8 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('css/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app-assets/css/core/colors/palette-gradient.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/app-assets/css/plugins/calendars/fullcalendar.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('css/app-assets/css/plugins/calendars/fullcalendar.css') }}">
 
     <!-- END: Page CSS-->
     @yield('css')
@@ -59,6 +60,26 @@
 
     <!-- BEGIN: Header-->
     <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu floating-nav navbar-light navbar-shadow">
+        @if (Session::has('success'))
+            <div id="alert-message" style="position: relative;">
+                <div class="alert alert-success" role="alert" style="position: absolute; width: 400px; top: -32px;">
+                    <h4 class="alert-heading">Success</h4>
+                    <p class="mb-0">
+                        {{ Session::get('success') }}
+                    </p>
+                </div>
+            </div>
+        @endif
+        @if (Session::has('error'))
+            <div id="alert-message" style="position: relative;">
+                <div class="alert alert-danger" role="alert" style="position: absolute; width: 400px; top: -32px;">
+                    <h4 class="alert-heading">Error</h4>
+                    <p class="mb-0">
+                        {{ Session::get('error') }}
+                    </p>
+                </div>
+            </div>
+        @endif
         <div class="navbar-wrapper">
             <div class="navbar-container content">
                 <div class="navbar-collapse" id="navbar-mobile">
@@ -67,17 +88,6 @@
                             <li class="nav-item mobile-menu d-xl-none mr-auto"><a
                                     class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i
                                         class="ficon feather icon-menu"></i></a></li>
-                        </ul>
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link bookmark-star"><i
-                                        class="ficon feather icon-star warning"></i></a>
-                                <div class="bookmark-input search-input">
-                                    <div class="bookmark-input-icon"><i class="feather icon-search primary"></i></div>
-                                    <input class="form-control input" type="text" placeholder="Explore Vuexy..."
-                                        tabindex="0" data-search="template-list">
-                                    <ul class="search-list search-list-bookmark"></ul>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                     <ul class="nav navbar-nav float-right">
@@ -88,22 +98,19 @@
                                 <div class="user-nav d-sm-flex d-none"><span
                                         class="user-name text-bold-600">{{ Auth::guard('employee')->user()->name }}</span><span
                                         class="user-status">Active</span></div>
-                                        <span>
-                                            @if (!empty(Auth::guard('employee')->user()->avatar))
-                                                <img class="round"
-                                                src="{{ asset('img') }}/{{ isset( Auth::guard('employee')->user()->avatar) ?  Auth::guard('employee')->user()->avatar : '' }}"
-                                                alt="avatar" height="40" width="40">
-                                            @else
-                                                <i class="ficon feather icon-user"></i>
-                                            @endif
-                                        </span>
+                                <span>
+                                    @if (!empty(Auth::guard('employee')->user()->avatar))
+                                        <img class="round"
+                                            src="{{ asset('img') }}/{{ isset(Auth::guard('employee')->user()->avatar) ? Auth::guard('employee')->user()->avatar : '' }}"
+                                            alt="avatar" height="40" width="40">
+                                    @else
+                                        <i class="ficon feather icon-user"></i>
+                                    @endif
+                                </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
-                                    href="{{ route('profile') }}"><i class="feather icon-user"></i> Edit Profile</a><a
-                                    class="dropdown-item" href="app-email.html"><i class="feather icon-mail"></i> My
-                                    Inbox</a><a class="dropdown-item" href="app-todo.html"><i
-                                        class="feather icon-check-square"></i> Task</a><a class="dropdown-item"
-                                    href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a>
+                                    href="{{ route('profile') }}"><i class="feather icon-user"></i> Edit
+                                    Profile</a>
                                 <div class="dropdown-divider"></div><a class="dropdown-item" href="/logoutAdmin"><i
                                         class="feather icon-power"></i> Logout</a>
                             </div>
@@ -134,109 +141,51 @@
         <div class="shadow-bottom"></div>
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class=" nav-item {{ Request::segment(1) === 'admin' ? 'active' : '' }}"><a href="{{ route('index') }}"><i class="feather icon-home"></i>
-                    <span class="menu-title" data-i18n="Email">Thống kê</span></a>
+                <li class=" nav-item {{ Request::segment(1) === 'admin' ? 'active' : '' }}"><a
+                        href="{{ route('index') }}"><i class="feather icon-home"></i>
+                        <span class="menu-title" data-i18n="Email">Thống kê</span></a>
                 </li>
-                <li class=" nav-item {{ Request::segment(1) === 'orderManagement&status=0' ? 'active' : '' }}"><a href="{{ route('order.management', 0)}}"><i class="feather icon-shopping-cart"></i><span
+                <li class=" nav-item {{ Request::segment(1) === 'orderManagement&status=0' ? 'active' : '' }}"><a
+                        href="{{ route('order.management', 0) }}"><i class="feather icon-shopping-cart"></i><span
                             class="menu-title" data-i18n="Email">Quản lý đơn hàng</span></a>
                 </li>
-                <li class=" nav-item {{ Request::segment(1) === 'product-management' ? 'active' : '' }}"><a href="/product-management"><i class="fa fa-product-hunt"></i><span
-                            class="menu-title" data-i18n="Chat">Quản lý sản phẩm</span></a>
+                <li class=" nav-item {{ Request::segment(1) === 'product-management' ? 'active' : '' }}"><a
+                        href="/product-management"><i class="fa fa-product-hunt"></i><span class="menu-title"
+                            data-i18n="Chat">Quản lý sản phẩm</span></a>
                 </li>
-                <li class=" nav-item {{ Request::segment(1) === 'admin-account-management' ? 'active' : '' }}"><a href="/admin-account-management"><i class="feather icon-users"></i><span
-                            class="menu-title" data-i18n="Todo">Quản Lý tài khoản</span></a>
-                </li>
-                <li class="nav-item {{ Request::segment(1) === 'slideshow-management' ? 'active' : '' }}"><a href="{{ route('slideshow.slideshowManagement') }}"><i class="feather icon-image"></i><span class="menu-title">Quản lý
-                            slideshow</span></a>
-                </li>
-                <li class="nav-item {{ Request::segment(1) === 'category-management' ? 'active' : '' }}"><a href="{{ route('category.categoryManagement') }}"><i
-                            class="feather icon-menu"></i><span class="menu-title">Quản lý danh mục</span></a>
-                </li>
-                <li class="nav-item"><a href="app-calender.html"><i class="fa fa-star-o"></i><span
-                            class="menu-title">Quản lý khách hàng</span></a>
-                </li>
-                <li class="nav-item"><a href="app-calender.html"><i class="fa fa-cube"></i><span class="menu-title">Quản
-                            lý shipper</span></a>
-                </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-shopping-cart"></i><span class="menu-title"
+                @if (Auth::guard('employee')->user()->role == 1)
+                    <li class=" nav-item {{ Request::segment(1) === 'admin-account-management' ? 'active' : '' }}"><a
+                            href="/admin-account-management"><i class="feather icon-users"></i><span class="menu-title"
+                                data-i18n="Todo">Quản Lý tài khoản</span></a>
+                    </li>
+                    <li class="nav-item"><a href="{{ route('admin.customerAccountManagement') }}"><i
+                                class="fa fa-star-o"></i><span class="menu-title">Quản lý khách hàng</span></a>
+                    </li>
+                @endif
+                <li class=" nav-item"><a href="#"><i class="fa fa-caret-down"></i><span class="menu-title"
                             data-i18n="Ecommerce">Khác ...</span></a>
                     <ul class="menu-content">
-                        <li class="nav-item"><a href="{{ route('vouchers.index') }}"><i class="fa fa-star-o"></i><span
-                            class="menu-title">Quản lý voucher</span></a>
+                        <li class="nav-item"><a href="{{ route('vouchers.index') }}"><i class="fa fa-bolt"></i><span
+                                    class="menu-title">Quản lý voucher</span></a>
                         </li>
-                        <li><a href="app-ecommerce-details.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Details">Details</span></a>
-                        </li>
-                        <li><a href="app-ecommerce-wishlist.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Wish List">Wish List</span></a>
-                        </li>
-                        <li><a href="app-ecommerce-checkout.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Checkout">Checkout</span></a>
+                        <li class="nav-item"><a href="{{ route('index.setDiscountProduct') }}"><i
+                                    class="fa fa-certificate"></i><span class="menu-title">Giảm giá sản phẩm</span></a>
                         </li>
                     </ul>
                 </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title"
-                            data-i18n="User">User</span></a>
-                    <ul class="menu-content">
-                        <li><a href="app-user-list.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="List">List</span></a>
-                        </li>
-                        <li><a href="app-user-view.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="View">View</span></a>
-                        </li>
-                        <li><a href="app-user-edit.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Edit">Edit</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class=" navigation-header"><span>UI Elements</span>
-                </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-list"></i><span class="menu-title"
-                            data-i18n="Data List">Data List</span><span
-                            class="badge badge badge-primary badge-pill float-right mr-2">New</span></a>
-                    <ul class="menu-content">
-                        <li><a href="data-list-view.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="List View">List View</span></a>
-                        </li>
-                        <li><a href="data-thumb-view.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Thumb View">Thumb View</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-layout"></i><span class="menu-title"
-                            data-i18n="Content">Content</span></a>
-                    <ul class="menu-content">
-                        <li><a href="content-grid.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Grid">Grid</span></a>
-                        </li>
-                        <li><a href="content-typography.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Typography">Typography</span></a>
-                        </li>
-                        <li><a href="content-text-utilities.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Text Utilities">Text Utilities</span></a>
-                        </li>
-                        <li><a href="content-syntax-highlighter.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Syntax Highlighter">Syntax Highlighter</span></a>
-                        </li>
-                        <li><a href="content-helper-classes.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Helper Classes">Helper Classes</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class=" nav-item"><a href="colors.html"><i class="feather icon-droplet"></i><span class="menu-title"
-                            data-i18n="Colors">Colors</span></a>
-                </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-eye"></i><span class="menu-title"
-                            data-i18n="Icons">Icons</span></a>
-                    <ul class="menu-content">
-                        <li><a href="icons-feather.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Feather">Feather</span></a>
-                        </li>
-                        <li><a href="icons-font-awesome.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Font Awesome">Font Awesome</span></a>
-                        </li>
-                    </ul>
-                </li>
+                @if (Auth::guard('employee')->user()->role == 1)
+                    <li class=" navigation-header"><span>UI Elements</span>
+                    </li>
+                    <li class="nav-item {{ Request::segment(1) === 'slideshow-management' ? 'active' : '' }}"><a
+                            href="{{ route('slideshow.slideshowManagement') }}"><i
+                                class="feather icon-image"></i><span class="menu-title">Quản lý
+                                slideshow</span></a>
+                    </li>
+                    <li class="nav-item {{ Request::segment(1) === 'category-management' ? 'active' : '' }}"><a
+                            href="{{ route('category.categoryManagement') }}"><i class="feather icon-menu"></i><span
+                                class="menu-title">Quản lý danh mục</span></a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>
@@ -267,8 +216,7 @@
                 class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2021<a
                     class="text-bold-800 grey darken-2" href="https://www.facebook.com/nguyenmanh2442.nt/"
                     target="_blank">ManhNguyen,</a>Đã đăng ký Bản quyền</span><span
-                class="float-md-right d-none d-md-block">Nguyen Tien Manh<i
-                    class="feather icon-heart pink"></i></span>
+                class="float-md-right d-none d-md-block">Nguyen Tien Manh<i class="feather icon-heart pink"></i></span>
             <button class="btn btn-primary btn-icon scroll-top" type="button"><i
                     class="feather icon-arrow-up"></i></button>
         </p>
@@ -300,6 +248,14 @@
     <script src="{{ asset('css/app-assets/js/scripts/extensions/fullcalendar.js') }}"></script>
     <!-- END: Page JS-->
     @yield('scripts')
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('#alert-message').hide()
+            }, 4000)
+        })
+
+    </script>
 
 </body>
 <!-- END: Body-->

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -83,11 +84,63 @@ class User extends Authenticatable
         return User::where('email', $email)->first();
     }
 
+    public function setToken($email, $token)
+    {
+        try {
+            User::where('email', $email)->update(['token'=>$token]);
+            return true;
+        }
+        catch(Exception $exeption) {
+            return false;
+        }
+    }
+
     public function checkUser($email, $token) {
         return User::where([
             'email'=>$email,
             'token'=>$token
         ])->first();
+    }
+
+    public function resetPassword($email, $password) {
+        try {
+            User::where('email', $email)->update(['password'=>bcrypt($password), 'token'=>null,]);
+            return true;
+        }
+        catch(Exception $exeption) {
+            return false;
+        }
+    }
+
+    public function getAllUser(array $request) {
+        $query = DB::table('customers');
+        if (!empty($request)) {
+            foreach ($request as $key => $value) {
+                if ($key == 'status') {
+                    $query->where($key, '=', $value);
+                } else {
+                    $query->where($key, 'like', '%' . $value . '%');
+                }
+            }
+        }
+        return $query->paginate($this->perPage);
+    }
+
+    public function changeStatus($id)
+    {
+        try {
+            $user = User::find($id);
+            if ($user->status == 0) {
+                $user->status = 1;
+            } else {
+                $user->status = 0;
+            }
+            $user->save();
+            return true;
+        }
+        catch(Exception $exeption) {
+            return false;
+        }
     }
 
     // public function orderProcessing() {

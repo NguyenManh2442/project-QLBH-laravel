@@ -17,9 +17,9 @@ class TableListingHelper
         $is_current_sort = $field == $orderBy;
         if($is_current_sort){
             if($sortOrder == 'asc'){
-                $item .= '<i class="fa fa-arrow-up"></i>';
+                $item .= '<i class="fa fa-sort-amount-asc"></i>';
             }else{
-                $item .= '<i class="fa fa-arrow-down"></i>';
+                $item .= '<i class="fa fa-sort-amount-desc"></i>';
             }
         }else{
             $item .= '<i class="fa fa-align-center"></i>';

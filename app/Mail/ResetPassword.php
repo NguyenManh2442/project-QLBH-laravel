@@ -7,18 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class TestMail extends Mailable
+class ResetPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $url;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($url)
     {
-        //
+        $this->url = $url;
     }
 
     /**
@@ -28,6 +29,6 @@ class TestMail extends Mailable
      */
     public function build()
     {
-        return $this->view('customer.form');
+        return $this->view('customer.send_gmail_reset_password');
     }
 }

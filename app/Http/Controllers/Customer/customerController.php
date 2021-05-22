@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Customer;
-use App\Mail\TestMail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\Category;
 use App\Models\DeliveryAddress;
 use App\Models\User;
+use App\Events\ResetPassword as EventChangePassword;
 class customerController extends Controller
 {
     //
@@ -39,12 +39,17 @@ class customerController extends Controller
             'email'=> $request->email,
             'password'=> $request->password
         ];
-        if(Auth::attempt($data)){
-
-            return redirect('/');
+        if(Auth::attempt($data)) {
+            if(Auth::user()->status == 1) {
+                return redirect('/');
+            }
+            elseif(Auth::user()->status == 0) {
+                Auth::logout();
+                return redirect('signin')->with('error','Tài khoản đã bị khóa');
+            }
         }
         else{
-            return redirect('signin')->with('loginFalse','Tài khoản mật khẩu không chính xác!');
+            return redirect('signin')->with('error','Tài khoản mật khẩu không chính xác!');
         }
     }
 
@@ -66,14 +71,14 @@ class customerController extends Controller
             $password = $request->password1;
 
         $this->user->postSignUp($email, $username, $password);
-        return redirect()->back()->with('thanhcong','Đăng ký tài khoản thành công!');
+        return redirect()->back()->with('success','Đăng ký tài khoản thành công!');
     }
 
 
-    public function form_forget_password(){
+    public function formForgetPassword(){
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
-        return view('customer.forget_password', compact('category','category1'));
+        return view('customer.forgot_password', compact('category','category1'));
     }
 
     public function editInfor(){
@@ -95,7 +100,7 @@ class customerController extends Controller
             $avatar = $fileName;
             $birthdate = $request->birth_date;
             $statusUpdate = $this->user->postUpdateInfor($username, $fullname, $avatar, $birthdate);
-            return redirect()->back()->with('update-infor','Cập nhật thông tin thành công!');
+            return redirect()->back()->with('success','Cập nhật thông tin thành công!');
         }
     }
 
@@ -104,33 +109,32 @@ class customerController extends Controller
         $password = Auth::user()->password;
         if(Hash::check($request->old_password, $password)){
             $this->user->changePassword($request->new_password);
-            return redirect()->back()->with('thaymatkhau2','Thay đổi mật khẩu thành công!');
+            return redirect()->back()->with('success','Thay đổi mật khẩu thành công!');
         }
         else{
-            return redirect()->back()->with('thaymatkhau','Mật khẩu cũng không đúng!');
+            return redirect()->back()->with('error','Mật khẩu cũng không đúng!');
         }
     }
 
-    public function addFeedback(SendEmailResetPass $request){
+    public function seedForgotPassword(SendEmailResetPass $request){
         $email = $request->email;
         $checkUser =  $this->user->checkEmail($email);
         if(!$checkUser){
-            return redirect()->back()->with('danger','Email không tồn tại');
+            return redirect()->back()->with('success','Email không tồn tại');
         }
         $token = bcrypt(md5(time().$email));
-        $checkUser->token = $token;
-        $checkUser->timeToken = Carbon::now('Asia/Ho_Chi_Minh');
-        $checkUser->save();
 
-        $url = route('get.link.reset.password',['token'=>$checkUser->token, 'email'=>$email]);
+        $setToken = $this->user->setToken($email, $token);
+        if (!$setToken) {
+            return redirect()->back()->with('error','That bai');
+        }
+        $url = route('get.link.reset.password',['token'=>$token, 'email'=>$email]);
         $data = [
             'route'=>$url
         ];
 
-        Mail::send('customer.send_gmail',$data, function ($message) use($email){
-            $message->to($email,'Reset Password')->subject('Thay đổi mật khẩu');
-        });
-        return redirect()->back()->with('sendEmail','Hệ thống đã gửi Link thay đổi mật khẩu về Email của bạn. Vui lòng kiểm tra!');
+        event(new EventChangePassword($data, $email));
+        return redirect()->back()->with('success','Hệ thống đã gửi Link thay đổi mật khẩu về Email của bạn. Vui lòng kiểm tra!');
     }
 
     public function formReset(Request $request){
@@ -140,7 +144,7 @@ class customerController extends Controller
         $token = $request->token;
         $checkUser = $this->user->checkUser($email, $token);
         if(!$checkUser){
-            return redirect('/')->with('loiduongdan','Đường dẫn lấy lại mật khẩu không đúng. Vui lòng thử lại!');
+            return redirect('/')->with('error','Đường dẫn lấy lại mật khẩu không đúng. Vui lòng thử lại!');
         }
         else {
             return view('customer.reset_password', compact('category', 'category1','email','token'));
@@ -150,15 +154,14 @@ class customerController extends Controller
     public function saveResetPassword(ResetPassword $request){
         $email = $request->email;
         $token = $request->token;
-        $password = $request->newPassword1;
+        $password = $request->password;
         $checkUser = $this->user->checkUser($email, $token);
         if(!$checkUser){
-            return redirect('/')->with('loiduongdan','Đường dẫn lấy lại mật khẩu không đúng. Vui lòng thử lại!');
+            return redirect('/')->with('error','Đường dẫn lấy lại mật khẩu không đúng. Vui lòng thử lại!');
         }
         else{
-            $checkUser->password = bcrypt($password);
-            $checkUser->save();
-            return redirect()->back()->with('resetPassword','Mật khẩu đã được thay đổi!');
+            $this->user->resetPassword($email, $password);
+            return redirect()->back()->with('success','Mật khẩu đã được thay đổi!');
         }
     }
 }

@@ -56,6 +56,7 @@ class VoucherController extends Controller
     public function store(VoucherRequest $request)
     {
         $this->voucher->storeVoucher($request->all());
+        session()->flash('success', 'Thêm mới voucher thành công!');
         return redirect()->route('vouchers.index');
     }
 
@@ -81,6 +82,7 @@ class VoucherController extends Controller
     public function update(VoucherRequest $request, $id)
     {
         $this->voucher->updateVoucher($id, $request->all());
+        session()->flash('success', 'Update slideshow thành công!');
         return redirect()->route('vouchers.index');
     }
 
@@ -93,6 +95,7 @@ class VoucherController extends Controller
     public function destroy($id)
     {
         $this->voucher->deleteVoucher($id);
+        session()->flash('success', 'Xóa slideshow thành công!');
         return redirect()->route('vouchers.index');
     }
 }

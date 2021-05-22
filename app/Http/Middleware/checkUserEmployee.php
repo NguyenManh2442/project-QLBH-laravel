@@ -16,13 +16,10 @@ class checkUserEmployee
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::guard('employee')->check()&&Auth::guard('employee')->user()->role==1){
+        if(Auth::guard('employee')->check() && (Auth::guard('employee')->user()->role==1 || Auth::guard('employee')->user()->role==2 )){
             return redirect()->intended('admin');
         }
-        elseif(Auth::guard('employee')->check()&&Auth::guard('employee')->user()->role==2){
-            return redirect()->intended('employee');
-        }
-        elseif(Auth::guard('employee')->check()&&Auth::guard('employee')->user()->role==3){
+        else if(Auth::guard('employee')->check()&&Auth::guard('employee')->user()->role==3){
             return redirect()->intended('shipper');
         }
         return $next($request);

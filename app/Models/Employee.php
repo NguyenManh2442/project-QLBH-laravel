@@ -43,6 +43,7 @@ class Employee extends Authenticatable
         $employee->phone = $request['phone'];
         $employee->address = $request['address'];
         $employee->birth_date = $request['birth_date'];
+        $employee->status = 1;
         $employee->role = $request['role'];
         $employee->password = bcrypt($request['password']);
         $employee->save();
@@ -73,7 +74,9 @@ class Employee extends Authenticatable
 
     public function deleteEmployee($id)
     {
-        Employee::destroy($id);
+        $employee = Employee::find($id);
+        $employee->status = 0;
+        $employee->save();
         return true;
     }
 

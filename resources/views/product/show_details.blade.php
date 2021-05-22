@@ -65,7 +65,8 @@
                                         .Đ</p>
                                     <p style="font-size: 15px !important; color: #626262;">
                                         <del>{{ number_format($product[0]->unit_price) }}<del>
-                                                .Đ</p>
+                                                .Đ
+                                    </p>
                                 @endif
                                 <span class="pl-1 font-medium-3 border-left">
                                     <i class="feather icon-star text-warning"></i>
@@ -190,7 +191,9 @@
                                                 Vui lòng đăng nhập để thêm vào giỏ hàng!
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="/signin" type="button" class="btn btn-outline-info mr-1 mb-1 waves-effect waves-light">Đăng nhập</a>
+                                                <a href="/signin" type="button"
+                                                    class="btn btn-outline-info mr-1 mb-1 waves-effect waves-light">Đăng
+                                                    nhập</a>
                                             </div>
                                         </div>
                                     </div>

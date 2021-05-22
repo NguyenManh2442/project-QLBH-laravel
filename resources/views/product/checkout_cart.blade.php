@@ -9,16 +9,14 @@
         $tong = 0;
         $sessionCart = session()->get('cart');
     @endphp
-    @if (isset($sessionCart) && $sessionCart == true  && Auth::check())
+    @if (isset($sessionCart) && $sessionCart == true && Auth::check())
         <div class="content-header-left col-md-9 col-12 mb-2">
             <div class="row breadcrumbs-top">
                 <div class="col-12">
                     <h2 class="content-header-title float-left mb-0">Checkout</h2>
                     <div class="breadcrumb-wrapper col-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a>
-                            </li>
-                            <li class="breadcrumb-item"><a href="#">eCommerce</a>
+                            <li class="breadcrumb-item"><a href="/">Home</a>
                             </li>
                             <li class="breadcrumb-item active">Checkout
                             </li>
@@ -53,7 +51,6 @@
                                             <span></span>
                                             <p class="item-company">By <span
                                                     class="company-name">{{ $value['supplier'] }}</span></p>
-                                            <p class="stock-status-in">In Stock</p>
                                         </div>
                                         <div>
                                             <p class="quantity-title">Size: <span
@@ -69,8 +66,6 @@
                                                     onchange="updateCart({{ $key }})">
                                             </div>
                                         </div>
-                                        <p class="delivery-date">Delivery by, Wed Apr 25</p>
-                                        <p class="offers">17% off 4 offers Available</p>
                                     </div>
                                     <div class="item-options text-center">
                                         <div class="item-wrapper">
@@ -146,7 +141,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="btn btn-primary btn-block place-order" id="confirm">ĐỊA CHỈ ĐẶT HÀNG</div>
+                                    <div class="btn btn-primary btn-block place-order" id="confirm">ĐỊA CHỈ ĐẶT HÀNG
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -167,8 +163,9 @@
                         <p class="text-muted mt-25">Hãy nhớ chọn "Gửi đến địa chỉ này" khi bạn đã hoàn tất
                         </p>
                         <div style="text-align: right; margin-top: 20px">
-                            <a href="/createAddress" class="btn bg-gradient-success mr-1 mb-1"><i class="feather icon-plus-square"></i> Add address</a>
-                         </div>
+                            <a href="/createAddress" class="btn bg-gradient-success mr-1 mb-1"><i
+                                    class="feather icon-plus-square"></i> Add address</a>
+                        </div>
                     </div>
                     <div class="card-content">
                         <div class="card-body">
@@ -186,81 +183,83 @@
                                         </thead>
                                         <tbody>
                                             @if (isset($address))
-                                            @foreach ($address as $key => $value)
-                                                <tr id="data-{{ $value->id }}">
-                                                    <td>
-                                                        <fieldset>
-                                                            <div class="vs-radio-con vs-radio-primary">
-                                                                <input type="radio" name="address"
-                                                                    value="{{ $value->id }}" @if ($key == 0) checked @endif>
-                                                                <span class="vs-radio vs-radio-lg">
-                                                                    <span class="vs-radio--border"></span>
-                                                                    <span class="vs-radio--circle"></span>
-                                                                </span>
-                                                            </div>
-                                                        </fieldset>
-                                                    </td>
-                                                    <td class="address-name" target="name">{{ $value->name }}</td>
-                                                    <td class="address-phone" target="phone">
-                                                        {{ $value->phone_number }}</td>
-                                                    <td class="address-detailed-address" target="detailed-address">
-                                                        {{ $value->detailed_address }} -
-                                                        {{ $value->wards }} - {{ $value->district }} -
-                                                        {{ $value->province }}</td>
-                                                    <td class="product-action">
-                                                        <span class="action-edit"
-                                                            onclick="updateAddress({{ $value->id }})"
-                                                            data-toggle="modal"
-                                                            data-target="#editForm{{ $value->id }}"><i
-                                                                class="feather icon-edit"></i></span>
-                                                        {{-- Model fake --}}
-                                                        <div class="modal fade text-left"
-                                                            id="editFake{{ $value->id }}" tabindex="-1"
-                                                            role="dialog" aria-labelledby="myModalLabel120"
-                                                            aria-hidden="true">
-                                                            <div class="modal-content">
-                                                                <div class="modal-body">
-                                                                    <form action=""></form>
+                                                @foreach ($address as $key => $value)
+                                                    <tr id="data-{{ $value->id }}">
+                                                        <td>
+                                                            <fieldset>
+                                                                <div class="vs-radio-con vs-radio-primary">
+                                                                    <input type="radio" name="address"
+                                                                        value="{{ $value->id }}" @if ($key == 0) checked @endif>
+                                                                    <span class="vs-radio vs-radio-lg">
+                                                                        <span class="vs-radio--border"></span>
+                                                                        <span class="vs-radio--circle"></span>
+                                                                    </span>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        {{-- Model edit --}}
-                                                        <div class="modal fade text-left"
-                                                            id="editForm{{ $value->id }}" tabindex="-1"
-                                                            role="dialog" aria-labelledby="myModalLabel130"
-                                                            aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
-                                                                role="document">
+                                                            </fieldset>
+                                                        </td>
+                                                        <td class="address-name" target="name">{{ $value->name }}
+                                                        </td>
+                                                        <td class="address-phone" target="phone">
+                                                            {{ $value->phone_number }}</td>
+                                                        <td class="address-detailed-address" target="detailed-address">
+                                                            {{ $value->detailed_address }} -
+                                                            {{ $value->wards }} - {{ $value->district }} -
+                                                            {{ $value->province }}</td>
+                                                        <td class="product-action">
+                                                            <span class="action-edit"
+                                                                onclick="updateAddress({{ $value->id }})"
+                                                                data-toggle="modal"
+                                                                data-target="#editForm{{ $value->id }}"><i
+                                                                    class="feather icon-edit"></i></span>
+                                                            {{-- Model fake --}}
+                                                            <div class="modal fade text-left"
+                                                                id="editFake{{ $value->id }}" tabindex="-1"
+                                                                role="dialog" aria-labelledby="myModalLabel120"
+                                                                aria-hidden="true">
                                                                 <div class="modal-content">
-                                                                    <div class="modal-header bg-info white">
-                                                                        <h5 class="modal-title" id="myModalLabel130">
-                                                                            Info Modal
-                                                                        </h5>
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
+                                                                    <div class="modal-body">
+                                                                        <form action=""></form>
                                                                     </div>
-                                                                    <form
-                                                                        action="{{ route('address.update_address', $value->id) }}"
-                                                                        method="post">
-                                                                        @method('put')
-                                                                        <div class="modal-body"
-                                                                            id="info_address_{{ $value->id }}">
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                            <input class="btn btn-info" type="submit"
-                                                                                value="Update" />
-                                                                        </div>
-                                                                    </form>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                                            {{-- Model edit --}}
+                                                            <div class="modal fade text-left"
+                                                                id="editForm{{ $value->id }}" tabindex="-1"
+                                                                role="dialog" aria-labelledby="myModalLabel130"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                                                    role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header bg-info white">
+                                                                            <h5 class="modal-title"
+                                                                                id="myModalLabel130">
+                                                                                Info Modal
+                                                                            </h5>
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <form
+                                                                            action="{{ route('address.update_address', $value->id) }}"
+                                                                            method="post">
+                                                                            @method('put')
+                                                                            <div class="modal-body"
+                                                                                id="info_address_{{ $value->id }}">
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <input class="btn btn-info"
+                                                                                    type="submit" value="Update" />
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             @endif
                                         </tbody>
                                     </table>
@@ -272,21 +271,21 @@
                 <div class="customer-card">
                     <div class="card">
                         @if ($address[0] != null)
-                        <div class="card-header" id="confirm-name">
-                            <h4 class="card-title" target="name">Tên: {{ $address[0]->name }}</h4>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-body actions" id="confirm-address">
-                                <p class="mb-0"></p>
-                                <p target="phone">Số điện thoại: {{ $address[0]->phone_number }}</p>
-                                <p target="address">Địa chỉ: {{ $address[0]->detailed_address }} -
-                                    {{ $address[0]->wards }} - {{ $address[0]->district }} -
-                                    {{ $address[0]->province }}</p>
-                                <hr>
-                                <div class="btn btn-primary btn-block delivery-address">GỬI ĐẾN ĐỊA CHỈ NÀY</div>
+                            <div class="card-header" id="confirm-name">
+                                <h4 class="card-title" target="name">Tên: {{ $address[0]->name }}</h4>
                             </div>
-                        </div>
-                        
+                            <div class="card-content">
+                                <div class="card-body actions" id="confirm-address">
+                                    <p class="mb-0"></p>
+                                    <p target="phone">Số điện thoại: {{ $address[0]->phone_number }}</p>
+                                    <p target="address">Địa chỉ: {{ $address[0]->detailed_address }} -
+                                        {{ $address[0]->wards }} - {{ $address[0]->district }} -
+                                        {{ $address[0]->province }}</p>
+                                    <hr>
+                                    <div class="btn btn-primary btn-block delivery-address">GỬI ĐẾN ĐỊA CHỈ NÀY</div>
+                                </div>
+                            </div>
+
                     </div>
                 </div>
             </section>
@@ -301,8 +300,8 @@
                 <div class="payment-type">
                     <div class="card">
                         <div class="card-header flex-column align-items-start">
-                            <h4 class="card-title">Payment options</h4>
-                            <p class="text-muted mt-25">Be sure to click on correct payment option</p>
+                            <h4 class="card-title">Xác nhận đặt hàng</h4>
+                            <p class="text-muted mt-25">Chọn đặt hàng để có thể xác nhận đặt đơn hàng</p>
                         </div>
                         <div class="card-content">
                             <div class="card-body" id="list-product">
@@ -330,7 +329,8 @@
                                                     <td class="product-category">{{ $value['num'] }}</td>
                                                     <td class="product-category">{{ $value['size'] }}</td>
                                                     <td class="product-category">
-                                                        {{ number_format(($value['gia'] - $value['gia'] * ($value['discount'] / 100)) * $value['num']) }} Đ
+                                                        {{ number_format(($value['gia'] - $value['gia'] * ($value['discount'] / 100)) * $value['num']) }}
+                                                        Đ
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -349,23 +349,12 @@
                         <div class="card-content">
                             <div class="card-body">
                                 <div class="detail">
-                                    <div>
-                                        Dùng 1200 xu
-                                    </div>
-                                    <div class="custom-control custom-switch custom-switch-success mr-2 mb-1">
-                                        <input type="checkbox" class="custom-control-input" id="customSwitch11">
-                                        <label class="custom-control-label" for="customSwitch11">
-                                            <span class="switch-icon-left"><i class="feather icon-check"></i></span>
-                                            <span class="switch-icon-right"><i class="feather icon-check"></i></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="detail">
                                     <div class="details-title">
                                         Tổng tiền:
                                     </div>
                                     <div class="detail-amt" id="count">
-                                        <strong id="count-unit-price">{{ number_format(session()->get('count')) }} Đ</strong>
+                                        <strong id="count-unit-price">{{ number_format(session()->get('count')) }}
+                                            Đ</strong>
                                     </div>
                                 </div>
                                 <div class="detail">
@@ -395,7 +384,8 @@
                                 </div>
                                 <hr>
                                 <div class="detail">
-                                    <button class="btn btn-primary mr-1 mb-1" id="order" onclick="orderItem()"> Đặt hàng</button>
+                                    <button class="btn btn-primary mr-1 mb-1" id="order" onclick="orderItem()"> Đặt
+                                        hàng</button>
                                 </div>
                                 @endif
                             </div>
@@ -409,9 +399,22 @@
     @endif
 </div>
 <div class="wrap-loading">
-    <div class="loading loadingio-spinner-ripple-x7w0f3dqyo"><div class="ldio-6se0qxb832c">
-        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-        </div></div>
+    <div class="loading loadingio-spinner-ripple-x7w0f3dqyo">
+        <div class="ldio-6se0qxb832c">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
 </div>
 @endsection
 @section('css')
@@ -421,60 +424,75 @@
         top: 0;
         left: 0;
         right: 0;
-        bottom:0;
-        background: RGBA(28,21,29,0.4);
+        bottom: 0;
+        background: RGBA(28, 21, 29, 0.4);
         z-index: 999;
         display: none;
     }
+
     .loading {
         position: absolute;
     }
+
     @keyframes ldio-6se0qxb832c {
-    0% {
-        top: 96px;
-        left: 96px;
-        width: 0;
-        height: 0;
-        opacity: 1;
+        0% {
+            top: 96px;
+            left: 96px;
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+
+        100% {
+            top: 18px;
+            left: 18px;
+            width: 156px;
+            height: 156px;
+            opacity: 0;
+        }
     }
-    100% {
-        top: 18px;
-        left: 18px;
-        width: 156px;
-        height: 156px;
+
+    .ldio-6se0qxb832c div {
+        position: absolute;
+        border-width: 8px;
+        border-style: solid;
         opacity: 0;
+        border-radius: 50%;
+        animation: ldio-6se0qxb832c 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
     }
-    }.ldio-6se0qxb832c div {
-    position: absolute;
-    border-width: 8px;
-    border-style: solid;
-    opacity: 0;
-    border-radius: 50%;
-    animation: ldio-6se0qxb832c 1s cubic-bezier(0,0.2,0.8,1) infinite;
-    }.ldio-6se0qxb832c div:nth-child(1) {
-    border-color: #22bb49;
-    animation-delay: 0s;
+
+    .ldio-6se0qxb832c div:nth-child(1) {
+        border-color: #22bb49;
+        animation-delay: 0s;
     }
+
     .ldio-6se0qxb832c div:nth-child(2) {
-    border-color: #7367F0;
-    animation-delay: -0.5s;
+        border-color: #7367F0;
+        animation-delay: -0.5s;
     }
+
     .loadingio-spinner-ripple-x7w0f3dqyo {
-    width: 200px;
-    height: 200px;
-    display: inline-block;
-    overflow: hidden;
-    background: transparent;
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        overflow: hidden;
+        background: transparent;
     }
+
     .ldio-6se0qxb832c {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform: translateZ(0) scale(1);
-    backface-visibility: hidden;
-    transform-origin: 0 0; /* see note above */
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(1);
+        backface-visibility: hidden;
+        transform-origin: 0 0;
+        /* see note above */
     }
-    .ldio-6se0qxb832c div { box-sizing: content-box; }
+
+    .ldio-6se0qxb832c div {
+        box-sizing: content-box;
+    }
+
 </style>
 @endsection
 @section('scripts')
@@ -482,7 +500,12 @@
 <script>
     function orderItem() {
         $('.wrap-loading').css('display', 'block');
-        $('.loading').css({"top": "50%", "left": "50%", "transform": "translate(-50%, -50%)"});
+        $('.loading').css({
+            "top": "50%",
+            "left": "50%",
+            "transform": "translate(-50%, -50%)"
+        });
     }
+
 </script>
 @stop

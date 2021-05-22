@@ -10,7 +10,7 @@
                     <h2 class="content-header-title float-left mb-0">Products</h2>
                     <div class="breadcrumb-wrapper col-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a>
+                            <li class="breadcrumb-item"><a href="/">Home</a>
                             </li>
                             <li class="breadcrumb-item"><a href="#">Products</a>
                             </li>
@@ -62,12 +62,14 @@
                     <div class="col-sm-12">
                         <form action="/" method="GET">
                             <fieldset class="form-group position-relative">
-                                <input type="text" class="form-control search-product" id="iconLeft5" placeholder="Search here" name="product_name">
+                                <input type="text" class="form-control search-product" id="iconLeft5"
+                                    placeholder="Search here" name="product_name">
                                 <div class="form-control-position">
-                                    <button type="submit" class="btn btn-icon" style="padding-top: 2px !important;"><i class="feather icon-search"></i></button>
+                                    <button type="submit" class="btn btn-icon" style="padding-top: 2px !important;"><i
+                                            class="feather icon-search"></i></button>
                                 </div>
                             </fieldset>
-                        <form>
+                            <form>
                     </div>
                 </div>
             </section>
@@ -81,7 +83,7 @@
                             <div class="item-img text-center">
                                 <a href="/detail&id={{ $value->id }}">
                                     <img class="img-fluid" src="{{ asset('img') }}/{{ $value->image }}"
-                                        alt="img-placeholder" style="height:350px !important" ></a>
+                                        alt="img-placeholder" style="height:350px !important"></a>
                             </div>
                             <div class="card-body">
                                 <div class="item-wrapper">
@@ -105,7 +107,8 @@
                                                     .Đ</p>
                                                 <p style="font-size: 15px !important; color: #626262;">
                                                     <del>{{ number_format($value->unit_price) }}<del>
-                                                            .Đ</p>
+                                                            .Đ
+                                                </p>
                                             @endif
                                         </h6>
                                     </div>
@@ -136,7 +139,7 @@
 
             <!-- Ecommerce Pagination Starts -->
             <section id="ecommerce-pagination">
-                <div >{!! $product->render(); !!}</div>
+                <div>{!! $product->appends(request()->input())->links() !!}</div>
             </section>
             <!-- Ecommerce Pagination Ends -->
 
@@ -176,14 +179,14 @@
                                         <span class="ml-50">Theo giảm giá: {!! \App\Helpers\TableListingHelper::headerSort('discount') !!}</span>
                                     </span>
                                 </li>
-                                </ul>
-                            </div>
+                            </ul>
                         </div>
-                        <!-- /Brand -->
-                        <hr>
                     </div>
+                    <!-- /Brand -->
+                    <hr>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 @endsection

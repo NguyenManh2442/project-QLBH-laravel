@@ -33,21 +33,25 @@ Route::group(['namespace'=>'Customer'], function(){
 
     Route::get('detail&id={id}', 'ProductController@getOne'); // chi tiết của 1 sản phẩm
 
-    Route::get('createAddress', 'DeliveryAddressController@createAddress');
+    Route::get('createAddress', 'DeliveryAddressController@createAddress')->middleware('checkSignUse');
 
-    Route::post('storeAddress','DeliveryAddressController@storeAddress')->name("address.store");
+    Route::post('storeAddress','DeliveryAddressController@storeAddress')->name("address.store")->middleware('checkSignUse');
 
-    Route::post('editAddress','DeliveryAddressController@editAddress');
+    Route::get('editAddress&id={id}','DeliveryAddressController@editAddressByID')->middleware('checkSignUse');
 
-    Route::put('updateAddress&id={id}','DeliveryAddressController@updateAddress')->name('address.update_address');
+    Route::put('updateAddressById&id={id}','DeliveryAddressController@updateAddressById')->name('address.update_address_by_id')->middleware('checkSignUse');
 
-    Route::delete('deleteAddress&id={id}','DeliveryAddressController@deleteAddress')->name('address.detete');
+    Route::post('editAddress','DeliveryAddressController@editAddress')->middleware('checkSignUse');
 
-    Route::put('cancel-status-order&id={id}','OrderController@updateOrderStatus')->name('order.status_cancel');
+    Route::put('updateAddress&id={id}','DeliveryAddressController@updateAddress')->name('address.update_address')->middleware('checkSignUse');
 
-    Route::post('storeAddressSession','DeliveryAddressController@storeAddressSession');
+    Route::delete('deleteAddress&id={id}','DeliveryAddressController@deleteAddress')->name('address.detete')->middleware('checkSignUse');
+
+    Route::put('cancel-status-order&id={id}','OrderController@updateOrderStatus')->name('order.status_cancel')->middleware('checkSignUse');
+
+    Route::post('storeAddressSession','DeliveryAddressController@storeAddressSession')->middleware('checkSignUse');
     
-    Route::post('postOrderProduct', 'OrderController@postOrderProduct');
+    Route::post('postOrderProduct', 'OrderController@postOrderProduct')->middleware('checkSignUse');
 
     Route::get('signin','customerController@form_signin')->middleware('checkUser'); // đăng Nhập form
 
@@ -61,18 +65,15 @@ Route::group(['namespace'=>'Customer'], function(){
 
     Route::post('post-signup','customerController@signup'); // post đăng ký
 
-    Route::get('infor','customerController@editInfor')->name('infor'); // cập nhật thông tin user form
+    Route::get('infor','customerController@editInfor')->name('infor')->middleware('checkSignUse'); // cập nhật thông tin user form
 
-    Route::post('update-infor', 'customerController@updateInfor')->name('updateInfor'); // post cập nhật thông tin user
+    Route::post('update-infor', 'customerController@updateInfor')->name('updateInfor')->middleware('checkSignUse'); // post cập nhật thông tin user
 
-    Route::post('change-password', 'customerController@changePassword')->name('changePassword');
+    Route::post('change-password-user', 'customerController@changePassword')->name('changePassword')->middleware('checkSignUse');
 
-    Route::get('forget-password','customerController@form_forget_password');// form quên m khẩu
+    Route::get('forgot-password','customerController@formForgetPassword');// form quên m khẩu
 
-    Route::get('form-email', function () {
-        return view('customer.form');
-    });
-    Route::post('/message/send', 'customerController@addFeedback');
+    Route::post('forgot-password', 'customerController@seedForgotPassword');
 
     Route::get('reset-password', 'customerController@formReset')->name('get.link.reset.password');
 
@@ -87,9 +88,7 @@ Route::group(['namespace'=>'Customer'], function(){
 });
 
 Route::group(['namespace'=>'Admin'],function(){
-    Route::get('admin','AdminController@index')->name('index')->middleware('checkSigninEmployee','CheckLevelEmployee');// Trang quản trị admin
-
-    Route::get('employee','AdminController@index')->middleware('checkSigninEmployee','CheckLevelEmployee');
+    Route::get('admin','AdminController@index')->name('index')->middleware('checkSigninEmployee','checkAdminAndEmployee');// Trang quản trị admin
 
     Route::get('shipper','ShipperController@index')->middleware('checkSigninEmployee','CheckLevelShipper');
 
@@ -99,83 +98,93 @@ Route::group(['namespace'=>'Admin'],function(){
 
     Route::get('logoutAdmin','AdminController@logoutAdmin');//Đăng xuất admin
 
-    Route::get('profile','AdminController@editProfile')->name('profile');
+    Route::get('profile','AdminController@editProfile')->name('profile')->middleware('checkSigninEmployee');
 
-    Route::post('profile','AdminController@updateProfile')->name('updateProfile');
+    Route::post('profile','AdminController@updateProfile')->name('updateProfile')->middleware('checkSigninEmployee');
 
-    Route::post('change-password','AdminController@updatePassword')->name('updatePassword');
+    Route::post('change-password','AdminController@updatePassword')->name('updatePassword')->middleware('checkSigninEmployee');
 
-    Route::get('product-management','ProductManagementController@viewProduct')->name('product.management')->middleware('checkSigninEmployee','CheckLevelEmployee');//Hiển thị các sản phẩm qản lý
+    Route::get('product-management','ProductManagementController@viewProduct')->name('product.management')->middleware('checkAdminAndEmployee');//Hiển thị các sản phẩm qản lý
 
-    Route::get('addProduct','ProductManagementController@createProduct')->middleware('checkSigninEmployee','CheckLevelEmployee');//Form thêm sản phẩm
+    Route::get('addProduct','ProductManagementController@createProduct')->middleware('checkAdminAndEmployee');//Form thêm sản phẩm
 
-    Route::post('getCategory','ProductManagementController@getCategoryAjax')->middleware('checkSigninEmployee','CheckLevelEmployee');//Lấy menu hiển thi ra trang thêm sản phẩm
+    Route::post('getCategory','ProductManagementController@getCategoryAjax')->middleware('checkAdminAndEmployee');//Lấy menu hiển thi ra trang thêm sản phẩm
 
-    Route::post('addProduct', 'ProductManagementController@storeProduct')->middleware('checkSigninEmployee','CheckLevelEmployee');// post Thêm sản phẩm
+    Route::post('addProduct', 'ProductManagementController@storeProduct')->middleware('checkAdminAndEmployee');// post Thêm sản phẩm
 
-    Route::get('repair&id={id}', 'ProductManagementController@editProduct')->middleware('checkSigninEmployee','CheckLevelEmployee'); // sua thong tin sản phẩm
+    Route::get('repair&id={id}', 'ProductManagementController@editProduct')->middleware('checkAdminAndEmployee'); // sua thong tin sản phẩm
 
-    Route::put('repairProduct&id={id}', 'ProductManagementController@updateProduct')->name('update_product')->middleware('checkSigninEmployee','CheckLevelEmployee');// post sửa sản phẩm
+    Route::put('repairProduct&id={id}', 'ProductManagementController@updateProduct')->name('update_product')->middleware('checkAdminAndEmployee');// post sửa sản phẩm
 
-    Route::delete('delete&id={id}', 'ProductManagementController@deleteProduct')->name('delete_product')->middleware('checkSigninEmployee','CheckLevelEmployee');// delete sản phẩm
+    Route::delete('delete&id={id}', 'ProductManagementController@deleteProduct')->name('delete_product')->middleware('checkAdminAndEmployee');// delete sản phẩm
 
-    Route::get('orderManagement&status={status}','OrderManagementController@orderManagement')->name('order.management')->middleware('checkSigninEmployee','CheckLevelEmployee');//quan ly don hang
+    Route::get('orderManagement&status={status}','OrderManagementController@orderManagement')->name('order.management')->middleware('checkAdminAndEmployee');//quan ly don hang
 
-    Route::get('orderdetail&id={id}','OrderManagementController@getOrderdetail')->middleware('checkSigninEmployee','CheckLevelEmployee');//xem chi tiet don hang
+    Route::get('orderdetail&id={id}','OrderManagementController@getOrderdetail')->middleware('checkAdminAndEmployee');//xem chi tiet don hang
 
-    Route::put('update-status-order&id={id}','OrderManagementController@updateOrderStatus')->name('update.status_order')->middleware('checkSigninEmployee','CheckLevelEmployee');//Xac nhan don hang
+    Route::put('update-status-order&id={id}','OrderManagementController@updateOrderStatus')->name('update.status_order')->middleware('checkAdminAndEmployee');//Xac nhan don hang
 
     // shipper
     Route::prefix('shipper')->group(function () {
-        Route::get('receive-purchase-order', 'ShipperController@receivePurchaseOrder')->name('shipper.receive_purchase_order')->middleware('checkSigninEmployee','CheckLevelShipper');
+        Route::get('receive-purchase-order', 'ShipperController@receivePurchaseOrder')->name('shipper.receive_purchase_order')->middleware('CheckLevelShipper');
         
-        Route::put('receive-purchase-order&id={id}', 'ShipperController@updateStatusOrder')->name('shipper.update_status_order')->middleware('checkSigninEmployee','CheckLevelShipper');
+        Route::put('receive-purchase-order&id={id}', 'ShipperController@updateStatusOrder')->name('shipper.update_status_order')->middleware('CheckLevelShipper');
 
-        Route::get('order-shipping', 'ShipperController@orderShipping')->name('shipper.order_shipping')->middleware('checkSigninEmployee','CheckLevelShipper');
+        Route::get('order-shipping', 'ShipperController@orderShipping')->name('shipper.order_shipping')->middleware('CheckLevelShipper');
 
-        Route::get('order-shipped', 'ShipperController@orderShipped')->name('shipper.order_shipped')->middleware('checkSigninEmployee','CheckLevelShipper');
+        Route::get('order-shipped', 'ShipperController@orderShipped')->name('shipper.order_shipped')->middleware('CheckLevelShipper');
+
+        Route::get('edit-profile', 'ShipperController@editProfile')->name('shipper.edit_profile')->middleware('CheckLevelShipper');
 
     });
     // end shipper
     
     // vouchers
-    Route::resource('/vouchers', 'VoucherController', ['only' => ['index', 'create', 'store','edit','update', 'destroy']])->name('*','vouchers')->middleware('checkSigninEmployee','CheckLevelAdmin');;
+    Route::resource('/vouchers', 'VoucherController', ['only' => ['index', 'create', 'store','edit','update', 'destroy']])->name('*','vouchers')->middleware('checkAdminAndEmployee');;
     // end vouchers
 
-    Route::get('admin-account-management','AdminController@adminAccountManagement')->name('admin.accountManagement')->middleware('checkSigninEmployee','CheckLevelAdmin');// hien thi acc employee
+    Route::get('admin-account-management','AdminController@adminAccountManagement')->name('admin.accountManagement')->middleware('CheckLevelAdmin');// hien thi acc employee
 
-    Route::get('createAccAdmin', 'AdminController@createAccountAdmin')->middleware('checkSigninEmployee','CheckLevelAdmin');//form them tai khoan employee
+    Route::get('createAccAdmin', 'AdminController@createAccountAdmin')->middleware('CheckLevelAdmin');//form them tai khoan employee
 
-    Route::post('createAccAdmin','AdminController@storeAccountAdmin')->name('store_acc_admin')->middleware('checkSigninEmployee','CheckLevelAdmin');//post them tai khoan employee
+    Route::post('createAccAdmin','AdminController@storeAccountAdmin')->name('store_acc_admin')->middleware('CheckLevelAdmin');//post them tai khoan employee
 
-    Route::get('editAccountAdmin&id={id}', 'AdminController@editAccountAdmin')->middleware('checkSigninEmployee','CheckLevelAdmin');//form them tai khoan employee
+    Route::get('editAccountAdmin&id={id}', 'AdminController@editAccountAdmin')->middleware('CheckLevelAdmin');
 
-    Route::put('updateAccAdmin&id={id}', 'AdminController@updateAccountAdmin')->name('update_acc_admin')->middleware('checkSigninEmployee','CheckLevelEmployee');
+    Route::put('updateAccAdmin&id={id}', 'AdminController@updateAccountAdmin')->name('update_acc_admin')->middleware('CheckLevelAdmin');
 
-    Route::delete('deleteAccountAdmin&id={id}', 'AdminController@deleteAccountAdmin')->name('delete_acc_admin')->middleware('checkSigninEmployee','CheckLevelAdmin');//Xoa acc employee
+    Route::delete('deleteAccountAdmin&id={id}', 'AdminController@deleteAccountAdmin')->name('delete_acc_admin')->middleware('CheckLevelAdmin');//Xoa acc employee
 
-    Route::get('category-management','CategoryController@showMenuManager' )->name('category.categoryManagement')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::get('customer-account-management','CustomerManagementController@index')->name('admin.customerAccountManagement')->middleware('CheckLevelAdmin');// hien thi acc employee
 
-    Route::get('createCategory','CategoryController@createCategory')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::put('changeStatusAccUser&id={id}', 'CustomerManagementController@changeStatus')->name('change_status_acc_user')->middleware('CheckLevelAdmin');
 
-    Route::post('storeCategory','CategoryController@storeCategory')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::get('category-management','CategoryController@showMenuManager' )->name('category.categoryManagement')->middleware('CheckLevelAdmin');
 
-    Route::get('editCategory&id={id}','CategoryController@editCategory')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::get('createCategory','CategoryController@createCategory')->middleware('CheckLevelAdmin');
 
-    Route::put('updateCategory&id={id}','CategoryController@updateCategory')->name("category.update")->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::post('storeCategory','CategoryController@storeCategory')->middleware('CheckLevelAdmin');
 
-    Route::delete('deleteCategory&id={id}','CategoryController@deleteCategory')->name('category.deleteCategory')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::get('editCategory&id={id}','CategoryController@editCategory')->middleware('CheckLevelAdmin');
 
-    Route::get('slideshow-management','SlideShowController@showSlideshowManager' )->name('slideshow.slideshowManagement')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::put('updateCategory&id={id}','CategoryController@updateCategory')->name("category.update")->middleware('CheckLevelAdmin');
 
-    Route::get('createSlideshow','SlideShowController@createSlideshow')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::delete('deleteCategory&id={id}','CategoryController@deleteCategory')->name('category.deleteCategory')->middleware('CheckLevelAdmin');
 
-    Route::post('storeSlideshow','SlideShowController@storeSlideshow')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::get('slideshow-management','SlideShowController@showSlideshowManager' )->name('slideshow.slideshowManagement')->middleware('CheckLevelAdmin');
 
-    Route::get('editSlideshow&id={id}','SlideShowController@editSlideshow')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::get('createSlideshow','SlideShowController@createSlideshow')->middleware('CheckLevelAdmin');
 
-    Route::put('updateSlideshow&id={id}','SlideShowController@updateSlideshow')->name("slideshow.update")->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::post('storeSlideshow','SlideShowController@storeSlideshow')->middleware('CheckLevelAdmin');
 
-    Route::delete('deleteSlideshow&id={id}','SlideShowController@deleteSlideshow')->name('slideshow.deleteSlideshow')->middleware('checkSigninEmployee','CheckLevelAdmin');
+    Route::get('editSlideshow&id={id}','SlideShowController@editSlideshow')->middleware('CheckLevelAdmin');
+
+    Route::put('updateSlideshow&id={id}','SlideShowController@updateSlideshow')->name("slideshow.update")->middleware('CheckLevelAdmin');
+
+    Route::delete('deleteSlideshow&id={id}','SlideShowController@deleteSlideshow')->name('slideshow.deleteSlideshow')->middleware('CheckLevelAdmin');
+    
+    Route::get('discountProduct','ProductManagementController@discountProducts')->name("index.setDiscountProduct")->middleware('checkAdminAndEmployee');
+
+    Route::post('setDiscountProduct','ProductManagementController@setDiscountProducts')->name("store.setDiscountProduct")->middleware('checkAdminAndEmployee');
 
 });

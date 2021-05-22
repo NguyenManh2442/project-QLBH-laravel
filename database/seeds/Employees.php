@@ -18,6 +18,7 @@ class Employees extends Seeder
         $emp->password = bcrypt('123456');
         $emp->name = "Nguyen tien manh";
         $emp->role = 1;
+        $emp->status = 1;
         $emp->save();
     }
 }

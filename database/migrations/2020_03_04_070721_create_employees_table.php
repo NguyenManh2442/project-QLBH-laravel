@@ -23,6 +23,7 @@ class CreateEmployeesTable extends Migration
             $table->date('birth_date')->nullable();
             $table->string('avatar')->nullable();
             $table->string('role', 2);
+            $table->string('status', 2);
             $table->string('token', 255)->nullable();
             $table->timestamps();
         });

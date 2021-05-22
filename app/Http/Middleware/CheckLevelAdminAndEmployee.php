@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class CheckLevelEmployee
+class CheckLevelAdminAndEmployee
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class CheckLevelEmployee
     public function handle($request, Closure $next)
     {
         if(Auth::guard('employee')->check()){
-            if (Auth::guard('employee')->user()->role == 2 && Auth::guard('employee')->user()->status == 1) {
+            if((Auth::guard('employee')->user()->role == 2 && Auth::guard('employee')->user()->status == 1) || (Auth::guard('employee')->user()->role == 1 && Auth::guard('employee')->user()->status == 1)){
                 return $next($request);
             }
             Auth::guard('employee')->logout();
