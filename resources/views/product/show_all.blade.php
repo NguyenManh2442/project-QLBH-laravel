@@ -52,8 +52,8 @@
                                                     src="{{ asset('img') }}/{{ $value->img_slideshow }}"
                                                     alt="First slide" width="1800px" style="height:700px !important">
                                                 <div class="carousel-caption">
-                                                    <h3>{{ $value->title }}</h3>
-                                                    <p>T{{ $value->content }}</p>
+                                                    <h1 class="display-3 text-bold-600 bg-primary text-white">{{ $value->title }}</h1>
+                                                    <h1 class="text-bold-600 bg-primary text-white">{{ $value->content }}</h1>
                                                 </div>
                                             </div>
                                             <?php $a++; ?>
@@ -62,9 +62,9 @@
                                                 <img class="img-fluid"
                                                     src="{{ asset('img') }}/{{ $value->img_slideshow }}"
                                                     alt="Second slide" width="1800px" style="height:700px !important">
-                                                <div class="carousel-caption">
-                                                    <h3>{{ $value->title }}</h3>
-                                                    <p>T{{ $value->content }}</p>
+                                                <div class="carousel-caption" >
+                                                    <h1 class="display-3 text-bold-600 bg-primary text-white">{{ $value->title }}</h1>
+                                                    <h1 class="text-bold-600 bg-primary text-white">{{ $value->content }}</h1>
                                                 </div>
                                             </div>
                                             <?php $a++; ?>
@@ -226,25 +226,29 @@
     </div>
     <div class="card-body">
         <div class="mt-4 mb-2 text-center">
-            <h2>Ngẫu nhiên</h2>
-            <p>Có thể bạn thích</p>
+            <h2>Có thể bạn thích</h2>
+            <p>Các sản phẩm đề xuất</p>
         </div>
         <div class="swiper-responsive-breakpoints swiper-container px-4 py-2">
             <div class="swiper-wrapper">
-                @foreach ($newProduct as $valueRandomProduct)
+                @foreach ($productRandom as $valueRandomProduct)
                     <div class="swiper-slide rounded swiper-shadow">
                         <div class="item-heading">
-                            <p class="text-truncate mb-0">
-                                {{ $valueRandomProduct->product_name }}
-                            </p>
+                            <a href="/detail&id={{ $valueRandomProduct->id }}">
+                                <p class="text-truncate mb-0">
+                                    {{ $valueRandomProduct->product_name }}
+                                </p>
+                            </a>
                             <p>
                                 <small>by</small>
                                 <small>{{ $valueRandomProduct->supplier }}</small>
                             </p>
                         </div>
                         <div class="img-container w-50 mx-auto my-2 py-75">
-                            <img src="{{ asset('img') }}/{{ $valueRandomProduct->image }}"
-                                style="height:159px; width: 121px !important" class="img-fluid" alt="image">
+                            <a href="/detail&id={{ $valueRandomProduct->id }}">
+                                <img src="{{ asset('img') }}/{{ $valueRandomProduct->image }}"
+                                    style="height:159px; width: 121px !important" class="img-fluid" alt="image">
+                            </a>
                         </div>
                         <div class="item-meta">
                             <div class="product-rating">
@@ -254,7 +258,20 @@
                                 <i class="feather icon-star text-warning"></i>
                                 <i class="feather icon-star text-secondary"></i>
                             </div>
-                            <p class="text-primary mb-0">{{ number_format($valueRandomProduct->unit_price) }} .Đ </p>
+                            @if ($valueRandomProduct->discount == 0)
+                                <p class="text-primary mb-0">
+                                    {{ number_format($valueRandomProduct->unit_price) }}
+                                    .Đ</p>
+                                </br></br>
+                            @else
+                                <p class="text-primary mb-0">
+                                    {{ number_format($valueRandomProduct->unit_price - $valueRandomProduct->unit_price * ($valueRandomProduct->discount / 100)) }}
+                                    .Đ</p>
+                                <p style="font-size: 15px !important; color: #626262;">
+                                    <del>{{ number_format($valueRandomProduct->unit_price) }}<del>
+                                            .Đ
+                                </p>
+                            @endif
                         </div>
                     </div>
                 @endforeach

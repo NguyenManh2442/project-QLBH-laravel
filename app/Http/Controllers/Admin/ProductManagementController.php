@@ -120,7 +120,7 @@ class ProductManagementController extends Controller
         $category = $this->category->getCategoryParent(0);
         $product = $this->product->getProductById($request->id);
         $subCategoryById = $this->category->getCategory('id', $product->category_id);
-        $subCategory = $this->category->getCategory('sub_category_id', $category[0]->id);
+        $subCategory = $this->category->getCategory('sub_category_id', $subCategoryById[0]->sub_category_id);
         return view('productManagement.addProduct', compact('product','subCategoryById', 'subCategory', 'category'));
     }
 

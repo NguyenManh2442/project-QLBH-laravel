@@ -16,6 +16,9 @@ use App\Models\Category;
 use App\Models\DeliveryAddress;
 use App\Models\User;
 use App\Events\ResetPassword as EventChangePassword;
+use App\Http\Requests\SignupUserRequest;
+use App\Http\Requests\UpdateInforUserRequest;
+
 class customerController extends Controller
 {
     //
@@ -65,7 +68,7 @@ class customerController extends Controller
         return view('customer.register', compact('category','category1'));
     }
 
-    public function signup(Request $request){
+    public function signup(SignupUserRequest $request){
             $email = $request->email;
             $username = $request->userName;
             $password = $request->password1;
@@ -89,22 +92,23 @@ class customerController extends Controller
         return view('customer.update_infor', compact('category','category1', 'address'));
     }
 
-    public function updateInfor(Request $request){
+    public function updateInfor(UpdateInforUserRequest $request){
+        $fileName = null;
         if($request->hasFile('avatar')){
             $fileImg = $request->avatar;
             $fileName =time() . "_" . rand(0,9999999) . "_" . md5(rand(0,9999999)) . $fileImg->getClientOriginalName();
             $fileImg->move('img', $fileName);
-
-            $username = $request->username;
-            $fullname = $request->full_name;
-            $avatar = $fileName;
-            $birthdate = $request->birth_date;
-            $statusUpdate = $this->user->postUpdateInfor($username, $fullname, $avatar, $birthdate);
-            return redirect()->back()->with('success','Cập nhật thông tin thành công!');
         }
+        $username = $request->username;
+        $fullname = $request->full_name;
+        $avatar = $fileName;
+        $birthdate = $request->birth_date;
+        $statusUpdate = $this->user->postUpdateInfor($username, $fullname, $avatar, $birthdate);
+            
+        return redirect()->back()->with('success','Cập nhật thông tin thành công!');
     }
 
-    public function changePassword(Request $request)
+    public function changePassword(ChangePassword $request)
     {
         $password = Auth::user()->password;
         if(Hash::check($request->old_password, $password)){

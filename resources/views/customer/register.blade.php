@@ -26,24 +26,37 @@
                                         <form action="/post-signup" method="post">
                                             @csrf
                                             <div class="form-label-group">
-                                                <input type="text" name="userName" id="inputName" class="form-control"
-                                                    placeholder="Name" required>
-                                                <label for="inputName">Name</label>
+                                                <input type="text" name="userName" id="inputName" class="form-control @error('userName') border border-danger @enderror"
+                                                    placeholder="Username" required>
+                                            @error('userName')
+                                                <lable style="color: red">{{ $errors->first('userName') }}</lable>
+                                                <br><br>
+                                            @enderror
+
                                             </div>
                                             <div class="form-label-group">
-                                                <input type="email" name="email" id="inputEmail" class="form-control"
+                                                <input type="email" name="email" id="inputEmail" class="form-control @error('email') border border-danger @enderror"
                                                     placeholder="Email" required>
-                                                <label for="inputEmail">Email</label>
+                                                @error('email')
+                                                    <lable style="color: red">{{ $errors->first('email') }}</lable>
+                                                    <br><br>
+                                                @enderror
                                             </div>
                                             <div class="form-label-group">
                                                 <input type="password" name="password1" id="inputPassword"
-                                                    class="form-control" placeholder="Password" required>
-                                                <label for="inputPassword">Password</label>
+                                                    class="form-control @error('password1') border border-danger @enderror" placeholder="Password" required>
+                                                @error('password1')
+                                                    <lable style="color: red">{{ $errors->first('password1') }}</lable>
+                                                    <br><br>
+                                                @enderror
                                             </div>
                                             <div class="form-label-group">
                                                 <input type="password" name="password2" id="inputConfPassword"
-                                                    class="form-control" placeholder="Confirm Password" required>
-                                                <label for="inputConfPassword">Confirm Password</label>
+                                                    class="form-control @error('password2') border border-danger @enderror"" placeholder="Confirm Password" required>
+                                                @error('password2')
+                                                    <lable style="color: red">{{ $errors->first('password2') }}</lable>
+                                                    <br><br>
+                                                @enderror
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-12">

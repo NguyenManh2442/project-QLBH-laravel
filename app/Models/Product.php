@@ -54,10 +54,11 @@ class Product extends Model
 
     public function getNewProduct($limit, $request){
         $query = Product::orderBy('products.created_at', 'desc');
+        
         if(isset($request['order_by'])) {
             $query->orderBy('products.'.$request['order_by'], $request['sort_order']);
         }
-        return $query->paginate($limit);
+        return $query->where('status', 1)->where('products.quantity','>', 0)->paginate($limit);
     }
 
     public function getproductbycatid($request){
@@ -66,7 +67,12 @@ class Product extends Model
             $query->orderBy($request->order_by, $request->sort_order);
         }
         
-        return $query->paginate(12);
+        return $query->where('status', 1)->where('products.quantity','>', 0)->paginate(12);
+    }
+
+    public function getproductbycategoryID($categoryID){
+        $query = Product::where('category_id', $categoryID); 
+        return $query->where('status', 1)->where('products.quantity','>', 0)->paginate(8);
     }
 
     public function getSearchProduct($request)

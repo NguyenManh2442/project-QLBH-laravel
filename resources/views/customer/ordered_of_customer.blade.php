@@ -110,7 +110,7 @@
                                                                     class="btn btn-outline-primary round mr-1 mb-1 waves-effect waves-light"
                                                                     value="Đặt lại" />
                                                             </form>
-                                                        @else
+                                                        @elseif ($status == 0)
                                                             <form
                                                                 action="{{ route('order.status_cancel', $order->id) }}"
                                                                 method="post">

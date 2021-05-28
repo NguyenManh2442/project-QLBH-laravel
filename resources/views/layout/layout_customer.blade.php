@@ -132,8 +132,7 @@
                                         href="{{ route('infor') }}"><i class="feather icon-user"></i> Thông tin cá
                                         nhân</a>
                                     <a class="dropdown-item" href="{{ route('order.ordered', 0) }}"><i
-                                            class="feather icon-check-square"></i> Đơn hàng</a><a class="dropdown-item"
-                                        href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a>
+                                            class="feather icon-check-square"></i> Đơn hàng</a>
                                     <div class="dropdown-divider"></div><a class="dropdown-item" href="/logout"><i
                                             class="feather icon-power"></i> Đăng xuất</a>
                                 </div>

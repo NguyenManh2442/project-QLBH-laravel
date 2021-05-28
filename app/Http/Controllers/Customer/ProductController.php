@@ -70,9 +70,10 @@ class ProductController extends Controller
 
     public function getOne(Request $request){
         $product = $this->product->getDetail($request->id);
+        $productbycategoryID = $this->product->getproductbycategoryID($product[0]->category_id);
         $category = $this->category->getCategoryParent(0);
         $category1 = $this->category->getCategoryChill();
-        return view('product.show_details', compact('product','category', 'category1'));
+        return view('product.show_details', compact('product','category', 'category1', 'productbycategoryID'));
     }
     public function getCart(){
         if (Auth::check()) {

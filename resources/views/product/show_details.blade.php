@@ -13,27 +13,14 @@
                     <h2 class="content-header-title float-left mb-0">Product Details</h2>
                     <div class="breadcrumb-wrapper col-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a>
+                            <li class="breadcrumb-item"><a href="/">Home</a>
                             </li>
-                            <li class="breadcrumb-item"><a href="#">eCommerce</a>
-                            </li>
-                            <li class="breadcrumb-item"><a href="app-ecommerce-shop.html">Shop</a>
+                            <li class="breadcrumb-item"><a href="#">Category</a>
                             </li>
                             <li class="breadcrumb-item active">Details
                             </li>
                         </ol>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
-            <div class="form-group breadcrum-right">
-                <div class="dropdown">
-                    <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                            class="feather icon-settings"></i></button>
-                    <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Chat</a><a
-                            class="dropdown-item" href="#">Email</a><a class="dropdown-item" href="#">Calendar</a></div>
                 </div>
             </div>
         </div>
@@ -167,8 +154,6 @@
                                 </ul>
                             </div>
                             <hr>
-                            <p>Available - <span class="text-success">In stock</span></p>
-
                             <div class="d-flex flex-column flex-sm-row">
                                 <button class="btn btn-primary mr-0 mr-sm-1 mb-1 mb-sm-0" @if (!Auth::check()) data-toggle="modal" data-target="#danger{{ $product[0]->id }}" @else onclick="addCart( {{ $product[0]->id }} )" @endif>
                                     <i class="feather icon-shopping-cart mr-25"></i>
@@ -216,23 +201,25 @@
                         <div class="col-12 col-md-4 mb-4 mb-md-0 ">
                             <div class="w-75 mx-auto">
                                 <i class="feather icon-award text-primary font-large-2"></i>
-                                <h5 class="mt-2 font-weight-bold">100% Original</h5>
-                                <p>Chocolate bar candy canes ice cream toffee. Croissant pie cookie halvah.</p>
+                                <h5 class="mt-2 font-weight-bold">
+                                    KHÁCH HÀNG THÂN THIẾT</h5>
+                                <p>Từ ngày 15/04/2021, Canifa ra mắt chính sách chăm sóc khách hàng thân thiết phiên bản 2.0 với nhiều đặc quyền vượt trội.</p>
                             </div>
                         </div>
                         <div class="col-12 col-md-4 mb-4 mb-md-0">
                             <div class="w-75 mx-auto">
                                 <i class="feather icon-clock text-primary font-large-2"></i>
-                                <h5 class="mt-2 font-weight-bold">10 Day Replacement</h5>
-                                <p>Marshmallow biscuit donut dragée fruitcake. Jujubes wafer cupcake.
+                                <h5 class="mt-2 font-weight-bold">QUY ĐỊNH ĐỔI TRẢ</h5>
+                                <p>Thúy Hằng sẵn sàng hỗ trợ đổi sản phẩm cho bạn trong vòng 30 ngày trên toàn hệ thống.
                                 </p>
                             </div>
                         </div>
                         <div class="col-12 col-md-4 mb-4 mb-md-0">
                             <div class="w-75 mx-auto">
                                 <i class="feather icon-shield text-primary font-large-2"></i>
-                                <h5 class="mt-2 font-weight-bold">1 Year Warranty</h5>
-                                <p>Cotton candy gingerbread cake I love sugar plum I love sweet croissant.
+                                <h5 class="mt-2 font-weight-bold">
+                                    TUYỂN DỤNG TẠI Thúy Hằng</h5>
+                                <p>Thúy Hằng đang cần tuyển hơn 40 vị trí nhân viên bán hàng tại Hà Nội, Hải Phòng, Vĩnh Yên, Nghệ An, Thái Nguyên; TX. Sơn Tây, Hưng Yên (Sắp khai trương)
                                 </p>
                             </div>
                         </div>
@@ -240,171 +227,60 @@
                 </div>
                 <div class="card-body">
                     <div class="mt-4 mb-2 text-center">
-                        <h2>RELATED PRODUCTS</h2>
-                        <p>People also search for this items</p>
+                        <h2>Có thể bạn thích</h2>
+                        <p>Các sản phẩm đề xuất</p>
                     </div>
                     <div class="swiper-responsive-breakpoints swiper-container px-4 py-2">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide rounded swiper-shadow">
-                                <div class="item-heading">
-                                    <p class="text-truncate mb-0">
-                                        Bowers Wilkins - CM10 S2 Triple 6-1/2" 3-Way Floorstanding Speaker (Each) - Gloss
-                                        Black
-                                    </p>
-                                    <p>
-                                        <small>by</small>
-                                        <small>Bowers & Wilkins</small>
-                                    </p>
-                                </div>
-                                <div class="img-container w-50 mx-auto my-2 py-75">
-                                    <img src="../../../app-assets/images/elements/apple-watch.png" class="img-fluid"
-                                        alt="image">
-                                </div>
-                                <div class="item-meta">
-                                    <div class="product-rating">
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-secondary"></i>
+                            @foreach ($productbycategoryID as $valueRandomProduct)
+                                <div class="swiper-slide rounded swiper-shadow">
+                                    <div class="item-heading">
+                                        <a href="/detail&id={{ $valueRandomProduct->id }}">
+                                            <p class="text-truncate mb-0">
+                                                {{ $valueRandomProduct->product_name }}
+                                            </p>
+                                        </a>
+                                        <p>
+                                            <small>by</small>
+                                            <small>{{ $valueRandomProduct->supplier }}</small>
+                                        </p>
                                     </div>
-                                    <p class="text-primary mb-0">$19.98</p>
-                                </div>
-                            </div>
-                            <div class="swiper-slide rounded swiper-shadow">
-                                <div class="item-heading">
-                                    <p class="text-truncate mb-0">
-                                        Alienware - 17.3" Laptop - Intel Core i7 - 16GB Memory - NVIDIA GeForce GTX 1070 -
-                                        1TB Hard Drive +
-                                        128GB Solid State Drive - Silver
-                                    </p>
-                                    <p>
-                                        <small>by</small>
-                                        <small>Alienware</small>
-                                    </p>
-                                </div>
-                                <div class="img-container w-50 mx-auto my-2 py-75">
-                                    <img src="../../../app-assets/images/elements/beats-headphones.png" class="img-fluid"
-                                        alt="image">
-                                </div>
-                                <div class="item-meta">
-                                    <div class="product-rating">
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-secondary"></i>
+                                    <div class="img-container w-50 mx-auto my-2 py-75">
+                                        <a href="/detail&id={{ $valueRandomProduct->id }}">
+                                            <img src="{{ asset('img') }}/{{ $valueRandomProduct->image }}"
+                                                style="height:159px; width: 121px !important" class="img-fluid" alt="image">
+                                        </a>
                                     </div>
-                                    <p class="text-primary mb-0">$35.98</p>
-                                </div>
-                            </div>
-                            <div class="swiper-slide rounded swiper-shadow">
-                                <div class="item-heading">
-                                    <p class="text-truncate mb-0">
-                                        Canon - EOS 5D Mark IV DSLR Camera with 24-70mm f/4L IS USM Lens
-                                    </p>
-                                    <p>
-                                        <small>by</small>
-                                        <small>Canon</small>
-                                    </p>
-                                </div>
-                                <div class="img-container w-50 mx-auto my-3 py-50">
-                                    <img src="../../../app-assets/images/elements/macbook-pro.png" class="img-fluid"
-                                        alt="image">
-                                </div>
-                                <div class="item-meta">
-                                    <div class="product-rating">
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-secondary"></i>
+                                    <div class="item-meta">
+                                        <div class="product-rating">
+                                            <i class="feather icon-star text-warning"></i>
+                                            <i class="feather icon-star text-warning"></i>
+                                            <i class="feather icon-star text-warning"></i>
+                                            <i class="feather icon-star text-warning"></i>
+                                            <i class="feather icon-star text-secondary"></i>
+                                        </div>
+                                        @if ($valueRandomProduct->discount == 0)
+                                            <p class="text-primary mb-0">
+                                                {{ number_format($valueRandomProduct->unit_price) }}
+                                                .Đ</p>
+                                            </br></br>
+                                        @else
+                                            <p class="text-primary mb-0">
+                                                {{ number_format($valueRandomProduct->unit_price - $valueRandomProduct->unit_price * ($valueRandomProduct->discount / 100)) }}
+                                                .Đ</p>
+                                            <p style="font-size: 15px !important; color: #626262;">
+                                                <del>{{ number_format($valueRandomProduct->unit_price) }}<del>
+                                                        .Đ
+                                            </p>
+                                        @endif
                                     </div>
-                                    <p class="text-primary mb-0">$49.98</p>
                                 </div>
-                            </div>
-                            <div class="swiper-slide rounded swiper-shadow">
-                                <div class="item-heading">
-                                    <p class="text-truncate mb-0">
-                                        Apple - 27" iMac with Retina 5K display - Intel Core i7 - 32GB Memory - 2TB Fusion
-                                        Drive - Silver
-                                    </p>
-                                    <p>
-                                        <small>by</small>
-                                        <small>Apple</small>
-                                    </p>
-                                </div>
-                                <div class="img-container w-50 mx-auto my-2 py-75">
-                                    <img src="../../../app-assets/images/elements/homepod.png" class="img-fluid"
-                                        alt="image">
-                                </div>
-                                <div class="item-meta">
-                                    <div class="product-rating">
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-secondary"></i>
-                                    </div>
-                                    <p class="text-primary mb-0">$29.98</p>
-                                </div>
-                            </div>
-                            <div class="swiper-slide rounded swiper-shadow">
-                                <div class="item-heading">
-                                    <p class="text-truncate mb-0">
-                                        Bowers Wilkins - CM10 S2 Triple 6-1/2" 3-Way Floorstanding Speaker (Each) - Gloss
-                                        Black
-                                    </p>
-                                    <p>
-                                        <small>by</small>
-                                        <small>Bowers & Wilkins</small>
-                                    </p>
-                                </div>
-                                <div class="img-container w-50 mx-auto my-2 py-75">
-                                    <img src="../../../app-assets/images/elements/magic-mouse.png" class="img-fluid"
-                                        alt="image">
-                                </div>
-                                <div class="item-meta">
-                                    <div class="product-rating">
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-secondary"></i>
-                                    </div>
-                                    <p class="text-primary mb-0">$99.98</p>
-                                </div>
-                            </div>
-                            <div class="swiper-slide rounded swiper-shadow">
-                                <div class="item-heading">
-                                    <p class="text-truncate mb-0">
-                                        Garmin - fenix 3 Sapphire GPS Watch - Silver
-                                    </p>
-                                    <p>
-                                        <small>by</small>
-                                        <small>Garmin</small>
-                                    </p>
-                                </div>
-                                <div class="img-container w-50 mx-auto my-2 py-75">
-                                    <img src="../../../app-assets/images/elements/iphone-x.png" class="img-fluid"
-                                        alt="image">
-                                </div>
-                                <div class="item-meta">
-                                    <div class="product-rating">
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-warning"></i>
-                                        <i class="feather icon-star text-secondary"></i>
-                                    </div>
-                                    <p class="text-primary mb-0">$59.98</p>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                         <!-- Add Arrows -->
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
-
+            
                     </div>
                 </div>
             </div>

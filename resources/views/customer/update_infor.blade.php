@@ -87,9 +87,13 @@
                                                     <div class="form-group">
                                                         <div class="controls">
                                                             <label for="account-username">Username</label>
-                                                            <input type="text" class="form-control"
+                                                            <input type="text" class="form-control @error('username') border border-danger @enderror"
                                                                 id="account-username" placeholder="Username"
                                                                 name="username" value="{{ Auth::user()->username }}">
+                                                            @error('username')
+                                                                <lable style="color: red">{{ $errors->first('username') }}</lable>
+                                                                <br><br>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -97,9 +101,13 @@
                                                     <div class="form-group">
                                                         <div class="controls">
                                                             <label for="account-name">Name</label>
-                                                            <input type="text" class="form-control" id="account-name"
+                                                            <input type="text" class="form-control @error('full_name') border border-danger @enderror" id="account-name"
                                                                 placeholder="Name" name="full_name"
                                                                 value="{{ Auth::user()->full_name }}">
+                                                            @error('full_name')
+                                                                <lable style="color: red">{{ $errors->first('full_name') }}</lable>
+                                                                <br><br>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -107,8 +115,12 @@
                                                     <div class="form-group">
                                                         <div class="controls">
                                                             <label for="account-e-mail">Birth day</label>
-                                                            <input type="date" class="form-control" name="birth_date"
+                                                            <input type="date" class="form-control @error('birth_date') border border-danger @enderror" name="birth_date"
                                                                 value="{{ Auth::user()->birth_date }}">
+                                                            @error('birth_date')
+                                                                <lable style="color: red">{{ $errors->first('birth_date') }}</lable>
+                                                                <br><br>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -129,9 +141,13 @@
                                                     <div class="form-group">
                                                         <div class="controls">
                                                             <label for="account-old-password">Old Password</label>
-                                                            <input type="password" class="form-control"
+                                                            <input type="password" class="form-control @error('old_password') border border-danger @enderror"
                                                                 id="account-old-password" placeholder="Old Password"
                                                                 name="old_password">
+                                                            @error('old_password')
+                                                                <lable style="color: red">{{ $errors->first('old_password') }}</lable>
+                                                                <br><br>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -140,8 +156,12 @@
                                                         <div class="controls">
                                                             <label for="account-new-password">New Password</label>
                                                             <input type="password" id="account-new-password"
-                                                                class="form-control" placeholder="New Password"
+                                                                class="form-control @error('new_password') border border-danger @enderror" placeholder="New Password"
                                                                 name="new_password">
+                                                            @error('new_password')
+                                                                <lable style="color: red">{{ $errors->first('new_password') }}</lable>
+                                                                <br><br>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -150,9 +170,13 @@
                                                         <div class="controls">
                                                             <label for="account-retype-new-password">Retype New
                                                                 Password</label>
-                                                            <input type="password" class="form-control"
+                                                            <input type="password" class="form-control @error('confirm_password') border border-danger @enderror"
                                                                 id="account-retype-new-password"
                                                                 placeholder="New Password" name="confirm_password">
+                                                            @error('confirm_password')
+                                                                <lable style="color: red">{{ $errors->first('confirm_password') }}</lable>
+                                                                <br><br>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>

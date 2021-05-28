@@ -56,12 +56,15 @@ class User extends Authenticatable
             $user = User::find($id);
             $user->username = $username;
             $user->full_name = $fullname;
-            $user->avatar = $avatar;
+            if ($avatar != null) {
+                $user->avatar = $avatar;
+            }
             $user->birth_date = $birthdate;
             $user->save();
             return true;
         }
         catch(Exception $exeption) {
+            dd($exeption);
             return false;
         }
         

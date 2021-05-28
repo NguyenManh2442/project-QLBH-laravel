@@ -55,6 +55,7 @@ class OrderController extends Controller
                     $orderdetail = $this->orderdetail->getOrderdetail($order[0]->id);
                     $order = json_decode(json_encode($order), true);
                     $orderdetails = json_decode(json_encode($orderdetail), true);
+                    
                     event(new CustomerOrder($order, $orderdetails, $mail));
 
                     session()->forget('cart');
@@ -62,9 +63,11 @@ class OrderController extends Controller
                     session()->flash('success', 'Đặt hàng thành công!');
                     return response()->json($data);
                 } else {
+                    session()->flash('error', 'Đặt hàng thất bại!');
                     return response()->json($data);
                 }
              }
+        session()->flash('error', 'Đặt hàng thất bại!');
         return response()->json($data);
     }
 

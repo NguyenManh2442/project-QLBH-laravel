@@ -32,7 +32,7 @@ class Orderdetail extends Model
         } else {
             $query->orderBy('selling','DESC');
         }
-        return $query->paginate($limit);
+        return $query->where('products.status', 1)->where('products.quantity','>', 0)->paginate($limit);
     }
 
     public function popularSellingProductsByTime($limit, $option)

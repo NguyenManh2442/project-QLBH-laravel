@@ -153,6 +153,7 @@ class Orders extends Model
                     'delivery_address.province', 
                     'delivery_address.detailed_address'
                     )
+                ->orderBy('orders.order_date','DESC')
                 ->paginate(12);
     }
 

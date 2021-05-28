@@ -121,11 +121,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
                                     href="{{ route('shipper.edit_profile') }}"><i class="feather icon-user"></i> Edit
-                                    Profile</a><a class="dropdown-item" href="app-email.html"><i
-                                        class="feather icon-mail"></i> My
-                                    Inbox</a><a class="dropdown-item" href="app-todo.html"><i
-                                        class="feather icon-check-square"></i> Task</a><a class="dropdown-item"
-                                    href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a>
+                                    Profile</a>
                                 <div class="dropdown-divider"></div><a class="dropdown-item" href="/logoutAdmin"><i
                                         class="feather icon-power"></i> Logout</a>
                             </div>
@@ -172,90 +168,6 @@
                 <li class=" nav-item {{ Request::segment(1) === 'admin-account-management' ? 'active' : '' }}"><a
                         href="{{ route('shipper.order_shipped') }}"><i class="feather icon-users"></i><span
                             class="menu-title" data-i18n="Todo">Đơn hàng đã giao</span></a>
-                </li>
-                <li class="nav-item {{ Request::segment(1) === 'slideshow-management' ? 'active' : '' }}"><a
-                        href="{{ route('slideshow.slideshowManagement') }}"><i class="feather icon-image"></i><span
-                            class="menu-title">Quản lý
-                            slideshow</span></a>
-                </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-shopping-cart"></i><span class="menu-title"
-                            data-i18n="Ecommerce">Quản lý ...</span></a>
-                    <ul class="menu-content">
-                        <li><a href="app-ecommerce-shop.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Shop">Quản lý</span></a>
-                        </li>
-                        <li><a href="app-ecommerce-details.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Details">Details</span></a>
-                        </li>
-                        <li><a href="app-ecommerce-wishlist.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Wish List">Wish List</span></a>
-                        </li>
-                        <li><a href="app-ecommerce-checkout.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Checkout">Checkout</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title"
-                            data-i18n="User">User</span></a>
-                    <ul class="menu-content">
-                        <li><a href="app-user-list.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="List">List</span></a>
-                        </li>
-                        <li><a href="app-user-view.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="View">View</span></a>
-                        </li>
-                        <li><a href="app-user-edit.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Edit">Edit</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class=" navigation-header"><span>UI Elements</span>
-                </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-list"></i><span class="menu-title"
-                            data-i18n="Data List">Data List</span><span
-                            class="badge badge badge-primary badge-pill float-right mr-2">New</span></a>
-                    <ul class="menu-content">
-                        <li><a href="data-list-view.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="List View">List View</span></a>
-                        </li>
-                        <li><a href="data-thumb-view.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Thumb View">Thumb View</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-layout"></i><span class="menu-title"
-                            data-i18n="Content">Content</span></a>
-                    <ul class="menu-content">
-                        <li><a href="content-grid.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Grid">Grid</span></a>
-                        </li>
-                        <li><a href="content-typography.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Typography">Typography</span></a>
-                        </li>
-                        <li><a href="content-text-utilities.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Text Utilities">Text Utilities</span></a>
-                        </li>
-                        <li><a href="content-syntax-highlighter.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Syntax Highlighter">Syntax Highlighter</span></a>
-                        </li>
-                        <li><a href="content-helper-classes.html"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="Helper Classes">Helper Classes</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class=" nav-item"><a href="colors.html"><i class="feather icon-droplet"></i><span class="menu-title"
-                            data-i18n="Colors">Colors</span></a>
-                </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-eye"></i><span class="menu-title"
-                            data-i18n="Icons">Icons</span></a>
-                    <ul class="menu-content">
-                        <li><a href="icons-feather.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Feather">Feather</span></a>
-                        </li>
-                        <li><a href="icons-font-awesome.html"><i class="feather icon-circle"></i><span class="menu-item"
-                                    data-i18n="Font Awesome">Font Awesome</span></a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </div>

@@ -70,7 +70,7 @@ class AdminController extends Controller
             'mail_address'=> $request->email,
             'password'=> $request->password
         ];
-        if (Auth::guard('employee')->attempt($data) && Auth::guard('employee')->user()->role == 1 && Auth::guard('employee')->user()->status == 1) {
+        if (Auth::guard('employee')->attempt($data) && (Auth::guard('employee')->user()->role == 1 || Auth::guard('employee')->user()->role == 2) && Auth::guard('employee')->user()->status == 1) {
             return redirect('admin');
         }
         else if (Auth::guard('employee')->attempt($data) && Auth::guard('employee')->user()->role == 3 && Auth::guard('employee')->user()->status == 1) {
